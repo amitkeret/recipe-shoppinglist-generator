@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "recipe-shoppinglist-generator",
   "main": "index.html",
-  "dependencies": {},
+  "dependencies": {
+    "http-server": "*"
+  },
   "devDependencies": {
     "coffeescript": "^2.3.2",
     "concurrently": "^4.1.0",
@@ -20,7 +22,8 @@
     "watch-jade": "npx pug -o dist/ -Pw src/index.jade",
     "build:html": "pug -o dist/ -P src/index.jade",
     "dev": "concurrently --kill-others \"npm:watch-*\"",
-    "build": "npm run build:js && npm run build:html"
+    "build": "npm run build:js && npm run build:html",
+    "start": "http-server ./dist"
   },
   "author": "amitkeret",
   "license": "MIT",
