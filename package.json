@@ -16,7 +16,7 @@
   },
   "scripts": {
     "watch-coffee": "npx coffee -o dist/ -cmw src/recipes.coffee",
-    "build:js": "coffee -o dist/ -cm src/recipes.coffee",
+    "build:js": "coffee -o dist/ -c src/recipes.coffee",
     "watch-jade": "npx pug -o dist/ -Pw src/index.jade",
     "build:html": "pug -o dist/ -P src/index.jade",
     "dev": "concurrently --kill-others \"npm:watch-*\"",
