@@ -16,8 +16,11 @@
   },
   "scripts": {
     "watch-coffee": "npx coffee -o dist/ -cmw src/recipes.coffee",
+    "build-coffee": "npx coffee -o dist/ -cm src/recipes.coffee",
     "watch-jade": "npx pug -o dist/ -Pw src/index.jade",
-    "dev": "concurrently --kill-others \"npm:watch-*\""
+    "build-jade": "npx pug -o dist/ -P src/index.jade",
+    "dev": "concurrently --kill-others \"npm:watch-*\"",
+    "build": "concurrently --kill-others \"npm:build-*\""
   },
   "author": "amitkeret",
   "license": "MIT",
