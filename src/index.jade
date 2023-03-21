@@ -122,7 +122,7 @@ html
 
             .col-md-6
               .input-group
-                input.form-control(v-model="query" placeholder="Start typing to filter list")
+                input.form-control(v-model="query" name="query" placeholder="Start typing to filter list")
                 .input-group-append: button-icon(icon="times" color="danger" title="Clear search" :cb="clearQuery")
           #recipes-list.card-body.container.row.justify-content-center
             ul.list-group.list-group-flush.col-md-8
