@@ -30,7 +30,7 @@ html
 
     template#recipe-item
       li.list-group-item.list-group-item-action(
-        v-show="query.length == 0 || recipe.recipeName.toLowerCase().includes(query)"
+        v-show="showItem"
         :data-index="index"
         :class="{ selected: recipe.selected }"
       )
