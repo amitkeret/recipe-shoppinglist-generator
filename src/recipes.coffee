@@ -162,6 +162,10 @@ init = ->
         , 'Copied'
       onError: (e) -> mess.show 'Error copying to the clipboard.'
 
+      clearQuery: ->
+        @query = ''
+        do document.querySelector('input[name="query"]').focus
+
       handleFileSelect: (evt)->
         onload = (e)->
           @recipes = JSON.parse e.target.result
