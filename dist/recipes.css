@@ -29,6 +29,12 @@ input[type=number] {
 /* Components */
 .section-title > .badge {
   border-radius: 50%;
+.button-icon[data-flex="1"] > .button-icon-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: calc(.5 * var(--spacer, 10px));
+}
 
 #step1 {
   /*display: none;*/
