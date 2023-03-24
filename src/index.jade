@@ -13,7 +13,7 @@ html
   body
 
     template#section-title
-      h4.section-title
+      h4.section-title(@click.stop="$emit('sectionclick')")
         span.badge.badge-dark.mr-2 {{ number }}
         | {{ title }}
 
