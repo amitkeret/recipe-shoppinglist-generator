@@ -37,7 +37,7 @@ Vue.component 'section-title',
     'icon', 'family'  # option 2: prepend icon
   ]
   computed:
-    getIcon: -> "fa-#{icon}"
+    getClass: -> "#{family} fa-#{icon}"
   emits: ['sectionclick']
   template: '#section-title'
 
