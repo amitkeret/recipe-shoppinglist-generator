@@ -74,9 +74,6 @@ input[type=number] {
 #step2 .recipe-actions,
 #step2 .recipe-meta {
   width: calc( 100% / 12 );
-}
-#step2 .card-body table tr > td:first-child,
-#step2 .card-body table tr > td:last-child {
   vertical-align: middle;
 }
 #step2 .recipe-actions > div,
