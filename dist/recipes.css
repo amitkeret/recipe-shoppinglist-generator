@@ -32,6 +32,14 @@ input[type=number] {
 .section-title > .badge {
   border-radius: 50%;
 }
+.recipe-image-thumbnail {
+  background-position: center;
+  background-size: cover;
+  box-shadow: inset 0 0 calc(1 * var(--spacer)) black;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
 
 #step1 {
   /*display: none;*/
@@ -42,6 +50,26 @@ input[type=number] {
 }
 #step1 .section-title:hover {
   text-decoration: underline;
+}
+#recipeImage {
+  position: relative;
+}
+#recipeImage > .recipe-image-thumbnail {
+  z-index: 1;
+}
+#recipeImage:hover > .recipe-image-thumbnail {
+  box-shadow: inset 0 0 calc(7 * var(--spacer)) black;
+  filter: grayscale(50%) blur(1px);
+}
+#recipeImage > button {
+  opacity: 0.8;
+  z-index: 2;
+}
+#recipeImage:hover > button {
+  opacity: 1;
+}
+#recipeImageFile {
+  background: none;
 }
 #new-ingredients .fa-trash {
   cursor: pointer;
@@ -98,6 +126,10 @@ input[type=number] {
   cursor: pointer;
 }
 
+.recipe-placeholder .recipe-image-thumbnail {
+  position: relative;
+  height: calc(10 * var(--spacer));
+}
 .recipe-placeholder ul {
   column-count: 2;
   column-gap: calc(2 * var(--spacer));

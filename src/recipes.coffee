@@ -31,6 +31,7 @@ templates =
     ingredients: []
     link: ''
     comment: ''
+    image: ''
   ingredient:
     name:       ''
     unit:       ''
@@ -169,6 +170,8 @@ init = ->
         selected = e.target.querySelector ':checked'
         @ingredient.name = selected.value
         @ingredient.department = selected.dataset.department
+
+      getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
 
       addRecipe: ->
         if @recipe.recipeName is '' then mess.show 'Recipe name cannot be empty'
