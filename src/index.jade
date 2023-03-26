@@ -50,6 +50,7 @@ html
           a.recipe-link(
             target="_blank"
             :href="recipe.link.length > 0 ? recipe.link : false"
+            @click.stop
           )
             | {{ recipe.recipeName }}
             span(v-if="recipe.link.length > 0")
@@ -79,17 +80,17 @@ html
               .dropdown#recipes-backup
                 button-icon.dropdown-toggle(icon="save" text="Recipes backup" data-toggle="dropdown")
                 .dropdown-menu
-                  // https://codepen.io/pieceofcode/pen/zldng
+                  //- https://codepen.io/pieceofcode/pen/zldng
                   label.dropdown-item.file-upload__label(for="recipesFile" text="Load") Load
                   input#recipesFile.file-upload__input(type="file" name="files" @change="handleFileSelect")
                   .dropdown-item(@click="exportRecipes") Save
 
           .card-body(v-show="step1visible == true"): .row
+            input(type="hidden" v-model="editindex")
             .col
               
               //- Recipe metadata
               .row.form-group: .col
-                input(type="hidden" v-model="editindex")
                 input.form-control.form-control-lg(v-model="recipe.recipeName" placeholder="Recipe name")
                 .input-group
                   input.form-control(v-model="recipe.link" placeholder="Link (optional)")
