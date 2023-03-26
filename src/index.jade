@@ -52,7 +52,9 @@ html
             :href="recipe.link.length > 0 ? recipe.link : false"
           )
             | {{ recipe.recipeName }}
-            i.ml-2.fas.fa-external-link-alt(v-show="recipe.link.length > 0")
+            span(v-if="recipe.link.length > 0")
+              icon.ml-2(icon="external-link-alt")
+              .badge.badge-primary {{ getLink().host }}
         td.recipe-comment: i(v-if="recipe.comment.length > 0") {{ recipe.comment }}
         td.recipe-meta: div
           .badge.badge-primary(v-if="ingSearch") {{ ingSearch }}
