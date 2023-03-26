@@ -195,6 +195,12 @@ init = ->
         @editindex = index
         @step1visible = yes
 
+      eModalRecipe: (recipe)->
+        @recipe[prop] = value for prop, value of recipe
+        cb = -> eModal.alert document.querySelector('#recipe-placeholder').innerHTML, recipe.recipeName
+        # allow time for Vue to update DOM
+        setTimeout(cb, 100)
+
       uniqueIngredients: (recipes = @recipes)->
         ings = {}
         recipes.forEach (recipe)->
@@ -226,7 +232,9 @@ init = ->
         do document.querySelector('input[name="query"]').focus
       toggleVeg: -> @vegfilter = not @vegfilter
 
-      step1toggle: -> @step1visible = not @step1visible
+      step1toggle: ->
+        do @clearRecipe
+        @step1visible = not @step1visible
 
       handleFileSelect: (evt)->
         onload = (e)->

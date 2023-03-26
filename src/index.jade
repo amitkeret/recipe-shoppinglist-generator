@@ -41,6 +41,7 @@ html
         td.recipe-actions: div
           icon(icon="trash" color="danger" @click.native.stop="deleteRecipe(index)" title="Delete recipe")
           icon(icon="pen" color="warning" @click.native.stop="$emit('updaterecipe')" title="Update recipe")
+          icon(icon="eye" color="secondary" @click.native.stop="$emit('emodalrecipe')" title="View recipe")
         td.recipe-title
           icon.fa-lg.mr-2(
             :icon=  "recipe.selected ? 'check-square' : 'square'"
@@ -65,6 +66,10 @@ html
           )
 
     #app
+
+      #recipe-placeholder.d-none: .recipe-placeholder.container
+        .row.mb-md-3: .col: i {{ recipe.comment }}
+        .row: ul: li(v-for="(ing, index) in recipe.ingredients") {{ ing.amount }}{{ ing.unit }} {{ ing.name }}
 
       .container.py-3
 
@@ -195,6 +200,7 @@ html
                 :query="query"
                 :vegfilter="vegfilter"
                 @updaterecipe="updateRecipe(index, recipe)"
+                @emodalrecipe="eModalRecipe(recipe)"
               )
 
         #step3.card.shadow
