@@ -131,7 +131,6 @@ init = ->
       ingredients: azsort recipe.ingredients, 'name'
     } for recipe in x)
     recipes = azsort recipes, 'recipeName'
-    recipes
 
   vm = new Vue
     el: '#app'
