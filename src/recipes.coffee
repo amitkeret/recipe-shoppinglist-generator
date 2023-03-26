@@ -29,7 +29,6 @@ templates =
   recipe:
     recipeName: ''
     ingredients: []
-    selected: no
     link: ''
     comment: ''
   ingredient:
@@ -121,11 +120,13 @@ Vue.component 'recipe-item',
 init = ->
 
   recipeCollection = ->
-    x.forEach (recipe, index)->
-      recipe.selected = no
-      recipe.ingredients = azsort recipe.ingredients, 'name'
-    recipes = azsort x, 'recipeName'
-    store.set 'recipes', recipes
+    # Backwards-compatibility: use template as starting point
+    # This is for recipes which were created prior to addition of new properties
+    recipes = (Object.assign clone(templates.recipe), recipe, {
+      selected: no
+      ingredients: azsort recipe.ingredients, 'name'
+    } for recipe in x)
+    recipes = azsort recipes, 'recipeName'
     recipes
 
   vm = new Vue
@@ -174,10 +175,7 @@ init = ->
         else if @recipe.ingredients.length is 0 then mess.show 'Add some ingredients first'
         else
           if @editindex isnt ''
-            @recipes[@editindex].recipeName = @recipe.recipeName
-            @recipes[@editindex].ingredients = @recipe.ingredients
-            @recipes[@editindex].link = @recipe.link
-            @recipes[@editindex].comment = @recipe.comment
+            @recipes[@editindex][prop] = @recipe[prop] for prop of @recipe when prop isnt 'selected'
             mess.show "Updated recipe: #{@recipe.recipeName}"
           else
             @recipes.push clone @recipe
@@ -191,7 +189,7 @@ init = ->
         @step1visible = no
 
       updateRecipe: (index, recipe)->
-        @recipe[k] = v for k, v of recipe
+        @recipe[prop] = value for prop, value of recipe
         @editindex = index
         @step1visible = yes
 
