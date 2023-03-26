@@ -97,8 +97,7 @@ input[type=number] {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-#step2 .card-body .fa-trash,
-#step2 .card-body .fa-pen {
+#step2 .recipe-actions i {
   cursor: pointer;
 }
 
