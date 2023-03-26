@@ -9,6 +9,14 @@ azsort = (arr, prop = null)->
   arr.sort (a, b)->
     if prop then a[prop].localeCompare b[prop]
     else a.localeCompare b
+parseURL = (uri)->
+  a = document.createElement 'a'
+  a.href = encodeURI uri
+  data =
+    uri:  a.href
+    host: a.hostname.replace ///^(www\.)?///, ''
+    port: a.port
+    css:  "url('#{a.href}')"
 
 document.addEventListener 'DOMContentLoaded', ->
   store = new xStore 'ShoppingList', localStorage
@@ -75,6 +83,9 @@ Vue.component 'recipe-item',
   ]
 
   methods:
+    getLink: ->
+      if @recipe.link.length is 0 then no
+      else parseURL @recipe.link
     toggleSelectedRecipe: -> @recipe.selected = !@recipe.selected
     deleteRecipe: (index)->
       s = @
