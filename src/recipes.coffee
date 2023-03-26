@@ -9,6 +9,9 @@ azsort = (arr, prop = null)->
   arr.sort (a, b)->
     if prop then a[prop].localeCompare b[prop]
     else a.localeCompare b
+nlbr = (str)->
+  if str.includes '\n' then str.replaceAll '\n', '<br />'
+  else str.replaceAll '<br />', '\n'
 parseURL = (uri)->
   a = document.createElement 'a'
   a.href = encodeURI uri
@@ -150,6 +153,8 @@ init = ->
 
     methods:
 
+      nlbr: (str)-> nlbr str
+
       addIngredient: ->
         if @ingredient.name is '' then mess.show 'Ingredient name cannot be empty'
         else if @ingredient.department is '' then mess.show 'Please input department name'
@@ -222,7 +227,7 @@ init = ->
 
       onCopy: (e) -> eModal.alert
           subtitle: '(<kbd>Ctrl</kbd> + <kbd>v</kbd> to paste)'
-          message: e.text.replace(///\n///g, '<br />')
+          message: nlbr e.text
         , 'Copied'
       onError: (e) -> mess.show 'Error copying to the clipboard.'
 

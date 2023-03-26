@@ -73,7 +73,7 @@ html
 
       #recipe-placeholder.d-none: .recipe-placeholder.container
         .row.mb-md-3: .col: .recipe-image-thumbnail.rounded(v-if="recipe.image" :style="{ 'background-image': getImage(recipe).css }")
-        .row.mb-md-3: .col: i {{ recipe.comment }}
+        .row.mb-md-3: .col: i(v-html="nlbr(recipe.comment)")
         .row: ul: li(v-for="(ing, index) in recipe.ingredients") {{ ing.amount }}{{ ing.unit }} {{ ing.name }}
 
       .container.py-3
@@ -121,7 +121,7 @@ html
                   input.form-control.form-control-lg(type="text" v-model="recipe.recipeName" placeholder="Recipe name")
                   //- .input-group
                   input.form-control(type="text" v-model="recipe.link" placeholder="Link (optional)")
-                  input.form-control(type="text" v-model="recipe.comment" placeholder="Comment (optional)")
+                  textarea.form-control(type="text" v-model="recipe.comment" placeholder="Comment (optional)")
               
               //- Recipe ingredients
               h5 Ingredients
