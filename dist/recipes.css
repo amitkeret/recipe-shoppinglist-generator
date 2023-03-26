@@ -102,6 +102,11 @@ input[type=number] {
   cursor: pointer;
 }
 
+.recipe-placeholder ul {
+  column-count: 2;
+  column-gap: calc(2 * var(--spacer));
+}
+
 /* BIGFIX for eModal to support bootstrap v4's flexbox model */
 .modal .modal-header > .x.close {
   order: 1;
