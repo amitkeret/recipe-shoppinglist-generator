@@ -189,7 +189,6 @@ init = ->
         @recipe = clone templates.recipe
         do @clearIngredient
         @editindex = ''
-        @step1visible = no
 
       updateRecipe: (index, recipe)->
         @recipe[prop] = value for prop, value of recipe
