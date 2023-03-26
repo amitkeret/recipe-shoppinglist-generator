@@ -61,6 +61,10 @@ html
         td.recipe-meta: div
           .badge.badge-primary(v-if="ingSearch") {{ ingSearch }}
           icon(
+            icon="camera" color="secondary"
+            :style="{opacity: recipe.image ? 1 : 0}"
+          )
+          icon(
             :icon=  "isVeg ? 'leaf' : 'drumstick-bite'"
             :color= "isVeg ? 'success' : 'danger'"
           )
@@ -68,6 +72,7 @@ html
     #app
 
       #recipe-placeholder.d-none: .recipe-placeholder.container
+        .row.mb-md-3: .col: .recipe-image-thumbnail.rounded(v-if="recipe.image" :style="{ 'background-image': getImage(recipe).css }")
         .row.mb-md-3: .col: i {{ recipe.comment }}
         .row: ul: li(v-for="(ing, index) in recipe.ingredients") {{ ing.amount }}{{ ing.unit }} {{ ing.name }}
 
@@ -94,12 +99,29 @@ html
             input(type="hidden" v-model="editindex")
             .col
               
-              //- Recipe metadata
-              .row.form-group: .col
-                input.form-control.form-control-lg(v-model="recipe.recipeName" placeholder="Recipe name")
-                .input-group
-                  input.form-control(v-model="recipe.link" placeholder="Link (optional)")
-                  input.form-control(v-model="recipe.comment" placeholder="Comment (optional)")
+              .row.form-group
+                .col-md-4.pr-md-0
+                  #recipeImage.input-group-text.justify-content-center.h-100.p-md-0
+                    .recipe-image-thumbnail(v-if="recipe.image" :style="{ 'background-image': getImage(recipe).css }")
+                    button-icon(
+                      v-if="recipe.image"
+                      icon="trash"
+                      color="danger"
+                      title="Remove image"
+                      @buttonclick="recipe.image = ''"
+                    )
+                    input#recipeImageFile.w-100.h-100.border-0.text-center(
+                      type="text"
+                      v-if="!recipe.image"
+                      v-model="recipe.image"
+                      name="imagefile"
+                      placeholder="Image (optional)"
+                    )
+                .col
+                  input.form-control.form-control-lg(type="text" v-model="recipe.recipeName" placeholder="Recipe name")
+                  //- .input-group
+                  input.form-control(type="text" v-model="recipe.link" placeholder="Link (optional)")
+                  input.form-control(type="text" v-model="recipe.comment" placeholder="Comment (optional)")
               
               //- Recipe ingredients
               h5 Ingredients
