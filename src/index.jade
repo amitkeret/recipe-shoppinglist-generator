@@ -68,7 +68,6 @@ html
     #app
 
       #recipe-placeholder.d-none: .recipe-placeholder.container
-        .row.mb-md-3: .col: .recipe-image-thumbnail.rounded(v-if="recipe.image" :style="getImage(recipe)")
         .row.mb-md-3: .col: i {{ recipe.comment }}
         .row: ul: li(v-for="(ing, index) in recipe.ingredients") {{ ing.amount }}{{ ing.unit }} {{ ing.name }}
 
