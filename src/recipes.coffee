@@ -41,6 +41,15 @@ templates =
     amount:     0
     department: ''
 
+prepareRecipes = (json = [])->
+  # Backwards-compatibility: use template as starting point
+  # This is for recipes which were created prior to addition of new properties
+  recipes = (Object.assign clone(templates.recipe), recipe, {
+    selected: no
+    ingredients: azsort recipe.ingredients, 'name'
+  } for recipe in json)
+  recipes = azsort recipes, 'recipeName'
+
 Vue.component 'section-title',
   props: [
     'title'           # the title
@@ -123,19 +132,10 @@ Vue.component 'recipe-item',
 
 init = ->
 
-  recipeCollection = ->
-    # Backwards-compatibility: use template as starting point
-    # This is for recipes which were created prior to addition of new properties
-    recipes = (Object.assign clone(templates.recipe), recipe, {
-      selected: no
-      ingredients: azsort recipe.ingredients, 'name'
-    } for recipe in x)
-    recipes = azsort recipes, 'recipeName'
-
   vm = new Vue
     el: '#app'
     data:
-      recipes: do recipeCollection
+      recipes: prepareRecipes x
       editindex: ''
       today: (new Date).toLocaleDateString 'en-AU',
         weekday: 'short'
@@ -242,7 +242,7 @@ init = ->
 
       handleFileSelect: (evt)->
         onload = (e)->
-          @recipes = JSON.parse e.target.result
+          @recipes = prepareRecipes JSON.parse e.target.result
           mess.show 'Recipes loaded successfully.'
         # https://www.html5rocks.com/en/tutorials/file/dndfiles/
         reader = new FileReader
