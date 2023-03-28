@@ -132,7 +132,7 @@ html
                   p(v-show="recipe.ingredients.length == 0") No ingredients yet...
                   ul#new-ingredients.fa-ul(v-show="recipe.ingredients.length > 0")
                     li(v-for="(ing, index) in recipe.ingredients")
-                      span.fa-li: icon(icon="trash" color="danger" @click="deleteIngredient(index)")
+                      span.fa-li: icon(icon="trash" color="danger" @click.native="deleteIngredient(index)")
                       | {{ ing.amount }}{{ ing.unit }} {{ ing.name }}
 
                 //- New ingredient form
