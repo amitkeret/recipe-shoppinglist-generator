@@ -118,7 +118,7 @@ Vue.component 'recipe-item',
         AND:
           veg:   @vegfilter is no or @isVeg is yes
         OR:
-          empty:    @query.length == 0
+          empty:    @query.length is 0
           title:    @recipe.recipeName.toLowerCase().includes(@query)
           comment:  @recipe.comment.toLowerCase().includes(@query)
           ings:     @ingSearch?
