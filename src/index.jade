@@ -39,7 +39,7 @@ html
         @click="toggleSelectedRecipe"
       )
         td.recipe-actions: div
-          icon(icon="trash" color="danger" @click.native.stop="deleteRecipe(index)" title="Delete recipe")
+          icon(icon="trash" color="danger" @click.native.stop="$emit('deleterecipe')" title="Delete recipe")
           icon(icon="pen" color="warning" @click.native.stop="$emit('updaterecipe')" title="Update recipe")
           icon(icon="eye" color="secondary" @click.native.stop="$emit('emodalrecipe')" title="View recipe")
         td.recipe-title
@@ -222,6 +222,7 @@ html
                 :query="query"
                 :vegfilter="vegfilter"
                 @updaterecipe="updateRecipe(index, recipe)"
+                @deleterecipe="deleteRecipe(index)"
                 @emodalrecipe="eModalRecipe(recipe)"
               )
 
