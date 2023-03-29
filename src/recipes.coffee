@@ -186,11 +186,9 @@ init = ->
           do @clearRecipe
 
       deleteRecipe: (index)->
-      app = @
-      eModal.confirm 'This cannot be undone.', 'Are you sure?'
-        .then ()->
-          app.recipes.splice index, 1
-          do app.updateRecipeDB
+        app = @
+        eModal.confirm 'This cannot be undone.', 'Are you sure?'
+          .then ()-> app.recipes.splice index, 1
 
       clearRecipe: ->
         @recipe = clone templates.recipe
