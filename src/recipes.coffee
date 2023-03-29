@@ -99,10 +99,6 @@ Vue.component 'recipe-item',
       if @recipe.link.length is 0 then no
       else parseURL @recipe.link
     toggleSelectedRecipe: -> @recipe.selected = !@recipe.selected
-    deleteRecipe: (index)->
-      s = @
-      eModal.confirm 'This cannot be undone.', 'Are you sure?'
-        .then -> s.recipes.splice index, 1
 
   computed:
     ingSearch: ->
@@ -188,6 +184,11 @@ init = ->
             @recipes.push clone @recipe
             mess.show "Added new recipe: #{@recipe.recipeName}"
           do @clearRecipe
+
+      deleteRecipe: (index)->
+        app = @
+        eModal.confirm 'This cannot be undone.', 'Are you sure?'
+          .then ()-> app.recipes.splice index, 1
 
       clearRecipe: ->
         @recipe = clone templates.recipe
