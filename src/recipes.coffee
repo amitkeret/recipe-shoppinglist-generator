@@ -131,7 +131,7 @@ init = ->
   vm = new Vue
     el: '#app'
     data:
-      recipes: prepareRecipes x
+      recipes: []
       editindex: ''
       today: (new Date).toLocaleDateString 'en-AU',
         weekday: 'short'
@@ -147,6 +147,10 @@ init = ->
       step1visible: no
 
     methods:
+
+      updateRecipeDB: (overwrite = null)->
+        @recipes = prepareRecipes if overwrite? then overwrite else @recipes
+        store.set 'recipes', @recipes
 
       nlbr: (str)-> nlbr str
 
@@ -184,11 +188,14 @@ init = ->
             @recipes.push clone @recipe
             mess.show "Added new recipe: #{@recipe.recipeName}"
           do @clearRecipe
+        do @updateRecipeDB
 
       deleteRecipe: (index)->
         app = @
         eModal.confirm 'This cannot be undone.', 'Are you sure?'
-          .then ()-> app.recipes.splice index, 1
+          .then ()->
+            app.recipes.splice index, 1
+            do app.updateRecipeDB
 
       clearRecipe: ->
         @recipe = clone templates.recipe
@@ -243,12 +250,13 @@ init = ->
 
       handleFileSelect: (evt)->
         onload = (e)->
-          @recipes = prepareRecipes JSON.parse e.target.result
+          @updateRecipeDB JSON.parse e.target.result
           mess.show 'Recipes loaded successfully.'
         # https://www.html5rocks.com/en/tutorials/file/dndfiles/
         reader = new FileReader
         reader.onload = onload.bind @
         reader.readAsBinaryString evt.target.files[0]
+
       prepareDBforDownload: (arr = @recipes)->
         clone arr
           .map (e)->
@@ -296,3 +304,5 @@ init = ->
             a += "#{ ingredient.amount }#{ ingredient.unit } #{ ingredient.name }\n"
           a += '\n'
         a
+
+  vm.updateRecipeDB x
