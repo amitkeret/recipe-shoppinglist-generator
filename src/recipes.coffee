@@ -21,13 +21,6 @@ parseURL = (uri)->
     port: a.port
     css:  "url('#{a.href}')"
 
-document.addEventListener 'DOMContentLoaded', ->
-  store = new xStore 'ShoppingList', localStorage
-  x = store.get('recipes') ? []
-  mess = new Mess
-  do mess.init
-  do init
-
 templates =
   recipe:
     recipeName: ''
@@ -126,183 +119,191 @@ Vue.component 'recipe-item',
 
   template: '#recipe-item'
 
-init = ->
+appConfig = 
 
-  vm = new Vue
-    el: '#app'
-    data:
-      recipes: []
-      editindex: ''
-      today: (new Date).toLocaleDateString 'en-AU',
-        weekday: 'short'
-        year: 'numeric'
-        month: 'long'
-        day: 'numeric'
-      recipe:     clone templates.recipe
-      ingredient: clone templates.ingredient
-      ingForm: 'exist'
-      units: ['mL', 'g', 'cup(s)', 'tsp(s)', 'pack(s)']
-      query: ''
-      vegfilter: no
-      step1visible: no
+  el: '#app'
+  data:
+    recipes: []
+    editindex: ''
+    today: (new Date).toLocaleDateString 'en-AU',
+      weekday: 'short'
+      year: 'numeric'
+      month: 'long'
+      day: 'numeric'
+    recipe:     clone templates.recipe
+    ingredient: clone templates.ingredient
+    ingForm: 'exist'
+    units: ['mL', 'g', 'cup(s)', 'tsp(s)', 'pack(s)']
+    query: ''
+    vegfilter: no
+    step1visible: no
 
-    methods:
+  methods:
 
-      updateRecipeDB: (overwrite = null)->
-        @recipes = prepareRecipes if overwrite? then overwrite else @recipes
-        store.set 'recipes', @recipes
+    updateRecipeDB: (overwrite = null)->
+      @recipes = prepareRecipes if overwrite? then overwrite else @recipes
+      store.set 'recipes', @recipes
 
-      nlbr: (str)-> nlbr str
+    nlbr: (str)-> nlbr str
 
-      addIngredient: ->
-        if @ingredient.name is '' then mess.show 'Ingredient name cannot be empty'
-        else if @ingredient.department is '' then mess.show 'Please input department name'
-        else
-          @recipe.ingredients.push
-            name:       @ingredient.name
-            unit:       @ingredient.unit
-            amount:     parseFloat @ingredient.amount
-            department: @ingredient.department
-          do @clearIngredient
-      deleteIngredient: (index)-> @recipe.ingredients.splice index, 1
-      clearIngredient: ->
-        @ingredient = clone templates.ingredient
-      clearIngredientName: ->
-        @ingredient.name = ''
-        @ingredient.department = ''
-      updateIngredientTexts: (e)->
-        selected = e.target.querySelector ':checked'
-        @ingredient.name = selected.value
-        @ingredient.department = selected.dataset.department
-
-      getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
-
-      addRecipe: ->
-        if @recipe.recipeName is '' then mess.show 'Recipe name cannot be empty'
-        else if @recipe.ingredients.length is 0 then mess.show 'Add some ingredients first'
-        else
-          if @editindex isnt ''
-            @recipes[@editindex][prop] = @recipe[prop] for prop of @recipe when prop isnt 'selected'
-            mess.show "Updated recipe: #{@recipe.recipeName}"
-          else
-            @recipes.push clone @recipe
-            mess.show "Added new recipe: #{@recipe.recipeName}"
-          do @clearRecipe
-        do @updateRecipeDB
-
-      deleteRecipe: (index)->
-        app = @
-        eModal.confirm 'This cannot be undone.', 'Are you sure?'
-          .then ()->
-            app.recipes.splice index, 1
-            do app.updateRecipeDB
-
-      clearRecipe: ->
-        @recipe = clone templates.recipe
+    addIngredient: ->
+      if @ingredient.name is '' then mess.show 'Ingredient name cannot be empty'
+      else if @ingredient.department is '' then mess.show 'Please input department name'
+      else
+        @recipe.ingredients.push
+          name:       @ingredient.name
+          unit:       @ingredient.unit
+          amount:     parseFloat @ingredient.amount
+          department: @ingredient.department
         do @clearIngredient
-        @editindex = ''
+    deleteIngredient: (index)-> @recipe.ingredients.splice index, 1
+    clearIngredient: ->
+      @ingredient = clone templates.ingredient
+    clearIngredientName: ->
+      @ingredient.name = ''
+      @ingredient.department = ''
+    updateIngredientTexts: (e)->
+      selected = e.target.querySelector ':checked'
+      @ingredient.name = selected.value
+      @ingredient.department = selected.dataset.department
 
-      updateRecipe: (index, recipe)->
-        @recipe[prop] = value for prop, value of recipe
-        @editindex = index
-        @step1visible = yes
+    getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
 
-      eModalRecipe: (recipe)->
-        @recipe[prop] = value for prop, value of recipe
-        cb = -> eModal.alert document.querySelector('#recipe-placeholder').innerHTML, recipe.recipeName
-        # allow time for Vue to update DOM
-        setTimeout(cb, 100)
-
-      uniqueIngredients: (recipes = @recipes)->
-        ings = {}
-        recipes.forEach (recipe)->
-          recipe.ingredients.forEach (ing)->
-            ings[ing.department] = {} if not ings[ing.department]
-            if not ings[ing.department][ing.name]
-              ings[ing.department][ing.name] =
-                unit:       ing.unit
-                amount:     ing.amount
-                department: ing.department
-            else
-              ings[ing.department][ing.name].amount += ing.amount
-        # alphabetise everything
-        ordered = {}
-        for d in azsort Object.keys ings
-          ordered[d] = {}
-          ordered[d][i] = ings[d][i] for i in azsort Object.keys ings[d]
-        ordered
-
-      onCopy: (e) -> eModal.alert
-          subtitle: '(<kbd>Ctrl</kbd> + <kbd>v</kbd> to paste)'
-          message: nlbr e.text
-        , 'Copied'
-      onError: (e) -> mess.show 'Error copying to the clipboard.'
-
-      selectNone: -> @recipes.forEach (recipe)-> recipe.selected = no
-      clearQuery: ->
-        @query = ''
-        do document.querySelector('input[name="query"]').focus
-      toggleVeg: -> @vegfilter = not @vegfilter
-
-      step1toggle: ->
+    addRecipe: ->
+      if @recipe.recipeName is '' then mess.show 'Recipe name cannot be empty'
+      else if @recipe.ingredients.length is 0 then mess.show 'Add some ingredients first'
+      else
+        if @editindex isnt ''
+          @recipes[@editindex][prop] = @recipe[prop] for prop of @recipe when prop isnt 'selected'
+          mess.show "Updated recipe: #{@recipe.recipeName}"
+        else
+          @recipes.push clone @recipe
+          mess.show "Added new recipe: #{@recipe.recipeName}"
         do @clearRecipe
-        @step1visible = not @step1visible
+      do @updateRecipeDB
 
-      handleFileSelect: (evt)->
-        onload = (e)->
-          @updateRecipeDB JSON.parse e.target.result
-          mess.show 'Recipes loaded successfully.'
-        # https://www.html5rocks.com/en/tutorials/file/dndfiles/
-        reader = new FileReader
-        reader.onload = onload.bind @
-        reader.readAsBinaryString evt.target.files[0]
+    deleteRecipe: (index)->
+      app = @
+      eModal.confirm 'This cannot be undone.', 'Are you sure?'
+        .then ()->
+          app.recipes.splice index, 1
+          do app.updateRecipeDB
 
-      prepareDBforDownload: (arr = @recipes)->
-        clone arr
-          .map (e)->
-            delete e.selected
-            delete e.index
-      exportRecipes: ->
-        records = do @prepareDBforDownload
-        textToSaveAsBlob = new Blob [JSON.stringify @recipes, undefined, 2], type: 'text/json'
-        downloadLink = document.createElement 'a'
-        downloadLink.download = 'recipes.json'
-        downloadLink.innerHTML = 'Download File'
-        downloadLink.href = window.URL.createObjectURL textToSaveAsBlob
-        downloadLink.onclick = (e)-> document.body.removeChild e.target
-        downloadLink.style.display = 'none'
-        document.body.appendChild downloadLink
-        do downloadLink.click
+    clearRecipe: ->
+      @recipe = clone templates.recipe
+      do @clearIngredient
+      @editindex = ''
 
-    computed:
-      selectedRecipes: -> @recipes.filter (recipe)-> recipe.selected is yes
-      selectedRecipesTitle: -> 
-        s = @selectedRecipes.map (recipe)-> recipe.recipeName
-        s.join ', '
-          .toUpperCase()
+    updateRecipe: (index, recipe)->
+      @recipe[prop] = value for prop, value of recipe
+      @editindex = index
+      @step1visible = yes
 
-      ingredientList: -> do @uniqueIngredients
-      departmentList: -> Object.keys do @uniqueIngredients
+    eModalRecipe: (recipe)->
+      @recipe[prop] = value for prop, value of recipe
+      cb = -> eModal.alert document.querySelector('#recipe-placeholder').innerHTML, recipe.recipeName
+      # allow time for Vue to update DOM
+      setTimeout(cb, 100)
 
-      clipboardShoppingList: ->
-        a = "Shopping list for #{@today}:\n\n"
-        departments = @uniqueIngredients @selectedRecipes
-        for department, ingredients of departments
-          a += "#{department}:\n"
-          a += "#{ing.amount}#{ing.unit} #{ingName}\n" for ingName, ing of ingredients
-          a += '\n'
-        a
-      clipboardMenues: ->
-        a = "Menu for #{ @today }:\n#{ @selectedRecipesTitle }\n\n"
-        for recipe in @selectedRecipes
-          a += "
-            #{ recipe.recipeName.toUpperCase() }
-            #{ if recipe.comment then '\n' + recipe.comment else '' }
-            \n--------------------------------------------\n
-          "
-          for ingredient in recipe.ingredients
-            a += "#{ ingredient.amount }#{ ingredient.unit } #{ ingredient.name }\n"
-          a += '\n'
-        a
+    uniqueIngredients: (recipes = @recipes)->
+      ings = {}
+      recipes.forEach (recipe)->
+        recipe.ingredients.forEach (ing)->
+          ings[ing.department] = {} if not ings[ing.department]
+          if not ings[ing.department][ing.name]
+            ings[ing.department][ing.name] =
+              unit:       ing.unit
+              amount:     ing.amount
+              department: ing.department
+          else
+            ings[ing.department][ing.name].amount += ing.amount
+      # alphabetise everything
+      ordered = {}
+      for d in azsort Object.keys ings
+        ordered[d] = {}
+        ordered[d][i] = ings[d][i] for i in azsort Object.keys ings[d]
+      ordered
 
-  vm.updateRecipeDB x
+    onCopy: (e) -> eModal.alert
+        subtitle: '(<kbd>Ctrl</kbd> + <kbd>v</kbd> to paste)'
+        message: nlbr e.text
+      , 'Copied'
+    onError: (e) -> mess.show 'Error copying to the clipboard.'
+
+    selectNone: -> @recipes.forEach (recipe)-> recipe.selected = no
+    clearQuery: ->
+      @query = ''
+      do document.querySelector('input[name="query"]').focus
+    toggleVeg: -> @vegfilter = not @vegfilter
+
+    step1toggle: ->
+      do @clearRecipe
+      @step1visible = not @step1visible
+
+    handleFileSelect: (evt)->
+      onload = (e)->
+        @updateRecipeDB JSON.parse e.target.result
+        mess.show 'Recipes loaded successfully.'
+      # https://www.html5rocks.com/en/tutorials/file/dndfiles/
+      reader = new FileReader
+      reader.onload = onload.bind @
+      reader.readAsBinaryString evt.target.files[0]
+
+    prepareDBforDownload: (arr = @recipes)->
+      clone arr
+        .map (e)->
+          delete e.selected
+          delete e.index
+    exportRecipes: ->
+      records = do @prepareDBforDownload
+      textToSaveAsBlob = new Blob [JSON.stringify @recipes, undefined, 2], type: 'text/json'
+      downloadLink = document.createElement 'a'
+      downloadLink.download = 'recipes.json'
+      downloadLink.innerHTML = 'Download File'
+      downloadLink.href = window.URL.createObjectURL textToSaveAsBlob
+      downloadLink.onclick = (e)-> document.body.removeChild e.target
+      downloadLink.style.display = 'none'
+      document.body.appendChild downloadLink
+      do downloadLink.click
+
+  computed:
+    selectedRecipes: -> @recipes.filter (recipe)-> recipe.selected is yes
+    selectedRecipesTitle: -> 
+      s = @selectedRecipes.map (recipe)-> recipe.recipeName
+      s.join ', '
+        .toUpperCase()
+
+    ingredientList: -> do @uniqueIngredients
+    ingredientListFlat: -> flattened = (Object.keys(ings) for dep, ings of @ingredientList).flat()
+    departmentList: -> Object.keys do @uniqueIngredients
+
+    clipboardShoppingList: ->
+      a = "Shopping list for #{@today}:\n\n"
+      departments = @uniqueIngredients @selectedRecipes
+      for department, ingredients of departments
+        a += "#{department}:\n"
+        a += "#{ing.amount}#{ing.unit} #{ingName}\n" for ingName, ing of ingredients
+        a += '\n'
+      a
+    clipboardMenues: ->
+      a = "Menu for #{ @today }:\n#{ @selectedRecipesTitle }\n\n"
+      for recipe in @selectedRecipes
+        a += "
+          #{ recipe.recipeName.toUpperCase() }
+          #{ if recipe.comment then '\n' + recipe.comment else '' }
+          \n--------------------------------------------\n
+        "
+        for ingredient in recipe.ingredients
+          a += "#{ ingredient.amount }#{ ingredient.unit } #{ ingredient.name }\n"
+        a += '\n'
+      a
+
+init = ->
+  app = new Vue appConfig
+  app.updateRecipeDB store.get 'recipes'
+
+document.addEventListener 'DOMContentLoaded', ->
+  store = new xStore 'ShoppingList', localStorage
+  mess = new Mess
+  do mess.init
+  do init
