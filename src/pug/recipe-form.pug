@@ -1,0 +1,93 @@
+input(type="hidden" v-model="editindex")
+.col
+
+  .row.form-group
+    .col-md-4.pr-md-0
+      #recipeImage.input-group-text.justify-content-center.h-100.p-md-0
+        .recipe-image-thumbnail(v-if="recipe.image" :style="{ 'background-image': getImage(recipe).css }")
+        button-icon(
+          v-if="recipe.image"
+          icon="trash"
+          color="danger"
+          title="Remove image"
+          @buttonclick="recipe.image = ''"
+        )
+        input#recipeImageFile.w-100.h-100.border-0.text-center(
+          type="text"
+          v-if="!recipe.image"
+          v-model="recipe.image"
+          name="imagefile"
+          placeholder="Image (optional)"
+        )
+    .col
+      input.form-control.form-control-lg(type="text" v-model="recipe.name" placeholder="Recipe name")
+      input.form-control(type="text" v-model="recipe.link" placeholder="Link (optional)")
+      textarea.form-control(type="text" v-model="recipe.comment" placeholder="Comment (optional)")
+
+  //- Recipe ingredients
+  h5 Ingredients
+  .row
+
+    //- Ingredient list
+    .col-md-4
+      p(v-show="recipe.ingredients.length == 0") No ingredients yet...
+      ul#new-ingredients.fa-ul(v-show="recipe.ingredients.length > 0")
+        li(v-for="(ing, index) in recipe.ingredients")
+          span.fa-li: icon(icon="trash" color="danger" @click.native="deleteIngredient(index)")
+          | {{ ing.amount }}{{ ing.unit }} {{ ing.name }}
+
+    //- New ingredient form
+    .col
+      .row.form-group
+
+        //- Ingredient selection
+        .col
+          //- vue-simple-suggest(v-model="ingredient.name" :list="ingredientListFlat" :filter-by-query="true" v-if="ingForm == 'exist'" @change="updateIngredientTexts" )
+          select.form-control(v-model="ingredient.name" v-if="ingForm == 'exist'" @change="updateIngredientTexts")
+          
+            option(value="" data-department="") Choose existing ingredient...
+            optgroup(v-for="(ingredients, department) in ingredientList" :label="department")
+              option(v-for="(ingredient, name) in ingredients" :value="name" :data-department="department") {{ name }}
+          div(v-if="ingForm == 'new'")
+            input.form-control(type="text" v-model="ingredient.name" @keydown.enter="addIngredient" placeholder="Ingredient name")
+            .row
+              .col
+                select.form-control(v-model="ingredient.department")
+                  option(value="") Select department...
+                  option(v-for="department in departmentList" :value="department") {{ department }}
+              .col
+                input.form-control(type="text" v-model="ingredient.department" @keydown.enter="addIngredient" placeholder="... or add new")
+
+        //- Existing / new
+        .col-md-3.text-right
+          .dropdown
+            button-icon.dropdown-toggle(data-toggle="dropdown" :text="ingForm == 'exist' ? 'Existing' : 'New'")
+            .dropdown-menu
+              input(type="hidden" v-model="ingForm" @change="clearIngredientName")
+              .dropdown-item(@click="ingForm = 'exist'") Existing
+              .dropdown-item(@click="ingForm = 'new'") New
+
+      .row
+
+        //- Amount & unit
+        .col-md-4
+          .input-group
+            input.form-control(type="number" v-model="ingredient.amount")
+            .input-group-append.dropdown
+              button.btn.dropdown-toggle(data-toggle="dropdown") {{ ingredient.unit }}
+              .dropdown-menu
+                input(type="hidden" v-model="ingredient.unit")
+                .dropdown-item(v-for="(option) in units" @click="ingredient.unit = option") {{ option }}
+
+        //- New ingedient action button
+        .col-md-2: button-icon(icon="plus" text="Add" color="primary" @buttonclick="addIngredient")
+
+//- Recipe action buttons
+.col-md-2.text-right
+  button-icon.btn-lg.mb-2(
+    :icon="editindex !== '' ? 'pen' : 'plus'"
+    :text="editindex !== '' ? 'Update' : 'Add'"
+    :color="editindex !== '' ? 'warning' : 'primary'"
+    @buttonclick="addRecipe"
+  )
+  button-icon(icon="times" text="Cancel" color="danger" @buttonclick="clearRecipe")
