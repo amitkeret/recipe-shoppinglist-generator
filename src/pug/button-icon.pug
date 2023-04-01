@@ -1,0 +1,9 @@
+template#button-icon
+  .button-icon.btn(
+    :is="compTag"
+    type="button"
+    :class="compColor"
+    @click="buttonClick"
+  )
+    icon(v-if="icon" :icon="icon" :family="family")
+    span(v-if="text" :class="children > 1 ? 'ml-2' : ''") {{ text }}
