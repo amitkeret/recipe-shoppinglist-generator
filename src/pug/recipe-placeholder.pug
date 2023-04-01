@@ -1,0 +1,4 @@
+#recipe-placeholder.d-none(ref="recipePlaceholder"): .recipe-placeholder.container
+  .row.mb-md-3: .col: .recipe-image-thumbnail.rounded(v-if="recipe.image" :style="{ 'background-image': getImage(recipe).css }")
+  .row.mb-md-3: .col: i(v-html="nlbr(recipe.comment)")
+  .row: ul: li(v-for="(ing, index) in recipe.ingredients") {{ ing.amount }}{{ ing.unit }} {{ ing.name }}

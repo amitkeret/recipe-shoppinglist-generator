@@ -2,122 +2,25 @@ store = null
 mess = null
 x = null
 
-
-clog = (args...)-> console.log args
-clone = (mix)-> JSON.parse JSON.stringify mix
-azsort = (arr, prop = null)->
-  arr.sort (a, b)->
-    if prop then a[prop].localeCompare b[prop]
-    else a.localeCompare b
-nlbr = (str)->
-  if str.includes '\n' then str.replaceAll '\n', '<br />'
-  else str.replaceAll '<br />', '\n'
-parseURL = (uri)->
-  a = document.createElement 'a'
-  a.href = encodeURI uri
-  data =
-    uri:  a.href
-    host: a.hostname.replace ///^(www\.)?///, ''
-    port: a.port
-    css:  "url('#{a.href}')"
+funcs = require './funcs.coffee'
 
 templates =
   recipe:
-    recipeName: ''
+    name:        ''
     ingredients: []
-    link: ''
-    comment: ''
-    image: ''
+    link:        ''
+    comment:     ''
+    image:       ''
   ingredient:
     name:       ''
     unit:       ''
     amount:     0
     department: ''
 
-prepareRecipes = (json = [])->
-  # Backwards-compatibility: use template as starting point
-  # This is for recipes which were created prior to addition of new properties
-  recipes = (Object.assign clone(templates.recipe), recipe, {
-    selected: no
-    ingredients: azsort recipe.ingredients, 'name'
-  } for recipe in json)
-  recipes = azsort recipes, 'recipeName'
-
-Vue.component 'section-title',
-  props: [
-    'title'           # the title
-    'text'            # option 1: prepend text
-    'icon', 'family'  # option 2: prepend icon
-  ]
-  template: '#section-title'
-
-Vue.component 'icon',
-  props: ['icon', 'family', 'color'] # "family" meaning the icon-family [fas|far|...]
-  methods:
-    getStyle: -> @family ? 'fas'
-  computed:
-    compIcon: -> "#{do @getStyle} fa-#{@icon}"
-    compColor: -> if @color then "text-#{@color}" else ''
-    compClass: -> "#{@compIcon} #{@compColor}"
-  template: '#icon'
-
-Vue.component 'button-icon',
-  props: [
-    'text'
-    'icon', 'family', 'color'
-    'tag'
-  ]
-  methods:
-    buttonClick: ->
-      this.$emit 'buttonclick'
-      do this.$el.blur
-  computed:
-    compIcon: -> "#{do @getStyle} fa-#{@icon}"
-    compColor: -> if @color then "btn-#{@color}" else 'btn-secondary'
-    compTag: -> @tag ? 'button'
-    children: -> (a for a in [@icon, @text] when a?).length
-  template: '#button-icon'
-
-Vue.component 'recipe-item',
-  props: [
-    'recipe'
-    'recipes'
-    'index'
-    'query'
-    'vegfilter'
-  ]
-
-  methods:
-    getLink: ->
-      if @recipe.link.length is 0 then no
-      else parseURL @recipe.link
-    toggleSelectedRecipe: -> @recipe.selected = !@recipe.selected
-
-  computed:
-    ingSearch: ->
-      if @query.length is 0 then no
-      else
-        ings = (ing.name.replace(///\(e?s\)///, '').split(' ') for ing in @recipe.ingredients)
-        found = (@recipe.ingredients[i].name for ing, i in ings when ing.includes @query)[0]
-    isVeg: ->
-      deps = (ing.department for ing in @recipe.ingredients)
-      meat = not deps.includes 'Meats'
-    showItem: ->
-      conditions =
-        AND:
-          veg:   @vegfilter is no or @isVeg is yes
-        OR:
-          empty:    @query.length is 0
-          title:    @recipe.recipeName.toLowerCase().includes(@query)
-          comment:  @recipe.comment.toLowerCase().includes(@query)
-          ings:     @ingSearch?
-      ands = Object.values conditions.AND
-        .every (e)-> e is yes
-      ors  = Object.values conditions.OR
-        .includes yes
-      final = ors is yes and ands is yes
-
-  template: '#recipe-item'
+Vue.component 'icon', require './icon.coffee'
+Vue.component 'button-icon', require './button-icon.coffee'
+Vue.component 'section-title', require './section-title.coffee'
+Vue.component 'recipe-item', require './recipe-item.coffee'
 
 appConfig = 
 
@@ -130,8 +33,8 @@ appConfig =
       year: 'numeric'
       month: 'long'
       day: 'numeric'
-    recipe:     clone templates.recipe
-    ingredient: clone templates.ingredient
+    recipe:     funcs.clone templates.recipe
+    ingredient: funcs.clone templates.ingredient
     ingForm: 'exist'
     units: ['mL', 'g', 'cup(s)', 'tsp(s)', 'pack(s)']
     query: ''
@@ -141,10 +44,16 @@ appConfig =
   methods:
 
     updateRecipeDB: (overwrite = null)->
-      @recipes = prepareRecipes if overwrite? then overwrite else @recipes
+      # Backwards-compatibility: use template as starting point
+      # This is for recipes which were created prior to addition of new properties
+      recipes = (Object.assign funcs.clone(templates.recipe), recipe, {
+        selected: no
+        ingredients: funcs.azsort recipe.ingredients, 'name'
+      } for recipe in overwrite ? @recipes)
+      @recipes = funcs.azsort recipes, 'name'
       store.set 'recipes', @recipes
 
-    nlbr: (str)-> nlbr str
+    nlbr: (str)-> funcs.nlbr str
 
     addIngredient: ->
       if @ingredient.name is '' then mess.show 'Ingredient name cannot be empty'
@@ -158,7 +67,7 @@ appConfig =
         do @clearIngredient
     deleteIngredient: (index)-> @recipe.ingredients.splice index, 1
     clearIngredient: ->
-      @ingredient = clone templates.ingredient
+      @ingredient = funcs.clone templates.ingredient
     clearIngredientName: ->
       @ingredient.name = ''
       @ingredient.department = ''
@@ -167,18 +76,18 @@ appConfig =
       @ingredient.name = selected.value
       @ingredient.department = selected.dataset.department
 
-    getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
+    getImage: (recipe)-> if recipe.image is '' then no else funcs.parseURL recipe.image
 
     addRecipe: ->
-      if @recipe.recipeName is '' then mess.show 'Recipe name cannot be empty'
+      if @recipe.name is '' then mess.show 'Recipe name cannot be empty'
       else if @recipe.ingredients.length is 0 then mess.show 'Add some ingredients first'
       else
         if @editindex isnt ''
           @recipes[@editindex][prop] = @recipe[prop] for prop of @recipe when prop isnt 'selected'
-          mess.show "Updated recipe: #{@recipe.recipeName}"
+          mess.show "Updated recipe: #{@recipe.name}"
         else
-          @recipes.push clone @recipe
-          mess.show "Added new recipe: #{@recipe.recipeName}"
+          @recipes.push funcs.clone @recipe
+          mess.show "Added new recipe: #{@recipe.name}"
         do @clearRecipe
       do @updateRecipeDB
 
@@ -190,7 +99,7 @@ appConfig =
           do app.updateRecipeDB
 
     clearRecipe: ->
-      @recipe = clone templates.recipe
+      @recipe = funcs.clone templates.recipe
       do @clearIngredient
       @editindex = ''
 
@@ -200,8 +109,10 @@ appConfig =
       @step1visible = yes
 
     eModalRecipe: (recipe)->
+      @step1visible = no
       @recipe[prop] = value for prop, value of recipe
-      cb = -> eModal.alert document.querySelector('#recipe-placeholder').innerHTML, recipe.recipeName
+      app = @
+      cb = -> eModal.alert app.$refs.recipePlaceholder.innerHTML, recipe.name
       # allow time for Vue to update DOM
       setTimeout(cb, 100)
 
@@ -219,21 +130,21 @@ appConfig =
             ings[ing.department][ing.name].amount += ing.amount
       # alphabetise everything
       ordered = {}
-      for d in azsort Object.keys ings
+      for d in funcs.azsort Object.keys ings
         ordered[d] = {}
-        ordered[d][i] = ings[d][i] for i in azsort Object.keys ings[d]
+        ordered[d][i] = ings[d][i] for i in funcs.azsort Object.keys ings[d]
       ordered
 
     onCopy: (e) -> eModal.alert
         subtitle: '(<kbd>Ctrl</kbd> + <kbd>v</kbd> to paste)'
-        message: nlbr e.text
+        message: funcs.nlbr e.text
       , 'Copied'
     onError: (e) -> mess.show 'Error copying to the clipboard.'
 
     selectNone: -> @recipes.forEach (recipe)-> recipe.selected = no
     clearQuery: ->
       @query = ''
-      do document.querySelector('input[name="query"]').focus
+      do this.$refs.query.focus
     toggleVeg: -> @vegfilter = not @vegfilter
 
     step1toggle: ->
@@ -243,14 +154,14 @@ appConfig =
     handleFileSelect: (evt)->
       onload = (e)->
         @updateRecipeDB JSON.parse e.target.result
-        mess.show 'Recipes loaded successfully.'
+        mess.show "#{ @recipes.length } recipes loaded successfully."
       # https://www.html5rocks.com/en/tutorials/file/dndfiles/
       reader = new FileReader
       reader.onload = onload.bind @
       reader.readAsBinaryString evt.target.files[0]
 
     prepareDBforDownload: (arr = @recipes)->
-      clone arr
+      funcs.clone arr
         .map (e)->
           delete e.selected
           delete e.index
@@ -268,8 +179,8 @@ appConfig =
 
   computed:
     selectedRecipes: -> @recipes.filter (recipe)-> recipe.selected is yes
-    selectedRecipesTitle: -> 
-      s = @selectedRecipes.map (recipe)-> recipe.recipeName
+    selectedRecipesTitle: ->
+      s = @selectedRecipes.map (recipe)-> recipe.name
       s.join ', '
         .toUpperCase()
 
@@ -289,7 +200,7 @@ appConfig =
       a = "Menu for #{ @today }:\n#{ @selectedRecipesTitle }\n\n"
       for recipe in @selectedRecipes
         a += "
-          #{ recipe.recipeName.toUpperCase() }
+          #{ recipe.name.toUpperCase() }
           #{ if recipe.comment then '\n' + recipe.comment else '' }
           \n--------------------------------------------\n
         "
