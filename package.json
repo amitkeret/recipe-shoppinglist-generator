@@ -3,27 +3,26 @@
   "version": "0.1.0",
   "description": "recipe-shoppinglist-generator",
   "main": "index.html",
-  "dependencies": {
-    "http-server": "^0.12.3"
-  },
   "devDependencies": {
+    "browserify": "^17.0.0",
+    "coffeeify": "^3.0.1",
     "coffeescript": "^2.3.2",
     "npm-run-all": "^4.1.5",
     "pug": "^2.0.3",
-    "pug-cli": "^1.0.0-alpha6"
+    "pug-cli": "^1.0.0-alpha6",
+    "watchify": "^4.0.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amitkeret/recipe-shoppinglist-generator.git"
   },
   "scripts": {
-    "watch:js": "coffee -o dist/ -cmw src/recipes.coffee",
-    "watch:html": "pug -o dist/ -Pw src/index.jade",
+    "watch:js": "watchify -t coffeeify --debug -o dist/app.js src/coffee/app.coffee",
+    "watch:html": "pug -o dist/ -Pw src/pug/index.pug",
     "dev": "npm-run-all -p watch:*",
-    "build:js": "coffee -o dist/ -c src/recipes.coffee",
-    "build:html": "pug -o dist/ -P src/index.jade",
-    "build": "npm-run-all -s build:*",
-    "start": "http-server ./dist -r"
+    "build:js": "browserify -t coffeeify -o dist/app.js src/coffee/app.coffee",
+    "build:html": "pug -o dist/ -P src/pug/index.pug",
+    "build": "npm-run-all -s build:*"
   },
   "author": "amitkeret",
   "license": "MIT",
