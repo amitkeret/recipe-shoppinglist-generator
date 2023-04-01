@@ -74,10 +74,9 @@ input(type="hidden" v-model="editindex")
           .input-group
             input.form-control(type="number" v-model="ingredient.amount")
             .input-group-append.dropdown
-              button.btn.dropdown-toggle(data-toggle="dropdown") {{ ingredient.unit }}
-              .dropdown-menu
-                input(type="hidden" v-model="ingredient.unit")
-                .dropdown-item(v-for="(option) in units" @click="ingredient.unit = option") {{ option }}
+              input(type="hidden" v-model="ingredient.unit")
+              button.btn.dropdown-toggle(data-toggle="dropdown") {{ ingredient.unit ? ingredient.unit : 'Unit' }}
+              .dropdown-menu: .dropdown-item(v-for="option in units" @click="ingredient.unit = option") {{ option }}
 
         //- New ingedient action button
         .col-md-2: button-icon(icon="plus" text="Add" color="primary" @buttonclick="addIngredient")
