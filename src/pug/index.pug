@@ -1,0 +1,92 @@
+
+doctype html
+html
+  head: include ./head.pug
+  body
+
+    include ./icon.pug
+    include ./button-icon.pug
+    include ./section-title.pug
+    include ./recipe-item.pug
+
+    #app
+
+      include ./recipe-placeholder.pug
+
+      .container.py-3
+
+        .row.justify-content-center
+          h3.mb-4 Shopping list generator
+
+        #step1.card.shadow.mb-4
+          .card-header: .row
+            .col-md-4
+              section-title(text="1" title="Add recipes" @sectionclick="step1toggle")
+              icon.ml-1.fa-lg(:icon="step1visible ? 'caret-up' : 'caret-down'")
+            .col-md-4.offset-md-4.text-right
+              .dropdown#recipes-backup
+                button-icon.dropdown-toggle(icon="save" text="Recipes backup" data-toggle="dropdown")
+                .dropdown-menu
+                  //- https://codepen.io/pieceofcode/pen/zldng
+                  label.dropdown-item.file-upload__label(for="recipesFile" text="Load") Load
+                  input#recipesFile.file-upload__input(type="file" name="files" @change="handleFileSelect")
+                  .dropdown-item(@click="exportRecipes") Save
+
+          .card-body(v-show="step1visible == true"): .row
+            include ./recipe-form.pug
+
+        #step2.card.shadow.mb-4
+
+          .card-header.pb-1: .row
+            .col-md-4: section-title(text="2" title="Select recipes")
+
+            .col-md-6.offset-md-2: div.card-header-actions.d-flex
+              //- Select none
+              button-icon(icon="clone" family="far" color="outline-dark" title="Select none" @buttonclick="selectNone")
+              //- Recipe filter
+              .input-group
+                .input-group-prepend: .input-group-text: icon(icon="filter")
+                input.form-control(v-model="query" ref="query" placeholder="Search recipe details & ingredients")
+                .input-group-append: button-icon(icon="times" color="danger" title="Clear search" @buttonclick="clearQuery")
+              //- Veg filter
+              button-icon(
+                icon="leaf"
+                :color="vegfilter ? 'success' : 'outline-dark'"
+                title="Toggle vegetarian"
+                @buttonclick="toggleVeg"
+              )
+
+          //- Recipes list
+          .card-body.py-2
+            .table-responsive: table.table.table-hover.mb-0: tbody
+              //- For custom components rendered as <tr>, syntax is different
+              //- @see https://vuejs.org/guide/essentials/component-basics.html#dom-template-parsing-caveats
+              tr(is="recipe-item" v-for="(recipe, index) in recipes"
+                :recipe="recipe"
+                :recipes="recipes"
+                :index="index"
+                :query="query"
+                :vegfilter="vegfilter"
+                @updaterecipe="updateRecipe(index, recipe)"
+                @deleterecipe="deleteRecipe(index)"
+                @emodalrecipe="eModalRecipe(recipe)"
+              )
+
+        #step3.card.shadow
+          .card-header: .row.justify-content-between
+            .col-md-4: section-title(text="3" title="Create shopping list")
+            .col.text-right(v-if="selectedRecipes.length > 0")
+              button-icon(
+                icon="shopping-basket" text="Generate shopping list" color="primary"
+                v-clipboard:copy="clipboardShoppingList"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError"
+              )
+              button-icon(
+                icon="clipboard-list" text="Preview selected recipes" color="primary"
+                v-clipboard:copy="clipboardMenues"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError"
+              )
+
+    include ./foot.pug
