@@ -51,13 +51,13 @@ input(type="hidden" v-model="editindex")
         .col
           vue-multiselect(
             v-if="ingForm == 'exist'"
-            v-model="ingredient.name"
             placeholder="Choose existing ingredient..."
+            label="name"
             :options="ingredientList"
             group-label="department"
             group-values="ings"
             :group-select="false"
-            @change="updateIngredientTexts"
+            @input="updateExistingIngredient"
           )
           div(v-if="ingForm == 'new'")
             input.form-control(type="text" v-model="ingredient.name" @keydown.enter="addIngredient" placeholder="Ingredient name")
@@ -74,9 +74,8 @@ input(type="hidden" v-model="editindex")
           .dropdown
             button-icon.dropdown-toggle(data-toggle="dropdown" :text="ingForm == 'exist' ? 'Existing' : 'New'")
             .dropdown-menu
-              input(type="hidden" v-model="ingForm" @change="clearIngredientName")
-              .dropdown-item(@click="ingForm = 'exist'") Existing
-              .dropdown-item(@click="ingForm = 'new'") New
+              .dropdown-item(@click="clearIngredient()") Existing
+              .dropdown-item(@click="clearIngredient('new')") New
 
       .row.align-items-center
 
@@ -85,8 +84,15 @@ input(type="hidden" v-model="editindex")
           .input-group
             input.form-control(type="number" v-model="ingredient.amount")
             .input-group-append.dropdown
-              button.btn.dropdown-toggle(data-toggle="dropdown" v-model="ingredient.unit") {{ ingredient.unit ? ingredient.unit : 'Unit' }}
-              .dropdown-menu: .dropdown-item(v-for="option in units" @click="ingredient.unit = option") {{ option }}
+              button.btn.dropdown-toggle(
+                v-model="ingredient.unit"
+                :disabled="ingForm == 'exist'"
+                data-toggle="dropdown"
+              ) {{ ingredient.unit !== null ? ingredient.unit : 'Unit' }}
+              .dropdown-menu: .dropdown-item(
+                v-for="option in units"
+                @click="ingredient.unit = option"
+              ) {{ option != '' ? option : '(no unit)' }}
 
         .col-md-4
           icon.fa-lg.mr-2(
