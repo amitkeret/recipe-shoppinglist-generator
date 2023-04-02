@@ -115,7 +115,10 @@ appConfig =
       @step1visible = no
       @recipe[prop] = value for prop, value of recipe
       app = @
-      cb = -> eModal.alert app.$refs.recipePlaceholder.innerHTML, recipe.name
+      cb = -> eModal.alert
+        message:  app.$refs.recipePlaceholder.outerHTML
+        title:    recipe.name
+        subtitle: app.$refs.recipePlaceholderLink.outerHTML
       # allow time for Vue to update DOM
       setTimeout(cb, 100)
 
