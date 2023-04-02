@@ -17,6 +17,7 @@ templates =
     amount:     0
     department: ''
 
+Vue.component 'vue-multiselect', VueMultiselect.default
 Vue.component 'icon', require './icon.coffee'
 Vue.component 'button-icon', require './button-icon.coffee'
 Vue.component 'section-title', require './section-title.coffee'
@@ -184,8 +185,7 @@ appConfig =
       s.join ', '
         .toUpperCase()
 
-    ingredientList: -> do @uniqueIngredients
-    ingredientListFlat: -> flattened = (Object.keys(ings) for dep, ings of @ingredientList).flat()
+    ingredientList: -> (department: dep, ings: (name for name, details of ings) for dep, ings of do @uniqueIngredients)
     departmentList: -> Object.keys do @uniqueIngredients
 
     clipboardShoppingList: ->
