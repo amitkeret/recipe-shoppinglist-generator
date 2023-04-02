@@ -13,7 +13,7 @@ templates =
     image:       ''
   ingredient:
     name:       ''
-    unit:       ''
+    unit:       null
     amount:     0
     department: ''
     optional:   no
@@ -38,7 +38,7 @@ appConfig =
     recipe:     funcs.clone templates.recipe
     ingredient: funcs.clone templates.ingredient
     ingForm: 'exist'
-    units: ['mL', 'g', 'cup(s)', 'tsp(s)', 'pack(s)']
+    units: ['', 'mL', 'g', 'cup(s)', 'tsp(s)', 'pack(s)']
     query: ''
     vegfilter: no
     step1visible: no
@@ -70,18 +70,14 @@ appConfig =
 
     deleteIngredient: (index)-> @recipe.ingredients.splice index, 1
 
-    clearIngredient: ->
+    clearIngredient: (type = 'exist')->
       @ingredient = funcs.clone templates.ingredient
-      @ingForm = 'exist'
+      @ingForm = type
 
-    clearIngredientName: ->
-      @ingredient.name = ''
-      @ingredient.department = ''
-
-    updateIngredientTexts: (e)->
-      selected = e.target.querySelector ':checked'
-      @ingredient.name = selected.value
-      @ingredient.department = selected.dataset.department
+    updateExistingIngredient: (selected)->
+      @ingredient.name = selected.name
+      @ingredient.department = selected.department
+      @ingredient.unit = selected.unit
 
     getImage: (recipe)-> if recipe.image is '' then no else funcs.parseURL recipe.image
 
@@ -123,6 +119,7 @@ appConfig =
       # allow time for Vue to update DOM
       setTimeout(cb, 100)
 
+    # Takes an array of recipes and returns unique ingredients with amount sums
     uniqueIngredients: (recipes = @recipes)->
       ings = {}
       recipes.forEach (recipe)->
@@ -191,7 +188,9 @@ appConfig =
       s.join ', '
         .toUpperCase()
 
-    ingredientList: -> (department: dep, ings: (name for name, details of ings) for dep, ings of do @uniqueIngredients)
+    ingredientList: -> (department: dep, ings: (Object.assign details, {
+      name: name
+    } for name, details of ings) for dep, ings of do @uniqueIngredients)
     departmentList: -> Object.keys do @uniqueIngredients
 
     clipboardShoppingList: ->
