@@ -42,12 +42,16 @@ input(type="hidden" v-model="editindex")
 
         //- Ingredient selection
         .col
-          //- vue-simple-suggest(v-model="ingredient.name" :list="ingredientListFlat" :filter-by-query="true" v-if="ingForm == 'exist'" @change="updateIngredientTexts" )
-          select.form-control(v-model="ingredient.name" v-if="ingForm == 'exist'" @change="updateIngredientTexts")
-          
-            option(value="" data-department="") Choose existing ingredient...
-            optgroup(v-for="(ingredients, department) in ingredientList" :label="department")
-              option(v-for="(ingredient, name) in ingredients" :value="name" :data-department="department") {{ name }}
+          vue-multiselect(
+            v-if="ingForm == 'exist'"
+            v-model="ingredient.name"
+            placeholder="Choose existing ingredient..."
+            :options="ingredientList2"
+            group-label="department"
+            group-values="ings"
+            :group-select="false"
+            @change="updateIngredientTexts"
+          )
           div(v-if="ingForm == 'new'")
             input.form-control(type="text" v-model="ingredient.name" @keydown.enter="addIngredient" placeholder="Ingredient name")
             .row
