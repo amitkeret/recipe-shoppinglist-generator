@@ -60,18 +60,18 @@ appConfig =
       if @ingredient.name is '' then mess.show 'Ingredient name cannot be empty'
       else if @ingredient.department is '' then mess.show 'Please input department name'
       else
-        @recipe.ingredients.push
-          name:       @ingredient.name
-          unit:       @ingredient.unit
-          amount:     parseFloat @ingredient.amount
-          department: @ingredient.department
+        @recipe.ingredients.push Object.assign @ingredient, amount: parseFloat @ingredient.amount
         do @clearIngredient
     deleteIngredient: (index)-> @recipe.ingredients.splice index, 1
+
     clearIngredient: ->
       @ingredient = funcs.clone templates.ingredient
+      @ingForm = 'exist'
+
     clearIngredientName: ->
       @ingredient.name = ''
       @ingredient.department = ''
+
     updateIngredientTexts: (e)->
       selected = e.target.querySelector ':checked'
       @ingredient.name = selected.value
