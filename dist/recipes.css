@@ -1,6 +1,7 @@
 :root {
   /* Copying Bootstrap's variable definition to native CSS */
   --spacer: 1rem;
+  --form-placeholder-color: #495057;
 }
 #mess-messElement {
   /* cos the original uses "absolute" for some odd reason */
