@@ -23,7 +23,7 @@ module.exports =
     ingSearch: ->
       if @query.length is 0 then no
       else
-        ings = (ing.name.replace(///\(e?s\)///, '').split(' ') for ing in @recipe.ingredients)
+        ings = (ing.name.replace(///\(e?s\)///, '').split(///[\s-]///) for ing in @recipe.ingredients)
         found = (@recipe.ingredients[i].name for ing, i in ings when ing.includes @query)[0]
 
     isVeg: ->
