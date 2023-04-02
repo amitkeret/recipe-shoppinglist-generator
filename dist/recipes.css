@@ -29,6 +29,28 @@ input[type=number] {
 }
 
 /* Components */
+.multiselect__placeholder {
+  font-size: 1rem;
+  margin-bottom: 0;
+  padding-top: 0;
+  color: var(--form-placeholder-color);
+}
+.multiselect__tags, .multiselect__content-wrapper {
+  border-color: #ced4da;
+}
+.multiselect.multiselect--active .multiselect__tags {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+}
+.multiselect__option--group {
+  background: inherit !important;
+  color: inherit !important;
+  font-style: italic;
+  font-weight: bolder;
+}
+.multiselect__option:not(.multiselect__option--group) {
+  text-indent: 1rem;
+}
 .section-title > .badge {
   border-radius: 50%;
 }
