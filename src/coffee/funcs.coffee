@@ -1,6 +1,8 @@
 module.exports =
 
-  clog: (args...)-> console.log args
+  clog: (args...)->
+    do console.trace
+    console.log args
 
   clone: (mix)-> JSON.parse JSON.stringify mix
 
