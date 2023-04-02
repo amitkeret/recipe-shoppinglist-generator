@@ -29,12 +29,19 @@ input(type="hidden" v-model="editindex")
   .row
 
     //- Ingredient list
-    .col-md-4
+    .col-md-5
       p(v-show="recipe.ingredients.length == 0") No ingredients yet...
       ul#new-ingredients.fa-ul(v-show="recipe.ingredients.length > 0")
-        li(v-for="(ing, index) in recipe.ingredients")
+        li.d-flex.justify-content-between.align-items-center(v-for="(ing, index) in recipe.ingredients")
           span.fa-li: icon(icon="trash" color="danger" @click.native="deleteIngredient(index)")
-          | {{ ing.amount }}{{ ing.unit }} {{ ing.name }}
+          span {{ ing.amount }}{{ ing.unit }} {{ ing.name }}
+          .d-flex
+            small.ing-optional.mr-1 Optional?
+            input(
+              type="checkbox"
+              :checked="ing.optional ? true : false"
+              @change="optionalIngredient(index)"
+            )
 
     //- New ingredient form
     .col
@@ -71,18 +78,28 @@ input(type="hidden" v-model="editindex")
               .dropdown-item(@click="ingForm = 'exist'") Existing
               .dropdown-item(@click="ingForm = 'new'") New
 
-      .row
+      .row.align-items-center
 
         //- Amount & unit
-        .col-md-4
+        .col-md-5
           .input-group
             input.form-control(type="number" v-model="ingredient.amount")
             .input-group-append.dropdown
               button.btn.dropdown-toggle(data-toggle="dropdown" v-model="ingredient.unit") {{ ingredient.unit ? ingredient.unit : 'Unit' }}
               .dropdown-menu: .dropdown-item(v-for="option in units" @click="ingredient.unit = option") {{ option }}
 
+        .col-md-4
+          icon.fa-lg.mr-2(
+            v-model="ingredient.optional"
+            @click.native="ingredient.optional = !ingredient.optional"
+            :icon=  "ingredient.optional ? 'check-square' : 'square'"
+            :family="ingredient.optional ? 'fas' : 'far'"
+            :color= "ingredient.optional ? 'primary' : ''"
+          )
+          | Optional?
+
         //- New ingedient action button
-        .col-md-2: button-icon(icon="plus" text="Add" color="primary" @buttonclick="addIngredient")
+        .col.text-right: button-icon(icon="plus" text="Add" color="primary" @buttonclick="addIngredient")
 
 //- Recipe action buttons
 .col-md-2.text-right

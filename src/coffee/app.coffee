@@ -16,6 +16,7 @@ templates =
     unit:       ''
     amount:     0
     department: ''
+    optional:   no
 
 Vue.component 'vue-multiselect', VueMultiselect.default
 Vue.component 'icon', require './icon.coffee'
@@ -45,11 +46,13 @@ appConfig =
   methods:
 
     updateRecipeDB: (overwrite = null)->
-      # Backwards-compatibility: use template as starting point
-      # This is for recipes which were created prior to addition of new properties
+      # 1. Backwards-compatibility: use template as starting point
+      #    This is for recipes which were created prior to addition of new properties
+      # 2. Multi-field ingredient sort
+      #    Sorting ingredients by optional first, to push these to the end of the list
       recipes = (Object.assign funcs.clone(templates.recipe), recipe, {
         selected: no
-        ingredients: funcs.azsort recipe.ingredients, 'name'
+        ingredients: recipe.ingredients.sort (a, b)-> a.optional - b.optional or a.name.localeCompare b.name
       } for recipe in overwrite ? @recipes)
       @recipes = funcs.azsort recipes, 'name'
       store.set 'recipes', @recipes
@@ -62,6 +65,9 @@ appConfig =
       else
         @recipe.ingredients.push Object.assign @ingredient, amount: parseFloat @ingredient.amount
         do @clearIngredient
+
+    optionalIngredient: (index)-> @recipe.ingredients[index].optional = not @recipe.ingredients[index].optional
+
     deleteIngredient: (index)-> @recipe.ingredients.splice index, 1
 
     clearIngredient: ->
