@@ -60,6 +60,10 @@ appConfig =
     nlbr: (str)-> funcs.nlbr str
 
     addIngredient: ->
+      # vue-multiselect is bound to ingredient.name
+      # however, it stores (and sends) ingredient objects, not just names
+      @ingredient.name = @ingredient.name.name if @ingredient.name.name?
+
       if @ingredient.name is '' then mess.show 'Ingredient name cannot be empty'
       else if @ingredient.department is '' then mess.show 'Please input department name'
       else
