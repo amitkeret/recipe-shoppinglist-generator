@@ -51,7 +51,9 @@ input(type="hidden" v-model="editindex")
         .col
           vue-multiselect(
             v-if="ingForm == 'exist'"
+            v-model="ingredient.name"
             placeholder="Choose existing ingredient..."
+            :allow-empty="false"
             label="name"
             :options="ingredientList"
             group-label="department"
