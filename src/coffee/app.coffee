@@ -10,6 +10,7 @@ templates =
     ingredients: []
     link:        ''
     comment:     ''
+    servings:    null
     image:       ''
   ingredient:
     name:       ''
@@ -85,8 +86,9 @@ appConfig =
     getImage: (recipe)-> if recipe.image is '' then no else funcs.parseURL recipe.image
 
     addRecipe: ->
-      if @recipe.name is '' then mess.show 'Recipe name cannot be empty'
-      else if @recipe.ingredients.length is 0 then mess.show 'Add some ingredients first'
+      if @recipe.name is '' then mess.show 'Name: Cannot be empty'
+      else if @recipe.ingredients.length is 0 then mess.show 'Ingredients: Add some first'
+      else if @recipe.servings? and @recipe.servings % 1 isnt 0 then mess.show 'Servings: Whole numbers only'
       else
         if @editindex isnt ''
           @recipes[@editindex][prop] = @recipe[prop] for prop of @recipe when prop isnt 'selected'
