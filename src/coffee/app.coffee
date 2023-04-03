@@ -79,7 +79,6 @@ appConfig =
       @ingForm = type
 
     updateExistingIngredient: (selected)->
-      @ingredient.name = selected.name
       @ingredient.department = selected.department
       @ingredient.unit = selected.unit
 
