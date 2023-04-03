@@ -1,8 +1,8 @@
 input(type="hidden" v-model="editindex")
 .col
 
-  .row.form-group
-    .col-md-4.pr-md-0
+  .form-row.form-group
+    .col-md-4
       #recipeImage.input-group-text.justify-content-center.h-100.p-md-0
         .recipe-image-thumbnail(v-if="recipe.image" :style="{ 'background-image': getImage(recipe).css }")
         button-icon(
