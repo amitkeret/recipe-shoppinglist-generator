@@ -39,7 +39,7 @@ appConfig =
     recipe:     funcs.clone templates.recipe
     ingredient: funcs.clone templates.ingredient
     ingForm: 'exist'
-    units: ['', 'mL', 'g', 'cup(s)', 'tbsp(s)', 'tsp(s)', 'pack(s)']
+    units: ['', 'mL', 'g', ' cup(s)', ' tbsp(s)', ' tsp(s)', ' pack(s)']
     query: ''
     vegfilter: no
     step1visible: no
