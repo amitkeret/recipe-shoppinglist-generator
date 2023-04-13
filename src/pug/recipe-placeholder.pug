@@ -10,7 +10,8 @@
         :icon="ing.optional ? 'question' : 'check'"
         :color="ing.optional ? 'primary' : 'success'"
       )
-      | {{ ing.amount }}{{ ing.unit }} {{ ing.name }}
+      span(v-html="getFraction(ing.amount, true)")
+      | {{ ing.unit }} {{ ing.name }}
   a(
     ref="recipePlaceholderLink"
     v-show="recipe.link.length > 0"
