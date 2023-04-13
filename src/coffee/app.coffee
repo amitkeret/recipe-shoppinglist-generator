@@ -83,6 +83,15 @@ appConfig =
       @ingredient.department = selected.department
       @ingredient.unit = selected.unit
 
+    # convert a floating point number to a fraction
+    # supports mixed fractions and HTML-entity formatting
+    # @uses fraction.js
+    getFraction: (decimal, html = no)->
+      f = new Fraction decimal
+      frac = f.toFraction true
+      if html is no or f.d is 1 then frac   # d=denominator. d=1 means its a whole number
+      else frac.replace(///(\d+)\/(\d+)///, '&frac$1$2;').replace(' ', '')
+
     getImage: (recipe)-> if recipe.image is '' then no else funcs.parseURL recipe.image
 
     addRecipe: ->
@@ -205,20 +214,17 @@ appConfig =
       a = "Shopping list for #{@today}:\n\n"
       departments = @uniqueIngredients @selectedRecipes
       for department, ingredients of departments
-        a += "#{department}:\n"
-        a += "#{ing.amount}#{ing.unit} #{ingName}\n" for ingName, ing of ingredients
+        a += "#{ department }:\n"
+        a += "#{ @getFraction(ing.amount) }#{ ing.unit } #{ ingName }\n" for ingName, ing of ingredients
         a += '\n'
       a
     clipboardMenues: ->
       a = "Menu for #{ @today }:\n#{ @selectedRecipesTitle }\n\n"
       for recipe in @selectedRecipes
-        a += "
-          #{ recipe.name.toUpperCase() }
-          #{ if recipe.comment then '\n' + recipe.comment else '' }
-          \n--------------------------------------------\n
-        "
-        for ingredient in recipe.ingredients
-          a += "#{ ingredient.amount }#{ ingredient.unit } #{ ingredient.name }\n"
+        a += "#{ recipe.name.toUpperCase() }
+              #{ if recipe.comment then '\n' + recipe.comment else '' }
+              \n--------------------------------------------\n"
+        a += "#{ @getFraction(ing.amount) }#{ ing.unit } #{ ing.name }\n" for ing in recipe.ingredients
         a += '\n'
       a
 
