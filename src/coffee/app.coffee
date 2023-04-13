@@ -67,6 +67,7 @@ appConfig =
 
       if @ingredient.name is '' then mess.show 'Ingredient name cannot be empty'
       else if @ingredient.department is '' then mess.show 'Please input department name'
+      else if @ingredient.amount is '' then mess.show 'Please input a decimal number'
       else
         @recipe.ingredients.push Object.assign @ingredient, amount: parseFloat @ingredient.amount
         do @clearIngredient
