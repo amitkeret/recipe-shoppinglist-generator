@@ -15,9 +15,10 @@ template#recipe-item
         :family="recipe.selected ? 'fas' : 'far'"
         :color= "recipe.selected ? 'primary' : ''"
       )
-      a.recipe-link(
-        target="_blank"
-        :href="recipe.link.length > 0 ? recipe.link : false"
+      .recipe-link(
+        :is=    "recipe.link.length > 0 ? 'a' : 'span'"
+        :href=  "recipe.link.length > 0 ? recipe.link : false"
+        :target="recipe.link.length > 0 ? '_blank' : false"
         @click.stop
       )
         | {{ recipe.name }}
