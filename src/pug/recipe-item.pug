@@ -30,7 +30,7 @@ template#recipe-item
       .badge.badge-primary(v-if="ingSearch") {{ ingSearch }}
       icon(
         icon="camera" color="secondary"
-        :style="{opacity: recipe.image ? 1 : 0}"
+        :class="{transparent: !recipe.image}"
       )
       icon(
         :icon=  "isVeg ? 'leaf' : 'drumstick-bite'"
