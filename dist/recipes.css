@@ -28,6 +28,9 @@ input[type=number] {
 .dropdown .dropdown-item {
   cursor: pointer;
 }
+.transparent {
+  opacity: 0;
+}
 
 /* Components */
 .multiselect__placeholder {
@@ -145,6 +148,9 @@ input[type=number] {
 }
 #step2 .recipe-meta > div {
   justify-content: flex-end;
+}
+#step2 .recipe-meta > div > .fas {
+  width: 16px;
 }
 #step2 .recipe-comment {
   width: calc( 100% / 2 );
