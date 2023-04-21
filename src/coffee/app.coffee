@@ -134,9 +134,9 @@ appConfig =
       @recipe[prop] = value for prop, value of recipe
       app = @
       cb = -> eModal.alert
-        message:  app.$refs.recipePlaceholder.outerHTML
         title:    recipe.name
         subtitle: app.$refs.recipePlaceholderLink.outerHTML
+        message:  app.$refs.recipePlaceholder.outerHTML
       # allow time for Vue to update DOM
       setTimeout(cb, 100)
 
@@ -161,9 +161,9 @@ appConfig =
       ordered
 
     onCopy: (e) -> eModal.alert
+        title:    'Copied'
         subtitle: '(<kbd>Ctrl</kbd> + <kbd>v</kbd> to paste)'
         message:  nlbr e.text
-      , 'Copied'
     onError: (e) -> mess.show 'Error copying to the clipboard.'
 
     selectNone: -> @recipes.forEach (recipe)-> recipe.selected = no
