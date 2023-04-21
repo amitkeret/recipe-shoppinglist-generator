@@ -58,7 +58,6 @@ html
               tr(is="recipe-item" v-for="(recipe, index) in recipes"
                 :recipe="recipe"
                 :recipes="recipes"
-                :index="index"
                 :query="query"
                 :vegfilter="vegfilter"
                 @updaterecipe="updateRecipe(index, recipe)"
