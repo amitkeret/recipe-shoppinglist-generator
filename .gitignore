@@ -3,4 +3,4 @@ package-lock.json
 *.js
 *.html
 *.map
-
+!webpack.config.js
