@@ -1,6 +1,9 @@
-funcs = require './funcs.coffee'
+import css from '../css/recipe-item.css'
+html = require '../pug/recipe-item.pug'
 
-module.exports =
+import { parseURL } from './funcs.coffee'
+
+recipeItem = 
 
   props: [
     'recipe'
@@ -14,7 +17,7 @@ module.exports =
 
     getLink: ->
       if @recipe.link.length is 0 then no
-      else funcs.parseURL @recipe.link
+      else parseURL @recipe.link
 
     toggleSelectedRecipe: -> @recipe.selected = !@recipe.selected
 
@@ -45,4 +48,6 @@ module.exports =
         .includes yes
       final = ors is yes and ands is yes
 
-  template: '#recipe-item'
+  template: html
+
+export { recipeItem }

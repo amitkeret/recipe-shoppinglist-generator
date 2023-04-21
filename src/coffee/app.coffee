@@ -2,7 +2,7 @@ store = null
 mess = null
 x = null
 
-funcs = require './funcs.coffee'
+import { log, clone, azsort, nlbr, parseURL } from './funcs.coffee'
 
 templates =
   recipe:
@@ -19,11 +19,14 @@ templates =
     department: ''
     optional:   no
 
+import { icon, buttonIcon } from './icon.coffee'
+import { sectionTitle } from './section-title.coffee'
+import { recipeItem } from './recipe-item.coffee'
 Vue.component 'vue-multiselect', VueMultiselect.default
-Vue.component 'icon', require './icon.coffee'
-Vue.component 'button-icon', require './button-icon.coffee'
-Vue.component 'section-title', require './section-title.coffee'
-Vue.component 'recipe-item', require './recipe-item.coffee'
+Vue.component 'icon', icon
+Vue.component 'button-icon', buttonIcon
+Vue.component 'section-title', sectionTitle
+Vue.component 'recipe-item', recipeItem
 
 appConfig = 
 
@@ -36,8 +39,8 @@ appConfig =
       year: 'numeric'
       month: 'long'
       day: 'numeric'
-    recipe:     funcs.clone templates.recipe
-    ingredient: funcs.clone templates.ingredient
+    recipe:     clone templates.recipe
+    ingredient: clone templates.ingredient
     ingForm: 'exist'
     units: ['', 'mL', 'g', ' cup(s)', ' tbsp(s)', ' tsp(s)', ' pack(s)']
     query: ''
@@ -51,14 +54,14 @@ appConfig =
       #    This is for recipes which were created prior to addition of new properties
       # 2. Multi-field ingredient sort
       #    Sorting ingredients by optional first, to push these to the end of the list
-      recipes = (Object.assign funcs.clone(templates.recipe), recipe, {
+      recipes = (Object.assign clone(templates.recipe), recipe, {
         selected: no
         ingredients: recipe.ingredients.sort (a, b)-> a.optional - b.optional or a.name.localeCompare b.name
       } for recipe in overwrite ? @recipes)
-      @recipes = funcs.azsort recipes, 'name'
+      @recipes = azsort recipes, 'name'
       store.set 'recipes', @recipes
 
-    nlbr: (str)-> funcs.nlbr str
+    nlbr: (str)-> nlbr str
 
     addIngredient: ->
       # vue-multiselect is bound to ingredient.name
@@ -77,7 +80,7 @@ appConfig =
     deleteIngredient: (index)-> @recipe.ingredients.splice index, 1
 
     clearIngredient: (type = 'exist')->
-      @ingredient = funcs.clone templates.ingredient
+      @ingredient = clone templates.ingredient
       @ingForm = type
 
     updateExistingIngredient: (selected)->
@@ -93,7 +96,7 @@ appConfig =
       if html is no or f.d is 1 then frac   # d=denominator. d=1 means its a whole number
       else frac.replace(///(\d+)\/(\d+)///, '&frac$1$2;').replace(' ', '')
 
-    getImage: (recipe)-> if recipe.image is '' then no else funcs.parseURL recipe.image
+    getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
 
     addRecipe: ->
       if @recipe.name is '' then mess.show 'Name: Cannot be empty'
@@ -104,7 +107,7 @@ appConfig =
           @recipes[@editindex][prop] = @recipe[prop] for prop of @recipe when prop isnt 'selected'
           mess.show "Updated recipe: #{@recipe.name}"
         else
-          @recipes.push funcs.clone @recipe
+          @recipes.push clone @recipe
           mess.show "Added new recipe: #{@recipe.name}"
         do @clearRecipe
       do @updateRecipeDB
@@ -117,7 +120,7 @@ appConfig =
           do app.updateRecipeDB
 
     clearRecipe: ->
-      @recipe = funcs.clone templates.recipe
+      @recipe = clone templates.recipe
       do @clearIngredient
       @editindex = ''
 
@@ -152,14 +155,14 @@ appConfig =
             ings[ing.department][ing.name].amount += ing.amount
       # alphabetise everything
       ordered = {}
-      for d in funcs.azsort Object.keys ings
+      for d in azsort Object.keys ings
         ordered[d] = {}
-        ordered[d][i] = ings[d][i] for i in funcs.azsort Object.keys ings[d]
+        ordered[d][i] = ings[d][i] for i in azsort Object.keys ings[d]
       ordered
 
     onCopy: (e) -> eModal.alert
         subtitle: '(<kbd>Ctrl</kbd> + <kbd>v</kbd> to paste)'
-        message: funcs.nlbr e.text
+        message:  nlbr e.text
       , 'Copied'
     onError: (e) -> mess.show 'Error copying to the clipboard.'
 
@@ -183,7 +186,7 @@ appConfig =
       reader.readAsBinaryString evt.target.files[0]
 
     prepareDBforDownload: (arr = @recipes)->
-      funcs.clone arr
+      clone arr
         .map (e)->
           delete e.selected
           delete e.index

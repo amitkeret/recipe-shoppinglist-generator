@@ -1,38 +1,37 @@
-template#recipe-item
-  tr.recipe-item(
-    v-show="showItem"
-    :data-index="index"
-    :class="{ 'table-active': recipe.selected }"
-    @click="toggleSelectedRecipe"
-  )
-    td.recipe-actions: div
-      icon(icon="trash" color="danger" @click.native.stop="$emit('deleterecipe')" title="Delete recipe")
-      icon(icon="pen" color="warning" @click.native.stop="$emit('updaterecipe')" title="Update recipe")
-      icon(icon="eye" color="secondary" @click.native.stop="$emit('emodalrecipe')" title="View recipe")
-    td.recipe-title
-      icon.fa-lg.mr-2(
-        :icon=  "recipe.selected ? 'check-square' : 'square'"
-        :family="recipe.selected ? 'fas' : 'far'"
-        :color= "recipe.selected ? 'primary' : ''"
-      )
-      .recipe-link(
-        :is=    "recipe.link.length > 0 ? 'a' : 'span'"
-        :href=  "recipe.link.length > 0 ? recipe.link : false"
-        :target="recipe.link.length > 0 ? '_blank' : false"
-        @click.stop
-      )
-        | {{ recipe.name }}
-        span(v-if="recipe.link.length > 0")
-          icon.ml-2(icon="external-link-alt")
-          .badge.badge-primary {{ getLink().host }}
-    td.recipe-comment: i(v-if="recipe.comment.length > 0") {{ recipe.comment }}
-    td.recipe-meta: div
-      .badge.badge-primary(v-if="ingSearch") {{ ingSearch }}
-      icon(
-        icon="camera" color="secondary"
-        :class="{transparent: !recipe.image}"
-      )
-      icon(
-        :icon=  "isVeg ? 'leaf' : 'drumstick-bite'"
-        :color= "isVeg ? 'success' : 'danger'"
-      )
+tr.recipe-item(
+  v-show="showItem"
+  :data-index="index"
+  :class="{ 'table-active': recipe.selected }"
+  @click="toggleSelectedRecipe"
+)
+  td.recipe-actions: div
+    icon(icon="trash" color="danger" @click.native.stop="$emit('deleterecipe')" title="Delete recipe")
+    icon(icon="pen" color="warning" @click.native.stop="$emit('updaterecipe')" title="Update recipe")
+    icon(icon="eye" color="secondary" @click.native.stop="$emit('emodalrecipe')" title="View recipe")
+  td.recipe-title
+    icon.fa-lg.mr-2(
+      :icon=  "recipe.selected ? 'check-square' : 'square'"
+      :family="recipe.selected ? 'fas' : 'far'"
+      :color= "recipe.selected ? 'primary' : ''"
+    )
+    .recipe-link(
+      :is=    "recipe.link.length > 0 ? 'a' : 'span'"
+      :href=  "recipe.link.length > 0 ? recipe.link : false"
+      :target="recipe.link.length > 0 ? '_blank' : false"
+      @click.stop
+    )
+      | {{ recipe.name }}
+      span(v-if="recipe.link.length > 0")
+        icon.ml-2(icon="external-link-alt")
+        .badge.badge-primary {{ getLink().host }}
+  td.recipe-comment: i(v-if="recipe.comment.length > 0") {{ recipe.comment }}
+  td.recipe-meta: div
+    .badge.badge-primary(v-if="ingSearch") {{ ingSearch }}
+    icon(
+      icon="camera" color="secondary"
+      :class="{transparent: !recipe.image}"
+    )
+    icon(
+      :icon=  "isVeg ? 'leaf' : 'drumstick-bite'"
+      :color= "isVeg ? 'success' : 'danger'"
+    )
