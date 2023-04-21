@@ -1,6 +1,5 @@
-template#section-title
-  h4.section-title(@click.stop="$emit('sectionclick')")
-    span.badge.badge-dark.mr-2
-      span(v-if="text") {{ text }}
-      icon(v-if="icon" :icon="icon" :family="family")
-    | {{ title }}
+h4.section-title(@click.stop="$emit('sectionclick')")
+  span.badge.badge-dark.mr-2
+    span(v-if="text") {{ text }}
+    icon(v-if="icon" :icon="icon" :family="family")
+  | {{ title }}
