@@ -1,27 +1,31 @@
 {
   "name": "recipe-shoppinglist-generator",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "description": "recipe-shoppinglist-generator",
   "main": "index.html",
   "devDependencies": {
-    "browserify": "^17.0.0",
-    "coffeeify": "^3.0.1",
+    "apply-loader": "^2.0.0",
+    "coffee-loader": "^4.0.0",
     "coffeescript": "^2.3.2",
+    "css-loader": "^6.7.3",
     "npm-run-all": "^4.1.5",
     "pug": "^2.0.3",
     "pug-cli": "^1.0.0-alpha6",
-    "watchify": "^4.0.0"
+    "pug-loader": "^2.4.0",
+    "style-loader": "^3.3.2",
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amitkeret/recipe-shoppinglist-generator.git"
   },
   "scripts": {
-    "watch:js": "watchify -t coffeeify --debug -o dist/app.js src/coffee/app.coffee",
+    "watch:js": "webpack",
     "watch:html": "pug -o dist/ -Pw src/pug/index.pug",
     "dev": "npm-run-all -p watch:*",
-    "build:js": "browserify -t coffeeify -o dist/app.js src/coffee/app.coffee",
-    "build:html": "pug -o dist/ -P src/pug/index.pug",
+    "build:js": "webpack --env prod",
+    "build:html": "pug -o dist/ src/pug/index.pug",
     "build": "npm-run-all -s build:*"
   },
   "author": "amitkeret",
