@@ -7,8 +7,6 @@ recipeItem =
 
   props: [
     'recipe'
-    'recipes'
-    'index'
     'query'
     'vegfilter'
   ]
