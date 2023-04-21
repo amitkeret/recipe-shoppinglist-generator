@@ -1,0 +1,10 @@
+.section-title > .badge {
+  border-radius: 50%;
+}
+.section-title {
+  display: inline;
+  cursor: pointer;
+}
+.section-title:hover {
+  text-decoration: underline;
+}
