@@ -1,5 +1,5 @@
 import { log, clone, azsort, nlbr, parseURL, fraction } from './funcs.coffee'
-import { store as db } from './xStore.coffee'
+import { store as db } from './store.coffee'
 mess = new Mess
 
 templates =
