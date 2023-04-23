@@ -1,8 +1,6 @@
-store = null
-mess = null
-x = null
-
 import { log, clone, azsort, nlbr, parseURL, fraction } from './funcs.coffee'
+import { store as db } from './store.coffee'
+mess = new Mess
 
 templates =
   recipe:
@@ -21,7 +19,7 @@ templates =
 
 import { icon, buttonIcon } from './icon.coffee'
 import { sectionTitle } from './section-title.coffee'
-import { recipeItem } from './recipe-item.coffee'
+import { recipeItem, uniqueIngredients } from './recipe-item.coffee'
 Vue.component 'vue-multiselect', VueMultiselect.default
 Vue.component 'icon', icon
 Vue.component 'button-icon', buttonIcon
@@ -48,18 +46,6 @@ appConfig =
     step1visible: no
 
   methods:
-
-    updateRecipeDB: (overwrite = null)->
-      # 1. Backwards-compatibility: use template as starting point
-      #    This is for recipes which were created prior to addition of new properties
-      # 2. Multi-field ingredient sort
-      #    Sorting ingredients by optional first, to push these to the end of the list
-      recipes = (Object.assign clone(templates.recipe), recipe, {
-        selected: no
-        ingredients: recipe.ingredients.sort (a, b)-> a.optional - b.optional or a.name.localeCompare b.name
-      } for recipe in overwrite ? @recipes)
-      @recipes = azsort recipes, 'name'
-      store.set 'recipes', @recipes
 
     nlbr: (str)-> nlbr str
 
@@ -102,14 +88,14 @@ appConfig =
           @recipes.push clone @recipe
           mess.show "Added new recipe: #{@recipe.name}"
         do @clearRecipe
-      do @updateRecipeDB
+      db.update @recipes
 
     deleteRecipe: (index)->
       app = @
       eModal.confirm 'This cannot be undone.', 'Are you sure?'
         .then ()->
           app.recipes.splice index, 1
-          do app.updateRecipeDB
+          db.update app.recipes
 
     clearRecipe: ->
       @recipe = clone templates.recipe
@@ -170,26 +156,30 @@ appConfig =
 
     handleFileSelect: (evt)->
       onload = (e)->
-        @updateRecipeDB JSON.parse e.target.result
+        @recipes = db.importJSON e.target.result
         mess.show "#{ @recipes.length } recipes loaded successfully."
       # https://www.html5rocks.com/en/tutorials/file/dndfiles/
       reader = new FileReader
       reader.onload = onload.bind @
       reader.readAsBinaryString evt.target.files[0]
 
-    prepareDBforDownload: (arr = @recipes)->
-      clone arr
-        .map (e)->
-          delete e.selected
-          delete e.index
+    prepareDBforDownload: ->
+      data = clone @recipes
+      for recipe in data
+        delete recipe.selected
+        delete recipe.index
+        recipe.servings = parseInt recipe.servings if recipe.servings?
+      data
+
     exportRecipes: ->
       records = do @prepareDBforDownload
       textToSaveAsBlob = new Blob [JSON.stringify @recipes, undefined, 2], type: 'text/json'
       downloadLink = document.createElement 'a'
-      downloadLink.download = 'recipes.json'
-      downloadLink.innerHTML = 'Download File'
-      downloadLink.href = window.URL.createObjectURL textToSaveAsBlob
-      downloadLink.onclick = (e)-> document.body.removeChild e.target
+      Object.assign downloadLink,
+        download:   'recipes.json'
+        innerHTML:  'Download File'
+        href:       window.URL.createObjectURL textToSaveAsBlob
+        onclick:    (e)-> document.body.removeChild e.target
       downloadLink.style.display = 'none'
       document.body.appendChild downloadLink
       do downloadLink.click
@@ -203,12 +193,12 @@ appConfig =
 
     ingredientList: -> (department: dep, ings: (Object.assign details, {
       name: name
-    } for name, details of ings) for dep, ings of do @uniqueIngredients)
-    departmentList: -> Object.keys do @uniqueIngredients
+    } for name, details of ings) for dep, ings of uniqueIngredients @recipes)
+    departmentList: -> Object.keys uniqueIngredients @recipes
 
     clipboardShoppingList: ->
       a = "Shopping list for #{@today}:\n\n"
-      departments = @uniqueIngredients @selectedRecipes
+      departments = uniqueIngredients @selectedRecipes
       for department, ingredients of departments
         a += "#{ department }:\n"
         a += "#{ fraction ing.amount }#{ ing.unit } #{ ingName }\n" for ingName, ing of ingredients
@@ -224,12 +214,7 @@ appConfig =
         a += '\n'
       a
 
-init = ->
-  app = new Vue appConfig
-  app.updateRecipeDB store.get 'recipes'
-
 document.addEventListener 'DOMContentLoaded', ->
-  store = new xStore 'ShoppingList', localStorage
-  mess = new Mess
   do mess.init
-  do init
+  app = new Vue appConfig
+  app.recipes = db.get 'recipes'

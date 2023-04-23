@@ -13,6 +13,14 @@ azsort = (arr, prop = null)->
     if prop then a[prop].localeCompare b[prop]
     else a.localeCompare b
 
+keysort = (object)->
+  ordered = azsort Object.keys object
+  if ordered.length is 0 then {}
+  else
+    ret = {}
+    ret[key] = object[key] for key in ordered
+    ret
+
 nlbr = (str)->
   if str.includes '\n' then str.replaceAll '\n', '<br />'
   else str.replaceAll '<br />', '\n'
@@ -40,6 +48,7 @@ export {
   tlog
   clone
   azsort
+  keysort
   nlbr
   parseURL
   fraction

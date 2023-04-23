@@ -1,9 +1,25 @@
+import { log, keysort, parseURL } from './funcs.coffee'
+
+# Takes an array of recipes and returns unique ingredients with amount sums
+uniqueIngredients = (recipes)->
+  ings = {}
+  recipes.forEach (recipe)->
+    recipe.ingredients.forEach (ing)->
+      ings[ing.department] = {} if not ings[ing.department]
+      if not ings[ing.department][ing.name]
+        ings[ing.department][ing.name] =
+          unit:       ing.unit
+          amount:     ing.amount
+          department: ing.department
+      else
+        ings[ing.department][ing.name].amount += ing.amount
+  # alphabetise everything
+  ing = keysort ing for dep, ing of ings
+  keysort ings
+
 import css from '../css/recipe-item.css'
 html = require '../pug/recipe-item.pug'
-
-import { parseURL } from './funcs.coffee'
-
-recipeItem = 
+recipeItem =
 
   props: [
     'recipe'
@@ -12,11 +28,7 @@ recipeItem =
   ]
 
   methods:
-
-    getLink: ->
-      if @recipe.link.length is 0 then no
-      else parseURL @recipe.link
-
+    getLink: -> if @recipe.link.length is 0 then no else parseURL @recipe.link
     toggleSelectedRecipe: -> @recipe.selected = !@recipe.selected
 
   computed:
@@ -24,12 +36,10 @@ recipeItem =
     ingSearch: ->
       if @query.length is 0 then no
       else
-        ings = (ing.name.replace(///\(e?s\)///, '').split(///[\s-]///) for ing in @recipe.ingredients)
-        found = (@recipe.ingredients[i].name for ing, i in ings when ing.includes @query)[0]
+        found = (ing.name for ing in @recipe.ingredients when ing.name.replace(///\(e?s\)///, '').split(///[\s-]///).includes @query)
+        found[0]
 
-    isVeg: ->
-      deps = (ing.department for ing in @recipe.ingredients)
-      meat = not deps.includes 'Meats'
+    isVeg: -> not @recipe.ingredients.map( (ing)-> ing.department ).includes 'Meats'
 
     showItem: ->
       conditions =
@@ -48,4 +58,4 @@ recipeItem =
 
   template: html
 
-export { recipeItem }
+export { recipeItem, uniqueIngredients }
