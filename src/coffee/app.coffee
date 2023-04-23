@@ -205,8 +205,8 @@ appConfig =
 
     ingredientList: -> (department: dep, ings: (Object.assign details, {
       name: name
-    } for name, details of ings) for dep, ings of uniqueIngredients @recipe)
-    departmentList: -> Object.keys uniqueIngredients @recipe
+    } for name, details of ings) for dep, ings of uniqueIngredients @recipes)
+    departmentList: -> Object.keys uniqueIngredients @recipes
 
     clipboardShoppingList: ->
       a = "Shopping list for #{@today}:\n\n"
