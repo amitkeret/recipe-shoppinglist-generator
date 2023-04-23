@@ -87,15 +87,7 @@ appConfig =
       @ingredient.department = selected.department
       @ingredient.unit = selected.unit
 
-    # convert a floating point number to a fraction
-    # supports mixed fractions and HTML-entity formatting
-    # @uses fraction.js
-    getFraction: (decimal, html = no)->
-      f = new Fraction decimal
-      frac = f.toFraction true
-      if html is no or f.d is 1 then frac   # d=denominator. d=1 means its a whole number
-      else frac.replace(///(\d+)\/(\d+)///, '&frac$1$2;').replace(' ', '')
-
+    fraction: (num)-> fraction num, yes
     getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
 
     addRecipe: ->
