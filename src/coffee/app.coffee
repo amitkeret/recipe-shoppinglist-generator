@@ -47,18 +47,6 @@ appConfig =
 
   methods:
 
-    updateRecipeDB: (overwrite = null)->
-      # 1. Backwards-compatibility: use template as starting point
-      #    This is for recipes which were created prior to addition of new properties
-      # 2. Multi-field ingredient sort
-      #    Sorting ingredients by optional first, to push these to the end of the list
-      recipes = (Object.assign clone(templates.recipe), recipe, {
-        selected: no
-        ingredients: recipe.ingredients.sort (a, b)-> a.optional - b.optional or a.name.localeCompare b.name
-      } for recipe in overwrite ? @recipes)
-      @recipes = azsort recipes, 'name'
-      db.set 'recipes', @recipes
-
     nlbr: (str)-> nlbr str
 
     addIngredient: ->
@@ -100,14 +88,14 @@ appConfig =
           @recipes.push clone @recipe
           mess.show "Added new recipe: #{@recipe.name}"
         do @clearRecipe
-      do @updateRecipeDB
+      db.update @recipes
 
     deleteRecipe: (index)->
       app = @
       eModal.confirm 'This cannot be undone.', 'Are you sure?'
         .then ()->
           app.recipes.splice index, 1
-          do app.updateRecipeDB
+          db.update app.recipes
 
     clearRecipe: ->
       @recipe = clone templates.recipe
