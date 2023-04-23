@@ -2,7 +2,7 @@ store = null
 mess = null
 x = null
 
-import { log, clone, azsort, nlbr, parseURL } from './funcs.coffee'
+import { log, clone, azsort, nlbr, parseURL, fraction } from './funcs.coffee'
 
 templates =
   recipe:
@@ -87,15 +87,7 @@ appConfig =
       @ingredient.department = selected.department
       @ingredient.unit = selected.unit
 
-    # convert a floating point number to a fraction
-    # supports mixed fractions and HTML-entity formatting
-    # @uses fraction.js
-    getFraction: (decimal, html = no)->
-      f = new Fraction decimal
-      frac = f.toFraction true
-      if html is no or f.d is 1 then frac   # d=denominator. d=1 means its a whole number
-      else frac.replace(///(\d+)\/(\d+)///, '&frac$1$2;').replace(' ', '')
-
+    fraction: (num)-> fraction num, yes
     getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
 
     addRecipe: ->
@@ -219,7 +211,7 @@ appConfig =
       departments = @uniqueIngredients @selectedRecipes
       for department, ingredients of departments
         a += "#{ department }:\n"
-        a += "#{ @getFraction(ing.amount) }#{ ing.unit } #{ ingName }\n" for ingName, ing of ingredients
+        a += "#{ fraction ing.amount }#{ ing.unit } #{ ingName }\n" for ingName, ing of ingredients
         a += '\n'
       a
     clipboardMenues: ->
@@ -228,7 +220,7 @@ appConfig =
         a += "#{ recipe.name.toUpperCase() }
               #{ if recipe.comment then '\n' + recipe.comment else '' }
               \n--------------------------------------------\n"
-        a += "#{ @getFraction(ing.amount) }#{ ing.unit } #{ ing.name }\n" for ing in recipe.ingredients
+        a += "#{ fraction ing.amount }#{ ing.unit } #{ ing.name }\n" for ing in recipe.ingredients
         a += '\n'
       a
 
