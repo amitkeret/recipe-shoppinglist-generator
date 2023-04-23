@@ -1,6 +1,6 @@
 import { log, clone, azsort, nlbr, parseURL, fraction } from './funcs.coffee'
 import { store as db } from './xStore.coffee'
-mess = null
+mess = new Mess
 
 templates =
   recipe:
