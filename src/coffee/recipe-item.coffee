@@ -19,7 +19,7 @@ uniqueIngredients = (recipes)->
 
 import css from '../css/recipe-item.css'
 html = require '../pug/recipe-item.pug'
-recipeItem = 
+recipeItem =
 
   props: [
     'recipe'
