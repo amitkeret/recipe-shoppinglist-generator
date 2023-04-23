@@ -2,7 +2,7 @@ store = null
 mess = null
 x = null
 
-import { log, clone, azsort, nlbr, parseURL } from './funcs.coffee'
+import { log, clone, azsort, nlbr, parseURL, fraction } from './funcs.coffee'
 
 templates =
   recipe:
@@ -211,7 +211,7 @@ appConfig =
       departments = @uniqueIngredients @selectedRecipes
       for department, ingredients of departments
         a += "#{ department }:\n"
-        a += "#{ @getFraction(ing.amount) }#{ ing.unit } #{ ingName }\n" for ingName, ing of ingredients
+        a += "#{ fraction ing.amount }#{ ing.unit } #{ ingName }\n" for ingName, ing of ingredients
         a += '\n'
       a
     clipboardMenues: ->
@@ -220,7 +220,7 @@ appConfig =
         a += "#{ recipe.name.toUpperCase() }
               #{ if recipe.comment then '\n' + recipe.comment else '' }
               \n--------------------------------------------\n"
-        a += "#{ @getFraction(ing.amount) }#{ ing.unit } #{ ing.name }\n" for ing in recipe.ingredients
+        a += "#{ fraction ing.amount }#{ ing.unit } #{ ing.name }\n" for ing in recipe.ingredients
         a += '\n'
       a
 
