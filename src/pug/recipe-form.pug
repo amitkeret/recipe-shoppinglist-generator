@@ -38,7 +38,7 @@ input(type="hidden" v-model="editindex")
         li.d-flex.justify-content-between.align-items-center(v-for="(ing, index) in recipe.ingredients")
           span.fa-li: icon(icon="trash" color="danger" @click.native="deleteIngredient(index)")
           span
-            span(v-html="getFraction(ing.amount, true)")
+            span(v-html="fraction(ing.amount)")
             | {{ ing.unit }} {{ ing.name }}
           .d-flex
             small.ing-optional.mr-1 Optional?
