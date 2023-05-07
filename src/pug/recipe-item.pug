@@ -26,10 +26,9 @@ tr.recipe-item(
   td.recipe-comment: i(v-if="recipe.comment.length > 0") {{ recipe.comment }}
   td.recipe-meta: div
     .badge.badge-primary(v-if="ingSearch") {{ ingSearch }}
-    icon(
-      icon="camera" color="secondary"
-      :class="{transparent: !recipe.image}"
-    )
+    span(:class="{transparent: !recipe.servings}")
+      icon.mr-md-1(icon="utensils")
+      | {{ recipe.servings }}
     icon(
       :icon=  "isVeg ? 'leaf' : 'drumstick-bite'"
       :color= "isVeg ? 'success' : 'danger'"
