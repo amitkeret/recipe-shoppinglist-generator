@@ -1,4 +1,4 @@
-import { log, clone, azsort, nlbr, parseURL, fraction } from './funcs.coffee'
+import { log, clone, azsort, sum, nlbr, parseURL, fraction } from './funcs.coffee'
 import { store as db } from './store.coffee'
 mess = new Mess
 
@@ -191,6 +191,7 @@ appConfig =
       s = @selectedRecipes.map (recipe)-> recipe.name
       s.join ', '
         .toUpperCase()
+    selectedRecipesServings: -> sum @selectedRecipes, 'servings'
 
     ingredientList: -> (department: dep, ings: (Object.assign details, {
       name: name
