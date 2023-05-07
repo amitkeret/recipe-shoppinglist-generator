@@ -21,6 +21,12 @@ keysort = (object)->
     ret[key] = object[key] for key in ordered
     ret
 
+sum = (arr, prop = null)->
+  func = (s, d)-> s + d
+  chain = (arr)-> arr.filter( (a)-> a? ).reduce func, 0
+  if prop then chain arr.map (a)-> a[prop]
+  else chain arr
+
 nlbr = (str)->
   if str.includes '\n' then str.replaceAll '\n', '<br />'
   else str.replaceAll '<br />', '\n'
