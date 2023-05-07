@@ -1,4 +1,11 @@
-import { log, keysort, parseURL } from './funcs.coffee'
+import { log, clone, keysort, parseURL } from './funcs.coffee'
+
+formatRecipe = (recipe)->
+  cloned = clone recipe
+  cloned.servings = parseInt cloned.servings if cloned.servings?
+  ing.amount = parseFloat ing.amount for ing in cloned.ingredients
+  delete cloned.selected if cloned.selected?
+  cloned
 
 # Takes an array of recipes and returns unique ingredients with amount sums
 uniqueIngredients = (recipes)->
@@ -58,4 +65,4 @@ recipeItem =
 
   template: html
 
-export { recipeItem, uniqueIngredients }
+export { recipeItem, formatRecipe, uniqueIngredients }
