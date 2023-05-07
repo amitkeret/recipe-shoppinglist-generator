@@ -19,7 +19,7 @@ templates =
 
 import { icon, buttonIcon } from './icon.coffee'
 import { sectionTitle } from './section-title.coffee'
-import { recipeItem, uniqueIngredients } from './recipe-item.coffee'
+import { recipeItem, formatRecipe, uniqueIngredients } from './recipe-item.coffee'
 Vue.component 'vue-multiselect', VueMultiselect.default
 Vue.component 'icon', icon
 Vue.component 'button-icon', buttonIcon
@@ -58,7 +58,7 @@ appConfig =
       else if @ingredient.department is '' then mess.show 'Please input department name'
       else if @ingredient.amount is '' then mess.show 'Please input a decimal number'
       else
-        @recipe.ingredients.push Object.assign @ingredient, amount: parseFloat @ingredient.amount
+        @recipe.ingredients.push @ingredient
         do @clearIngredient
 
     optionalIngredient: (index)-> @recipe.ingredients[index].optional = not @recipe.ingredients[index].optional
@@ -81,14 +81,15 @@ appConfig =
       else if @recipe.ingredients.length is 0 then mess.show 'Ingredients: Add some first'
       else if @recipe.servings? and @recipe.servings % 1 isnt 0 then mess.show 'Servings: Whole numbers only'
       else
+        formatted = formatRecipe @recipe
         if @editindex isnt ''
-          @recipes[@editindex][prop] = @recipe[prop] for prop of @recipe when prop isnt 'selected'
+          @recipes[@editindex] = formatted
           mess.show "Updated recipe: #{@recipe.name}"
         else
-          @recipes.push clone @recipe
+          @recipes.push formatted
           mess.show "Added new recipe: #{@recipe.name}"
         do @clearRecipe
-      db.update @recipes
+        db.update @recipes
 
     deleteRecipe: (index)->
       app = @
@@ -173,7 +174,7 @@ appConfig =
 
     exportRecipes: ->
       records = do @prepareDBforDownload
-      textToSaveAsBlob = new Blob [JSON.stringify @recipes, undefined, 2], type: 'text/json'
+      textToSaveAsBlob = new Blob [JSON.stringify records, undefined, 2], type: 'text/json'
       downloadLink = document.createElement 'a'
       Object.assign downloadLink,
         download:   'recipes.json'
