@@ -55,6 +55,7 @@ export {
   clone
   azsort
   keysort
+  sum
   nlbr
   parseURL
   fraction
