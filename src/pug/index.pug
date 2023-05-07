@@ -68,6 +68,7 @@ html
           .card-header: .row.justify-content-between
             .col-md-4: section-title(text="3" title="Create shopping list")
             .col.text-right(v-if="selectedRecipes.length > 0")
+              span.mr-md-2 {{ selectedRecipes.length }} recipes, {{ selectedRecipesServings }} servings
               button-icon(
                 icon="shopping-basket" text="Generate shopping list" color="primary"
                 v-clipboard:copy="clipboardShoppingList"
