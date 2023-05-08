@@ -18,7 +18,6 @@ format = (recipes)->
 unformat = (recipes)->
   recipes = clone recipes
   delete recipe.selected for recipe in recipes
-  log 'in', recipes
   recipes
 
 store = new xStore 'ShoppingList_', localStorage
