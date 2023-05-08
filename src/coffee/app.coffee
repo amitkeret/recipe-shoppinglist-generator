@@ -164,16 +164,8 @@ appConfig =
       reader.onload = onload.bind @
       reader.readAsBinaryString evt.target.files[0]
 
-    prepareDBforDownload: ->
-      data = clone @recipes
-      for recipe in data
-        delete recipe.selected
-        delete recipe.index
-        recipe.servings = parseInt recipe.servings if recipe.servings?
-      data
-
     exportRecipes: ->
-      records = do @prepareDBforDownload
+      records = do db.exportJSON
       textToSaveAsBlob = new Blob [JSON.stringify records, undefined, 2], type: 'text/json'
       downloadLink = document.createElement 'a'
       Object.assign downloadLink,
