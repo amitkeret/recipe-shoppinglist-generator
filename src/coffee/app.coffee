@@ -94,7 +94,7 @@ appConfig =
     deleteRecipe: (index)->
       app = @
       eModal.confirm 'This cannot be undone.', 'Are you sure?'
-        .then ()->
+        .then ->
           app.recipes.splice index, 1
           db.update app.recipes
 
@@ -145,7 +145,7 @@ appConfig =
         message:  nlbr e.text
     onError: (e) -> mess.show 'Error copying to the clipboard.'
 
-    selectNone: -> @recipes.forEach (recipe)-> recipe.selected = no
+    selectNone: -> recipe.selected = no for recipe in @recipes
     clearQuery: ->
       @query = ''
       do this.$refs.query.focus
