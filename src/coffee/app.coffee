@@ -166,10 +166,7 @@ appConfig =
 
     prepareDBforDownload: ->
       data = clone @recipes
-      for recipe in data
-        delete recipe.selected
-        delete recipe.index
-        recipe.servings = parseInt recipe.servings if recipe.servings?
+      delete recipe.selected for recipe in data
       data
 
     exportRecipes: ->
