@@ -14,10 +14,10 @@ html
 
         #step1.card.shadow.mb-4
           .card-header: .row
-            .col-md-4
+            .col-md-3
               section-title(text="1" title="Add recipes" @sectionclick="step1toggle")
               icon.ml-1.fa-lg(:icon="step1visible ? 'caret-up' : 'caret-down'")
-            .col-md-4.offset-md-4.text-right
+            .col.text-right
               .dropdown#recipes-backup
                 button-icon.dropdown-toggle(icon="save" text="Recipes backup" data-toggle="dropdown")
                 .dropdown-menu
@@ -36,9 +36,9 @@ html
         #step2.card.shadow.mb-4
 
           .card-header.pb-1: .row
-            .col-md-4: section-title(text="2" title="Select recipes")
+            .col-md-3: section-title(text="2" title="Select recipes")
 
-            .col-md-6.offset-md-2: div.card-header-actions.d-flex
+            .col-md-6.offset-md-3: div.card-header-actions.d-flex
               //- Select none
               button-icon(icon="clone" family="far" color="outline-dark" title="Select none" @buttonclick="selectNone")
               //- Recipe filter
@@ -70,7 +70,7 @@ html
 
         #step3.card.shadow
           .card-header: .row.justify-content-between
-            .col-md-4: section-title(text="3" title="Create shopping list")
+            .col-md-3: section-title(text="3" title="Create shopping list")
             .col.text-right(v-if="selectedRecipes.length > 0")
               span.mr-md-2 {{ selectedRecipes.length }} recipes, {{ selectedRecipesServings }} servings
               button-icon(
