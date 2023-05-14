@@ -1,14 +1,21 @@
 tr.recipe-item(
   v-show="showItem"
   :class="{ 'table-active': recipe.selected }"
-  @click="toggleSelectedRecipe"
 )
   td.recipe-actions: div
-    icon(icon="trash" color="danger" @click.native.stop="$emit('deleterecipe')" title="Delete recipe")
-    icon(icon="pen" color="warning" @click.native.stop="$emit('updaterecipe')" title="Update recipe")
-    icon(icon="eye" color="secondary" @click.native.stop="$emit('emodalrecipe')" title="View recipe")
+    .dropdown.mt-n1
+      icon.clickable.my-n2(icon="ellipsis-h" data-toggle="dropdown")
+      .dropdown-menu
+        .dropdown-item(@click="$emit('updaterecipe')")
+          icon.ml-n2.mr-2(icon="pen" color="warning" title="Update recipe")
+          | Edit
+        .dropdown-item(@click="$emit('deleterecipe')")
+          icon.ml-n2.mr-2(icon="trash" color="danger" title="Delete recipe")
+          | Delete
+    icon(icon="eye" color="secondary" @click.native="$emit('emodalrecipe')" title="View recipe")
   td.recipe-title
-    icon.fa-lg.mr-2(
+    icon.clickable.fa-lg.mr-2(
+      @click.native="toggleSelectedRecipe"
       :icon=  "recipe.selected ? 'check-square' : 'square'"
       :family="recipe.selected ? 'fas' : 'far'"
       :color= "recipe.selected ? 'primary' : ''"
@@ -17,7 +24,6 @@ tr.recipe-item(
       :is=    "recipe.link.length > 0 ? 'a' : 'span'"
       :href=  "recipe.link.length > 0 ? recipe.link : false"
       :target="recipe.link.length > 0 ? '_blank' : false"
-      @click.stop
     )
       | {{ recipe.name }}
       span(v-if="recipe.link.length > 0")
