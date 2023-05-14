@@ -22,9 +22,13 @@ html
                 button-icon.dropdown-toggle(icon="save" text="Recipes backup" data-toggle="dropdown")
                 .dropdown-menu
                   //- https://codepen.io/pieceofcode/pen/zldng
-                  label.dropdown-item.file-upload__label(for="recipesFile" text="Load") Load
+                  label.dropdown-item.file-upload__label(for="recipesFile" text="Load")
+                    icon.mr-2(icon="file-import")
+                    | Load
                   input#recipesFile.file-upload__input(type="file" name="files" @change="handleFileSelect")
-                  .dropdown-item(@click="exportRecipes") Save
+                  .dropdown-item(@click="exportRecipes")
+                    icon.ml-n2.mr-2(icon="file-download")
+                    | Save
 
           .card-body(v-show="step1visible == true"): .row
             include ./recipe-form.pug
