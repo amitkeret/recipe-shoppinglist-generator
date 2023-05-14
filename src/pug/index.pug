@@ -14,10 +14,10 @@ html
 
         #step1.card.shadow.mb-4
           .card-header: .row
-            .col-md-3
+            .col-md-4
               section-title(text="1" title="Add recipes" @sectionclick="step1toggle")
               icon.ml-1.fa-lg(:icon="step1visible ? 'caret-up' : 'caret-down'")
-            .col.text-right
+            .col-md-4.offset-md-4.text-right
               .dropdown#recipes-backup
                 button-icon.dropdown-toggle(icon="save" text="Recipes backup" data-toggle="dropdown")
                 .dropdown-menu
