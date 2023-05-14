@@ -71,6 +71,9 @@ input[type=number] {
   height: 100%;
   opacity: 0;
 }
+.file-upload__label > i {
+  margin-left: -0.75rem;
+}
 .recipe-image-thumbnail {
   background-position: center;
   background-size: cover;
