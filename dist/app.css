@@ -53,6 +53,9 @@
 /**
 * App
 */
+#app .clickable {
+  cursor: pointer;
+}
 input[type=number] {
   -moz-appearance: textfield;
 }
