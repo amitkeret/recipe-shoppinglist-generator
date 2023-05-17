@@ -31,7 +31,7 @@ appConfig =
   el: '#app'
   data:
     recipes: []
-    editindex: ''
+    editindex: -1
     today: (new Date).toLocaleDateString 'en-AU',
       weekday: 'short'
       year: 'numeric'
@@ -82,7 +82,7 @@ appConfig =
       else if @recipe.servings? and @recipe.servings % 1 isnt 0 then mess.show 'Servings: Whole numbers only'
       else
         formatted = formatRecipe @recipe
-        if @editindex isnt ''
+        if @editindex > -1
           @recipes[@editindex] = formatted
           mess.show "Updated recipe: #{@recipe.name}"
         else
@@ -101,7 +101,7 @@ appConfig =
     clearRecipe: ->
       @recipe = clone templates.recipe
       do @clearIngredient
-      @editindex = ''
+      @editindex = -1
 
     updateRecipe: (index, recipe)->
       @recipe[prop] = value for prop, value of recipe
