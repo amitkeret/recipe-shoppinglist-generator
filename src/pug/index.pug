@@ -15,7 +15,7 @@ html
         #step1.card.shadow.mb-4
           .card-header: .row
             .col-md-3
-              section-title(text="1" title="Add recipes" @sectionclick="step1toggle")
+              section-title(text="1" :title="editindex > -1 ? 'Edit recipe' : 'Add recipes'" @sectionclick="step1toggle")
               icon.ml-1.fa-lg(:icon="step1visible ? 'caret-up' : 'caret-down'")
             .col.text-right
               .dropdown#recipes-backup
