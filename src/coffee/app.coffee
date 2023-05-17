@@ -156,17 +156,17 @@ appConfig =
       @step1visible = not @step1visible
 
     handleFileSelect: (evt)->
-      onload = (e)->
-        @recipes = db.importJSON e.target.result
+      onloadend = (e)->
+        jsonStr = new TextDecoder().decode e.target.result # @see https://stackoverflow.com/a/65272548
+        @recipes = db.importJSON jsonStr
         mess.show "#{ @recipes.length } recipes loaded successfully."
-      # https://www.html5rocks.com/en/tutorials/file/dndfiles/
       reader = new FileReader
-      reader.onload = onload.bind @
-      reader.readAsBinaryString evt.target.files[0]
+      reader.onloadend = onloadend.bind @
+      reader. readAsArrayBuffer evt.target.files[0]
 
     exportRecipes: ->
-      records = do db.exportJSON
-      textToSaveAsBlob = new Blob [JSON.stringify records, undefined, 2], type: 'text/json'
+      str = JSON.stringify (do db.exportJSON), undefined, 2 # @see https://stackoverflow.com/a/7220510
+      textToSaveAsBlob = new Blob [str], type: 'text/json'
       downloadLink = document.createElement 'a'
       Object.assign downloadLink,
         download:   'recipes.json'
