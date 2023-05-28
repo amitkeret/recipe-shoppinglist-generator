@@ -212,3 +212,4 @@ document.addEventListener 'DOMContentLoaded', ->
   do mess.init
   app = new Vue appConfig
   app.recipes = db.get 'recipes'
+  do $('[data-toggle="tooltip"]').tooltip
