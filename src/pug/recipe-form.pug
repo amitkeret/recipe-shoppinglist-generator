@@ -16,8 +16,7 @@ input(type="hidden" v-model="editindex")
           type="text"
           v-if="!recipe.image"
           v-model="recipe.image"
-          name="imagefile"
-          placeholder="Image (optional)"
+          placeholder="Image URL (optional)"
         )
     .col
       input.form-control.form-control-lg(type="text" v-model="recipe.name" placeholder="Recipe name")
@@ -89,7 +88,11 @@ input(type="hidden" v-model="editindex")
         //- Amount & unit
         .col-md-5
           .input-group
-            input.form-control(type="number" v-model="ingredient.amount")
+            input.form-control(
+              type="number" v-model="ingredient.amount"
+              data-toggle="tooltip" data-placement="bottom" data-html="true"
+              title="1 tbsp = 2 tsps<br />1 cup = 250 mLs"
+            )
             .input-group-append.dropdown
               button.btn.dropdown-toggle(
                 v-model="ingredient.unit"
