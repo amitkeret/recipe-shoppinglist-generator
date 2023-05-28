@@ -85,15 +85,15 @@ input[type=number] {
   background-position: center;
   background-size: cover;
   box-shadow: inset 0 0 calc(1 * var(--spacer)) black;
-  position: absolute;
   width: 100%;
-  height: 100%;
+  z-index: 1;
 }
 #step1 #recipeImage {
   position: relative;
 }
-#step1 #recipeImage > .recipe-image-thumbnail {
-  z-index: 1;
+#step1 #recipeImage .recipe-image-thumbnail {
+  position: absolute;
+  height: 100%;
 }
 #step1 #recipeImage:hover > .recipe-image-thumbnail {
   box-shadow: inset 0 0 calc(7 * var(--spacer)) black;
@@ -108,9 +108,6 @@ input[type=number] {
 }
 #step1 #recipeImageFile {
   background: none;
-}
-#step1 #new-ingredients .fa-trash {
-  cursor: pointer;
 }
 #step1 #new-ingredients li .ing-optional {
   cursor: default;
