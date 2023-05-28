@@ -44,14 +44,14 @@ html
               //- Recipe filter
               .input-group
                 .input-group-prepend: .input-group-text: icon(icon="filter")
-                input.form-control(v-model="query" ref="query" placeholder="Search recipe details & ingredients")
+                input.form-control(v-model="filters.query" ref="query" placeholder="Search recipe details & ingredients")
                 .input-group-append: button-icon(icon="times" color="danger" title="Clear search" @buttonclick="clearQuery")
               //- Veg filter
               button-icon(
                 icon="leaf"
-                :color="vegfilter ? 'success' : 'outline-dark'"
+                :color="filters.veg ? 'success' : 'outline-dark'"
                 title="Toggle vegetarian"
-                @buttonclick="toggleVeg"
+                @buttonclick="filters.veg = !filters.veg"
               )
 
           //- Recipes list
@@ -61,8 +61,7 @@ html
               //- @see https://vuejs.org/guide/essentials/component-basics.html#dom-template-parsing-caveats
               tr(is="recipe-item" v-for="(recipe, index) in recipes"
                 :recipe="recipe"
-                :query="query"
-                :vegfilter="vegfilter"
+                :filters="filters"
                 @updaterecipe="updateRecipe(index, recipe)"
                 @deleterecipe="deleteRecipe(index)"
                 @emodalrecipe="eModalRecipe(recipe)"
