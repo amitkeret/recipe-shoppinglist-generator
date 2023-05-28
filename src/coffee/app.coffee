@@ -41,8 +41,9 @@ appConfig =
     ingredient: clone templates.ingredient
     ingForm: 'exist'
     units: ['', 'mL', 'g', ' cup(s)', ' tbsp(s)', ' tsp(s)', ' pack(s)']
-    query: ''
-    vegfilter: no
+    filters:
+      query: ''
+      veg: no
     step1visible: no
 
   methods:
@@ -147,9 +148,8 @@ appConfig =
 
     selectNone: -> recipe.selected = no for recipe in @recipes
     clearQuery: ->
-      @query = ''
+      @filters.query = ''
       do this.$refs.query.focus
-    toggleVeg: -> @vegfilter = not @vegfilter
 
     step1toggle: ->
       do @clearRecipe
