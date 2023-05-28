@@ -30,8 +30,7 @@ recipeItem =
 
   props: [
     'recipe'
-    'query'
-    'vegfilter'
+    'filters'
   ]
 
   methods:
@@ -41,9 +40,9 @@ recipeItem =
   computed:
 
     ingSearch: ->
-      if @query.length is 0 then no
+      if @filters.query.length is 0 then no
       else
-        found = (ing.name for ing in @recipe.ingredients when ing.name.replace(///\(e?s\)///, '').split(///[\s-]///).includes @query)
+        found = (ing.name for ing in @recipe.ingredients when ing.name.replace(///\(e?s\)///, '').split(///[\s-]///).includes @filters.query)
         found[0]
 
     isVeg: -> not @recipe.ingredients.map( (ing)-> ing.department ).includes 'Meats'
@@ -51,11 +50,11 @@ recipeItem =
     showItem: ->
       conditions =
         AND:
-          veg:   @vegfilter is no or @isVeg is yes
+          veg:   @filters.veg is no or @isVeg is yes
         OR:
-          empty:    @query.length is 0
-          title:    @recipe.name.toLowerCase().includes(@query)
-          comment:  @recipe.comment.toLowerCase().includes(@query)
+          empty:    @filters.query.length is 0
+          title:    @recipe.name.toLowerCase().includes(@filters.query)
+          comment:  @recipe.comment.toLowerCase().includes(@filters.query)
           ings:     @ingSearch?
       ands = Object.values conditions.AND
         .every (e)-> e is yes
