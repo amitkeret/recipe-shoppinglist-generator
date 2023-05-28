@@ -5,7 +5,7 @@
 :root {
   /* Copying Bootstrap's variable definition to native CSS */
   --spacer: 1rem;
-  --form-placeholder-color: #495057;
+  --form-placeholder-color: #6f7880;
 }
 .dropdown .dropdown-item {
   cursor: pointer;
