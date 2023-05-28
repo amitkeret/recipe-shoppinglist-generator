@@ -43,6 +43,7 @@ appConfig =
     units: ['', 'mL', 'g', ' cup(s)', ' tbsp(s)', ' tsp(s)', ' pack(s)']
     filters:
       query: ''
+      ings: []
       veg: no
     step1visible: no
 
@@ -185,9 +186,8 @@ appConfig =
         .toUpperCase()
     selectedRecipesServings: -> sum @selectedRecipes, 'servings'
 
-    ingredientList: -> (department: dep, ings: (Object.assign details, {
-      name: name
-    } for name, details of ings) for dep, ings of uniqueIngredients @recipes)
+    ingredientList: -> (department: dep, ings: (details for name, details of ings) for dep, ings of uniqueIngredients @recipes)
+    ingredientListFlat: -> uniqueIngredients @recipes, no
     departmentList: -> Object.keys uniqueIngredients @recipes
 
     clipboardShoppingList: ->
@@ -195,7 +195,7 @@ appConfig =
       departments = uniqueIngredients @selectedRecipes
       for department, ingredients of departments
         a += "#{ department }:\n"
-        a += "#{ fraction ing.amount }#{ ing.unit } #{ ingName }\n" for ingName, ing of ingredients
+        a += "#{ fraction ing.amount }#{ ing.unit } #{ ing.name }\n" for ing in ingredients
         a += '\n'
       a
     clipboardMenues: ->

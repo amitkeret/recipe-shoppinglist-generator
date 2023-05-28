@@ -1,4 +1,4 @@
-import { log, clone, keysort, parseURL } from './funcs.coffee'
+import { log, clone, azsort, keysort, parseURL } from './funcs.coffee'
 
 formatRecipe = (recipe)->
   cloned = clone recipe
@@ -8,21 +8,23 @@ formatRecipe = (recipe)->
   cloned
 
 # Takes an array of recipes and returns unique ingredients with amount sums
-uniqueIngredients = (recipes)->
+uniqueIngredients = (recipes, groupDeps = yes)->
   ings = {}
-  recipes.forEach (recipe)->
-    recipe.ingredients.forEach (ing)->
+  for recipe in recipes
+    for ing in recipe.ingredients
       ings[ing.department] = {} if not ings[ing.department]
       if not ings[ing.department][ing.name]
         ings[ing.department][ing.name] =
+          name:       ing.name
           unit:       ing.unit
           amount:     ing.amount
           department: ing.department
       else
         ings[ing.department][ing.name].amount += ing.amount
-  # alphabetise everything
-  ing = keysort ing for dep, ing of ings
-  keysort ings
+  # Convert to array
+  ings[dep] = azsort (details for name, details of ing), 'name' for dep, ing of ings
+  if groupDeps is yes then keysort ings
+  else azsort (Object.values(ings).flat()), 'name'
 
 import css from '../css/recipe-item.css'
 html = require '../pug/recipe-item.pug'
@@ -40,9 +42,13 @@ recipeItem =
   computed:
 
     ingSearch: ->
-      if @filters.query.length is 0 then no
+      if @filters.ings.length is 0 then no
       else
-        found = (ing.name for ing in @recipe.ingredients when ing.name.replace(///\(e?s\)///, '').split(///[\s-]///).includes @filters.query)
+        self = @
+        found = @recipe.ingredients.filter (ing)->
+          for fing in self.filters.ings
+            if ing.name is fing.name then return yes
+          no
         found[0]
 
     isVeg: -> not @recipe.ingredients.map( (ing)-> ing.department ).includes 'Meats'
@@ -50,12 +56,12 @@ recipeItem =
     showItem: ->
       conditions =
         AND:
-          veg:   @filters.veg is no or @isVeg is yes
+          veg:      @filters.veg is no or @isVeg is yes
+          ings:     @ingSearch?
         OR:
           empty:    @filters.query.length is 0
           title:    @recipe.name.toLowerCase().includes(@filters.query)
           comment:  @recipe.comment.toLowerCase().includes(@filters.query)
-          ings:     @ingSearch?
       ands = Object.values conditions.AND
         .every (e)-> e is yes
       ors  = Object.values conditions.OR

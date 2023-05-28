@@ -27,6 +27,10 @@
 /**
 * External Vue components
 */
+.input-group .multiselect {
+  width: 1%;
+  flex: 1 1 auto;
+}
 .multiselect__placeholder {
   font-size: 1rem;
   margin-bottom: 0;
