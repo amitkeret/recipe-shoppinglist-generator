@@ -42,14 +42,8 @@ recipeItem =
   computed:
 
     ingSearch: ->
-      if @filters.ings.length is 0 then no
-      else
-        self = @
-        found = @recipe.ingredients.filter (ing)->
-          for fing in self.filters.ings
-            if ing.name is fing.name then return yes
-          no
-        found[0]
+      fings = (ing.name for ing in @filters.ings)
+      found = (ing for ing in @recipe.ingredients when fings.includes ing.name)
 
     isVeg: -> not @recipe.ingredients.map( (ing)-> ing.department ).includes 'Meats'
 
@@ -57,7 +51,7 @@ recipeItem =
       conditions =
         AND:
           veg:      @filters.veg is no or @isVeg is yes
-          ings:     @ingSearch?
+          ings:     @filters.ings.length is 0 or @ingSearch.length > 0
         OR:
           empty:    @filters.query.length is 0
           title:    @recipe.name.toLowerCase().includes(@filters.query)
