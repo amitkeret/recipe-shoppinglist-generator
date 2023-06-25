@@ -36,7 +36,7 @@ tr.recipe-item(
       span: .ml-1.badge.badge-pill.badge-primary(v-for="ing in ingSearch") {{ ing.name }}
     span(:class="{transparent: !recipe.servings}")
       icon.mr-md-1(icon="utensils")
-      | {{ recipe.servings }}
+      | {{ recipe.servings || 0 }}
     icon(
       :icon=  "isVeg ? 'leaf' : 'drumstick-bite'"
       :color= "isVeg ? 'success' : 'danger'"
