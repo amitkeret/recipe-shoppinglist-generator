@@ -31,7 +31,9 @@ tr.recipe-item(
         .badge.badge-primary {{ getLink().host }}
   td.recipe-comment: i(v-if="recipe.comment.length > 0") {{ recipe.comment }}
   td.recipe-meta: div
-    .badge.badge-primary(v-if="ingSearch") {{ ingSearch.name }}
+    .recipe-meta-ings(v-if="ingSearch.length > 0")
+      span.badge.badge-pill(:class="ingSearch.length == filters.ings.length ? 'badge-primary' : 'badge-secondary'") {{ ingSearch.length }}
+      span: .ml-1.badge.badge-pill.badge-primary(v-for="ing in ingSearch") {{ ing.name }}
     span(:class="{transparent: !recipe.servings}")
       icon.mr-md-1(icon="utensils")
       | {{ recipe.servings }}
