@@ -35,14 +35,34 @@ tr.recipe-item .recipe-actions > div,
 tr.recipe-item .recipe-meta > div {
   justify-content: flex-end;
 }
-tr.recipe-item .recipe-comment,
-tr.recipe-item .recipe-meta {
+tr.recipe-item .recipe-comment {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 tr.recipe-item .recipe-meta {
   width: calc( var(--column) * 2 );
+}
+tr.recipe-item .recipe-meta .recipe-meta-ings {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+tr.recipe-item .recipe-meta .recipe-meta-ings > span {
+  position: absolute;
+  right: 0;
+  transition: all 0.5s ease-in-out;
+}
+tr.recipe-item .recipe-meta .recipe-meta-ings > span:nth-child(2) {
+  white-space: nowrap;
+}
+tr.recipe-item .recipe-meta .recipe-meta-ings > span:nth-child(2),
+tr.recipe-item:hover .recipe-meta .recipe-meta-ings > span:nth-child(1) {
+  opacity: 0;
+}
+tr.recipe-item .recipe-meta .recipe-meta-ings > span:nth-child(1),
+tr.recipe-item:hover .recipe-meta .recipe-meta-ings > span:nth-child(2) {
+  opacity: 1;
 }
 tr.recipe-item .recipe-meta > div > .fas {
   width: 16px;
