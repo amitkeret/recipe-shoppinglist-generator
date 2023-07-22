@@ -58,7 +58,16 @@ html
                   :options="ingredientListFlat"
                   :multiple="true"
                 )
-                .input-group-append: button-icon(icon="times" color="danger" title="Clear" @buttonclick="filters.ings = []")
+                .input-group-append
+                  button-icon(icon="times" color="danger" title="Clear" @buttonclick="filters.ings = []")
+                  input(type="checkbox" v-model="filters.ingModeAnd"
+                    data-toggle="switchbutton"
+                    data-onlabel="AND"
+                    data-offlabel="OR"
+                    data-onstyle="danger"
+                    data-offstyle="warning"
+                    data-height="auto"
+                  )
 
               //- Veg filter
               button-icon(
