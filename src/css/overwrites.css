@@ -50,3 +50,15 @@
 .multiselect__option:not(.multiselect__option--group) {
   text-indent: 1rem;
 }
+
+/* Bootstrap-switch-button */
+input[data-toggle="switchbutton"] ~ .switch-group label {
+  position: absolute;
+  padding: 0;
+}
+input[data-toggle="switchbutton"] ~ .switch-group label.switch-on {
+  right: 65%;
+}
+input[data-toggle="switchbutton"] ~ .switch-group label.switch-off {
+  left: 60%;
+}

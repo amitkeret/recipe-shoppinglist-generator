@@ -47,6 +47,7 @@ appConfig =
     filters:
       query: ''
       ings: []
+      ingModeAnd: no
       veg: no
     step1visible: no
 
