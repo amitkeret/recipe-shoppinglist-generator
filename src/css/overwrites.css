@@ -1,0 +1,52 @@
+/* Bootstrap */
+:root {
+  /* Copying Bootstrap's variable definition to native CSS */
+  --spacer: 1rem;
+  --form-placeholder-color: #6f7880;
+}
+.dropdown .dropdown-item {
+  cursor: pointer;
+}
+.transparent {
+  opacity: 0;
+}
+
+/* Mess */
+/* coz the original uses "absolute" for some odd reason */
+#mess-messElement {
+  position: fixed !important;
+}
+
+/* eModal */
+/* BIGFIX to support bootstrap v4's flexbox model */
+.modal .modal-header > .x.close {
+  order: 1;
+}
+
+/* vue-multiselect */
+.input-group .multiselect {
+  width: 1%;
+  flex: 1 1 auto;
+}
+.multiselect__placeholder {
+  font-size: 1rem;
+  margin-bottom: 0;
+  padding-top: 0;
+  color: var(--form-placeholder-color);
+}
+.multiselect__tags, .multiselect__content-wrapper {
+  border-color: #ced4da;
+}
+.multiselect.multiselect--active .multiselect__tags {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+}
+.multiselect__option--group {
+  background: inherit !important;
+  color: inherit !important;
+  font-style: italic;
+  font-weight: bolder;
+}
+.multiselect__option:not(.multiselect__option--group) {
+  text-indent: 1rem;
+}
