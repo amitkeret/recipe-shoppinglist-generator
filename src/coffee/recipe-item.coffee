@@ -1,4 +1,5 @@
 import { log, clone, azsort, keysort, parseURL } from './funcs.coffee'
+import { recipeServings } from './recipe-servings.coffee'
 
 formatRecipe = (recipe)->
   cloned = clone recipe
@@ -29,6 +30,9 @@ uniqueIngredients = (recipes, groupDeps = yes)->
 import css from '../css/recipe-item.css'
 html = require '../pug/recipe-item.pug'
 recipeItem =
+
+  components:
+    'recipe-servings': recipeServings
 
   props: [
     'recipe'
