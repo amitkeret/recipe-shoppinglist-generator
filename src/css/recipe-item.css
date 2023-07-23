@@ -70,3 +70,6 @@ tr.recipe-item .recipe-meta > div > .fas {
 tr.recipe-item .recipe-comment {
   max-width: 0;
 }
+tr.recipe-item .recipe-meta-servings {
+  min-width: 2rem;
+}
