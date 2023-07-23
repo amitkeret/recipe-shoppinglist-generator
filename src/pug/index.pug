@@ -61,7 +61,7 @@ html
                 .input-group-append
                   button-icon(icon="times" color="danger" title="Clear" @buttonclick="filters.ings = []")
                   input(type="checkbox" v-model="filters.ingModeAnd"
-                    data-toggle="switchbutton"
+                    data-toggle="switchbutton" id="switchbutton-filters-ingModeAnd"
                     data-onlabel="AND"
                     data-offlabel="OR"
                     data-onstyle="danger"
