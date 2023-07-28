@@ -4,6 +4,7 @@
     .mb-md-1(v-show="recipe.servings")
       icon.ml-md-1.mr-md-2(icon="utensils")
       | {{ recipe.servings }} servings
+    .mb-md-3.recipe-rating(v-if="recipe.rating"): icon(v-for="i in recipe.rating" icon="star" color="warning")
     .mb-md-3: i(v-html="nlbr(recipe.comment)")
     ul.fa-ul: li(v-for="(ing, index) in recipe.ingredients" :data-optional="ing.optional ? true : false")
       span.fa-li: small: icon(
