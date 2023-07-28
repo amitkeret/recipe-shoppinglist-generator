@@ -3,6 +3,7 @@ import { log, clone, azsort, keysort, parseURL } from './funcs.coffee'
 formatRecipe = (recipe)->
   cloned = clone recipe
   cloned.servings = parseInt cloned.servings if cloned.servings?
+  cloned.rating = parseInt cloned.rating if cloned.rating?
   ing.amount = parseFloat ing.amount for ing in cloned.ingredients
   delete cloned.selected if cloned.selected?
   cloned
