@@ -70,3 +70,13 @@ tr.recipe-item .recipe-meta > div > .fas {
 tr.recipe-item .recipe-comment {
   max-width: 0;
 }
+tr.recipe-item .recipe-meta-rating {
+  min-width: 1.5rem;
+}
+tr.recipe-item .recipe-rating {
+  display: flex;
+  align-items: center;
+}
+tr.recipe-item .recipe-rating > small {
+  font-size: 0.7rem;
+}
