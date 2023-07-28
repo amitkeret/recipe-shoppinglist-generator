@@ -37,6 +37,9 @@ tr.recipe-item(
     span(:class="{transparent: !recipe.servings}")
       icon.mr-md-1(icon="utensils")
       | {{ recipe.servings || 0 }}
+    .recipe-meta-rating: .recipe-rating(v-if="recipe.rating")
+      icon.fa-sm(icon="star" color="warning")
+      small {{ recipe.rating }}
     icon(
       :icon=  "isVeg ? 'leaf' : 'drumstick-bite'"
       :color= "isVeg ? 'success' : 'danger'"
