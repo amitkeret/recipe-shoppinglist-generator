@@ -6,16 +6,13 @@ recipeServings =
 
   props: [
     'recipe'
-    'buttons'
   ]
 
-  data:
-    originalRecipe: null
+  data: ->
+    original: null
 
-  computed:
-    original: ->
-      if not @originalRecipe? then @originalRecipe = clone @recipe
-      @originalRecipe
+  created: ->
+    @original = clone @recipe
 
   methods:
     update: (change)->
