@@ -34,7 +34,7 @@ tr.recipe-item(
     .recipe-meta-ings(v-if="ingSearch.length > 0")
       span.badge.badge-pill(:class="ingSearch.length == filters.ings.length ? 'badge-primary' : 'badge-secondary'") {{ ingSearch.length }}
       span: .ml-1.badge.badge-pill.badge-primary(v-for="ing in ingSearch") {{ ing.name }}
-    .recipe-meta-servings: recipe-servings(v-if="recipe.servings" :recipe="recipe")
+    .recipe-meta-servings: recipe-servings(:recipe="recipe")
     icon(
       :icon=  "isVeg ? 'leaf' : 'drumstick-bite'"
       :color= "isVeg ? 'success' : 'danger'"
