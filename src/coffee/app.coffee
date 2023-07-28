@@ -12,6 +12,7 @@ templates =
     link:        ''
     comment:     ''
     servings:    null
+    rating:      null
     image:       ''
   ingredient:
     name:       ''
