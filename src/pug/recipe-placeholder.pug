@@ -1,16 +1,13 @@
 #recipe-placeholder.d-none
   .recipe-placeholder.container(ref="recipePlaceholder")
     .recipe-image-thumbnail.mb-md-3.rounded(v-if="recipe.image" :style="{ 'background-image': getImage(recipe).css }")
-    .mb-md-1(v-show="recipe.servings")
-      icon.ml-md-1.mr-md-2(icon="utensils")
-      | {{ recipe.servings }} servings
     .mb-md-3: i(v-html="nlbr(recipe.comment)")
     ul.fa-ul: li(v-for="(ing, index) in recipe.ingredients" :data-optional="ing.optional ? true : false")
       span.fa-li: small: icon(
         :icon="ing.optional ? 'question' : 'check'"
         :color="ing.optional ? 'primary' : 'success'"
       )
-      span(v-html="fraction(ing.amount)")
+      span(v-html="fraction(ing.amount * recipe.servingsModifier)")
       | {{ ing.unit }} {{ ing.name }}
   a(
     ref="recipePlaceholderLink"

@@ -1,0 +1,28 @@
+.recipe-servings,
+.recipe-servings .servings-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 3px;
+}
+.recipe-servings .servings-buttons {
+  padding-top: 2px;
+  max-width: 0;
+  overflow: hidden;
+  transition: var(--transition);
+}
+.recipe-servings:hover .servings-buttons {
+  max-width: 5em;
+}
+.recipe-servings .servings-buttons > button {
+  /* Halving Bootstrap's xs size */
+  padding: .15rem .2rem .125rem;
+  font-size: 0.5rem;
+  line-height: 0.25;
+}
+.recipe-servings.recipe-servings-modified > span {
+  color: var(--danger);
+}
+.recipe-servings.recipe-servings-modified > span > span {
+  font-weight: bolder;
+}

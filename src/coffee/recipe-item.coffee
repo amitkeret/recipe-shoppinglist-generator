@@ -1,8 +1,8 @@
 import { log, clone, azsort, keysort, parseURL } from './funcs.coffee'
+import { recipeServings } from './recipe-servings.coffee'
 
 formatRecipe = (recipe)->
   cloned = clone recipe
-  cloned.servings = parseInt cloned.servings if cloned.servings?
   ing.amount = parseFloat ing.amount for ing in cloned.ingredients
   delete cloned.selected if cloned.selected?
   cloned
@@ -17,7 +17,7 @@ uniqueIngredients = (recipes, groupDeps = yes)->
         ings[ing.department][ing.name] =
           name:       ing.name
           unit:       ing.unit
-          amount:     ing.amount
+          amount:     ing.amount * recipe.servingsModifier
           department: ing.department
       else
         ings[ing.department][ing.name].amount += ing.amount
@@ -29,6 +29,9 @@ uniqueIngredients = (recipes, groupDeps = yes)->
 import css from '../css/recipe-item.css'
 html = require '../pug/recipe-item.pug'
 recipeItem =
+
+  components:
+    'recipe-servings': recipeServings
 
   props: [
     'recipe'

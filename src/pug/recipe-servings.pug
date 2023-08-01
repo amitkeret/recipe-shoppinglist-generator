@@ -1,0 +1,9 @@
+.recipe-servings(v-if="recipe.servings" :class="{'recipe-servings-modified': currentServings !== recipe.servings}")
+  span
+    icon.mr-md-1(icon="utensils")
+    span {{ currentServings || 0 }}
+  span.servings-buttons: button-icon.btn-xs.rounded-circle(
+    v-for="dir, index in ['plus', 'minus']"
+    :icon="dir" color="dark"
+    @buttonclick="update(index ? -1 : 1)"
+  )
