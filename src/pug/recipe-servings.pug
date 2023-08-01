@@ -1,7 +1,7 @@
-.recipe-servings(v-if="recipe.servings" :class="{'recipe-servings-modified': original.servings !== recipe.servings}")
+.recipe-servings(v-if="recipe.servings" :class="{'recipe-servings-modified': currentServings !== recipe.servings}")
   span
     icon.mr-md-1(icon="utensils")
-    span {{ recipe.servings || 0 }}
+    span {{ currentServings || 0 }}
   span.servings-buttons: button-icon.btn-xs.rounded-circle(
     v-for="dir, index in ['plus', 'minus']"
     :icon="dir" color="dark"
