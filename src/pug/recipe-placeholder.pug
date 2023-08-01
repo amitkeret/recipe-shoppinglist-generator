@@ -7,7 +7,7 @@
         :icon="ing.optional ? 'question' : 'check'"
         :color="ing.optional ? 'primary' : 'success'"
       )
-      span(v-html="fraction(ing.amount)")
+      span(v-html="fraction(ing.amount * recipe.servingsModifier)")
       | {{ ing.unit }} {{ ing.name }}
   a(
     ref="recipePlaceholderLink"
