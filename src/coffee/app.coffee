@@ -32,7 +32,7 @@ Vue.component 'recipe-item', recipeItem
 appConfig = 
 
   el: '#app'
-  data:
+  data: ->
     recipes: []
     editindex: -1
     today: (new Date).toLocaleDateString 'en-AU',
@@ -50,6 +50,11 @@ appConfig =
       ingModeAnd: no
       veg: no
     step1visible: no
+
+  created: ->
+    @recipes = do db.getAll
+    do mess.init
+    do $('[data-toggle="tooltip"]').tooltip
 
   methods:
 
@@ -212,8 +217,4 @@ appConfig =
         a += '\n'
       a
 
-document.addEventListener 'DOMContentLoaded', ->
-  do mess.init
-  app = new Vue appConfig
-  app.recipes = do db.getAll
-  do $('[data-toggle="tooltip"]').tooltip
+document.addEventListener 'DOMContentLoaded', -> app = new Vue appConfig
