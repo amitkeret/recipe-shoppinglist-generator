@@ -18,7 +18,7 @@ uniqueIngredients = (recipes, groupDeps = yes)->
         ings[ing.department][ing.name] =
           name:       ing.name
           unit:       ing.unit
-          amount:     ing.amount
+          amount:     ing.amount * recipe.servingsModifier
           department: ing.department
       else
         ings[ing.department][ing.name].amount += ing.amount
