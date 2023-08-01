@@ -8,17 +8,13 @@ recipeServings =
     'recipe'
   ]
 
-  data: ->
-    original: null
-
-  created: ->
-    @original = clone @recipe
+  computed:
+    currentServings: -> @recipe.servings * @recipe.servingsModifier
 
   methods:
     update: (change)->
-      if @recipe.servings + change isnt 0
-        @recipe.servings += change
-        ing.amount = @original.ingredients[index].amount / @original.servings * @recipe.servings for ing, index in @recipe.ingredients
+      if @currentServings + change isnt 0
+        @recipe.servingsModifier = (@currentServings + change) / @recipe.servings
 
   template: html
 
