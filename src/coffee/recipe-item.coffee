@@ -3,7 +3,6 @@ import { recipeServings } from './recipe-servings.coffee'
 
 formatRecipe = (recipe)->
   cloned = clone recipe
-  cloned.servings = parseInt cloned.servings if cloned.servings?
   ing.amount = parseFloat ing.amount for ing in cloned.ingredients
   delete cloned.selected if cloned.selected?
   cloned
