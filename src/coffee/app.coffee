@@ -129,7 +129,7 @@ appConfig =
       @step1visible = no
       app = @
       cb = -> eModal.alert
-        title:    recipe.name
+        title:    app.activeRecipe.name
         subtitle: app.$refs.recipePlaceholderLink.outerHTML
         message:  app.$refs.recipePlaceholder.outerHTML
       # allow time for Vue to update DOM
