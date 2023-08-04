@@ -87,6 +87,11 @@ appConfig =
     fraction: (num)-> fraction num, yes
     getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
 
+    # Set one of the list recipes to be the active recipe (for the placeholder)
+    # Any updates to the underlying recipe object should be reflected immediately in the active recipe
+    setActiveRecipe: (index)->
+      @activeRecipe = @recipes[index]
+
     addRecipe: ->
       if @recipe.name is '' then mess.show 'Name: Cannot be empty'
       else if @recipe.ingredients.length is 0 then mess.show 'Ingredients: Add some first'
@@ -114,14 +119,14 @@ appConfig =
       do @clearIngredient
       @editindex = -1
 
-    updateRecipe: (index, recipe)->
-      @recipe[prop] = value for prop, value of recipe
+    updateRecipe: (index)->
+      @recipe = clone @recipes[index]
       @editindex = index
       @step1visible = yes
 
-    eModalRecipe: (recipe)->
+    eModalRecipe: (index)->
+      @setActiveRecipe(index)
       @step1visible = no
-      @recipe[prop] = value for prop, value of recipe
       app = @
       cb = -> eModal.alert
         title:    recipe.name
