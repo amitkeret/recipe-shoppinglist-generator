@@ -85,9 +85,9 @@ html
               tr(is="recipe-item" v-for="(recipe, index) in recipes"
                 :recipe="recipe"
                 :filters="filters"
-                @updaterecipe="updateRecipe(index, recipe)"
+                @updaterecipe="updateRecipe(index)"
                 @deleterecipe="deleteRecipe(index)"
-                @emodalrecipe="eModalRecipe(recipe)"
+                @emodalrecipe="eModalRecipe(index)"
               )
 
         #step3.card.shadow
