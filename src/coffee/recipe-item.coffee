@@ -1,30 +1,5 @@
-import { log, clone, azsort, keysort, parseURL } from './funcs.coffee'
+import { log, parseURL } from './funcs.coffee'
 import { recipeServings } from './recipe-servings.coffee'
-
-formatRecipe = (recipe)->
-  cloned = clone recipe
-  ing.amount = parseFloat ing.amount for ing in cloned.ingredients
-  delete cloned.selected if cloned.selected?
-  cloned
-
-# Takes an array of recipes and returns unique ingredients with amount sums
-uniqueIngredients = (recipes, groupDeps = yes)->
-  ings = {}
-  for recipe in recipes
-    for ing in recipe.ingredients
-      ings[ing.department] = {} if not ings[ing.department]
-      if not ings[ing.department][ing.name]
-        ings[ing.department][ing.name] =
-          name:       ing.name
-          unit:       ing.unit
-          amount:     ing.amount * recipe.servingsModifier
-          department: ing.department
-      else
-        ings[ing.department][ing.name].amount += ing.amount
-  # Convert to array
-  ings[dep] = azsort (details for name, details of ing), 'name' for dep, ing of ings
-  if groupDeps is yes then keysort ings
-  else azsort (Object.values(ings).flat()), 'name'
 
 import css from '../css/recipe-item.css'
 html = require '../pug/recipe-item.pug'
@@ -76,4 +51,4 @@ recipeItem =
 
   template: html
 
-export { recipeItem, formatRecipe, uniqueIngredients }
+export { recipeItem }
