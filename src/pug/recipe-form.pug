@@ -122,6 +122,6 @@ input(type="hidden" v-model="editindex")
     :icon="editindex !== '' ? 'pen' : 'plus'"
     :text="editindex !== '' ? 'Update' : 'Add'"
     :color="editindex !== '' ? 'warning' : 'primary'"
-    @buttonclick="addRecipe"
+    @buttonclick="saveRecipe"
   )
   button-icon(icon="times" text="Cancel" color="danger" @buttonclick="clearRecipe")
