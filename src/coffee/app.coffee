@@ -165,12 +165,17 @@ appConfig =
       do downloadLink.click
 
   computed:
+
     selectedRecipes: -> @recipes.filter (recipe)-> recipe.selected is yes
+
     selectedRecipesTitle: ->
       s = @selectedRecipes.map (recipe)-> recipe.name
       s.join ', '
         .toUpperCase()
-    selectedRecipesServings: -> sum @selectedRecipes, 'servings'
+
+    selectedRecipesServings: ->
+      servings = @selectedRecipes.map (recipe)-> recipe.servings * recipe.servingsModifier
+      sum servings
 
     ingredientList: -> (department: dep, ings: (details for name, details of ings) for dep, ings of Ingredients.unique @recipes)
     ingredientListFlat: -> Ingredients.unique @recipes, no
