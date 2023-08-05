@@ -1,24 +1,25 @@
 import cssApp from '../css/app.css'
 import cssOverwrites from '../css/overwrites.css'
 
-import { log, clone, azsort, sum, nlbr, parseURL, fraction } from './funcs.coffee'
+import { log, clone, sum, nlbr, parseURL, fraction } from './funcs.coffee'
 import { store as db, defaults } from './store.coffee'
-mess = new Mess
-
-import { icon, buttonIcon } from './icon.coffee'
 import { sectionTitle } from './section-title.coffee'
 import { recipeItem } from './recipe-item.coffee'
 import * as Ingredients from './recipe-ingredients.coffee'
 
-Vue.component 'vue-multiselect', VueMultiselect.default
-Vue.component 'icon', icon
-Vue.component 'button-icon', buttonIcon
-Vue.component 'section-title', sectionTitle
-Vue.component 'recipe-item', recipeItem
+import { icon, buttonIcon } from './icon.coffee'  # these components are used by multiple other components
+Vue.component 'icon', icon                        # importing globally -> available to any component, negates repetative inclusion
+Vue.component 'button-icon', buttonIcon           # @see https://vuejs.org/guide/components/registration.html
 
 appConfig = 
 
   el: '#app'
+
+  components:
+    'section-title': sectionTitle
+    'vue-multiselect': VueMultiselect.default
+    'recipe-item': recipeItem
+  
   data: ->
     recipes: []
     editindex: -1
@@ -41,6 +42,7 @@ appConfig =
 
   created: ->
     @recipes = do db.getAll
+    mess = new Mess
     do mess.init
     do $('[data-toggle="tooltip"]').tooltip
 
