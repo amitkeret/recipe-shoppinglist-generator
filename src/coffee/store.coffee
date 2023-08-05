@@ -76,7 +76,11 @@ store.convert = convert
 
 store.getAll = -> convert (store.get 'recipes'), 'Vue'
 
-store.importJSON = (json)-> store.update convert (JSON.parse json), 'Vue'
+store.importJSON = (json)->
+  recipes = convert (JSON.parse json), 'Vue'
+  store.update recipes
+  recipes
+
 store.exportJSON = -> convert (store.get 'recipes'), 'JSON'
 
 store.update = (recipes)-> store.set 'recipes', convert recipes, 'Vue'
