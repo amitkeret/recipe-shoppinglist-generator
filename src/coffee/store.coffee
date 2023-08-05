@@ -2,46 +2,83 @@
 
 import { log, clone, azsort, uniqueArr, uniqueObj } from './funcs.coffee'
 
+defaults =
+  recipe:
+    name:        ''
+    link:        ''
+    comment:     ''
+    image:       ''
+    servings:    null
+    rating:      null
+    ingredients: []
+  ingredient:
+    name:       ''
+    department: ''
+    amount:     0
+    unit:       null
+    optional:   no
+
 initialise = ->
   store.set 'recipes', []
 
-# 1. Backwards-compatibility: use template as starting point
-#    This is for recipes which were created prior to addition of new properties
-# 2. Multi-field ingredient sort
-#    Sorting ingredients by optional first, to push these to the end of the list
-format = (recipes)->
-  azsort (Object.assign clone(templates.recipe), recipe, 
-  { # field formatting
-    servings: parseInt recipe.servings | 0
-  },
-  { # non-DB additions
-    selected: no
-    servingsModifier: 1
-    ingredients: recipe.ingredients.sort (a, b)-> a.optional - b.optional or a.name.localeCompare b.name
-  },
-  {} for recipe in recipes), 'name'
+objectFields =
+  JSON: [
+    {name: 'name'}, {name: 'link'}, {name: 'comment'}, {name: 'image'}
+    {name: 'servings', formatFunc: (val)-> parseInt val | 0}
+    {name: 'rating', formatFunc: (val)-> parseInt val | 0}
+    {
+      name: 'ingredients', init: []
+      formatFunc: (ings)->
+        ing.amount = parseFloat ing.amount for ing in ings
+        # Multi-field ingredient sort:
+        # Sorting ingredients by optional first, to push these to the end of the list
+        ings.sort (a, b)-> a.optional - b.optional or a.name.localeCompare b.name
+    }
+  ]
+objectFields.Vue = objectFields.JSON.concat [
+  {name: 'selected', init: no}
+  {name: 'servingsModifier', init: 1}
+]
+# Conversion function between types of storage:
+# - JSON file- slimmed-down version, confirm correct field types
+# - Vue- added fields for Vue / lists etc.
+# Takes recipe/s and adds/removes/formats field as necessary
+convert = (recipes = [], toFormat = 'JSON')->
 
-unformat = (recipes)->
+  # make sure we have an array of objects
+  recipes = [recipes] if not Array.isArray recipes
+
+  # create a copy; do not affect the original object sent to this function
+  # eg. Vue-formatted objects will still be used by Vue after being saved to JSON file
   recipes = clone recipes
-  delete recipe.selected for recipe in recipes
-  delete recipe.servingsModifier for recipe in recipes
-  recipes
+
+  # choose the fields corresponding to the format we're dealing with
+  fields = objectFields[toFormat].map (e)-> e.name
+
+  # clear any unnecessary fields
+  delete recipe[prop] for prop of recipe when not fields.includes prop for recipe in recipes
+
+  # initialise appropriate fields
+  recipe[field.name] = field.init for field in objectFields[toFormat] when field.init? and not recipe[field.name]? for recipe in recipes
+
+  # format all remaining fields
+  recipe[field.name] = field.formatFunc recipe[field.name] for field in objectFields[toFormat] when field.formatFunc? for recipe in recipes
+
+  # final alphabetical sorting
+  recipes = azsort recipes, 'name'
+
+  if recipes.length is 1 then recipes[0] else recipes
 
 store = new xStore 'ShoppingList_', localStorage
 do initialise if not store.get 'recipes'
 
-store.getAll = ->
-  recipes = store.get 'recipes'
-  format recipes
+store.convert = convert
 
-store.importJSON = (json)->
-  db = format JSON.parse json
-  store.update db
+store.getAll = -> convert (store.get 'recipes'), 'Vue'
 
-store.exportJSON = -> unformat store.get 'recipes'
+store.importJSON = (json)-> store.update convert (JSON.parse json), 'Vue'
+store.exportJSON = -> convert (store.get 'recipes'), 'JSON'
 
-store.update = (recipes)->
-  store.set 'recipes', recipes
-  recipes
+store.update = (recipes)-> store.set 'recipes', convert recipes, 'Vue'
 
-export { store }
+export { store, defaults }
