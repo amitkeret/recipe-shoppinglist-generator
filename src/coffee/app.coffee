@@ -2,27 +2,14 @@ import cssApp from '../css/app.css'
 import cssOverwrites from '../css/overwrites.css'
 
 import { log, clone, azsort, sum, nlbr, parseURL, fraction } from './funcs.coffee'
-import { store as db } from './store.coffee'
+import { store as db, defaults } from './store.coffee'
 mess = new Mess
-
-templates =
-  recipe:
-    name:        ''
-    ingredients: []
-    link:        ''
-    comment:     ''
-    servings:    null
-    image:       ''
-  ingredient:
-    name:       ''
-    unit:       null
-    amount:     0
-    department: ''
-    optional:   no
 
 import { icon, buttonIcon } from './icon.coffee'
 import { sectionTitle } from './section-title.coffee'
-import { recipeItem, formatRecipe, uniqueIngredients } from './recipe-item.coffee'
+import { recipeItem } from './recipe-item.coffee'
+import * as Ingredients from './recipe-ingredients.coffee'
+
 Vue.component 'vue-multiselect', VueMultiselect.default
 Vue.component 'icon', icon
 Vue.component 'button-icon', buttonIcon
@@ -40,10 +27,11 @@ appConfig =
       year: 'numeric'
       month: 'long'
       day: 'numeric'
-    recipe:     clone templates.recipe
-    ingredient: clone templates.ingredient
+    recipe:     clone defaults.recipe
+    ingredient: clone defaults.ingredient
+    activeRecipe: null
     ingForm: 'exist'
-    units: ['', 'mL', 'g', ' cup(s)', ' tbsp(s)', ' tsp(s)', ' pack(s)']
+    units: Ingredients.units
     filters:
       query: ''
       ings: []
@@ -77,7 +65,7 @@ appConfig =
     deleteIngredient: (index)-> @recipe.ingredients.splice index, 1
 
     clearIngredient: (type = 'exist')->
-      @ingredient = clone templates.ingredient
+      @ingredient = clone defaults.ingredient
       @ingForm = type
 
     updateExistingIngredient: (selected)->
@@ -92,15 +80,16 @@ appConfig =
     setActiveRecipe: (index)->
       @activeRecipe = @recipes[index]
 
-    addRecipe: ->
+    saveRecipe: ->
       if @recipe.name is '' then mess.show 'Name: Cannot be empty'
       else if @recipe.ingredients.length is 0 then mess.show 'Ingredients: Add some first'
       else if @recipe.servings? and @recipe.servings % 1 isnt 0 then mess.show 'Servings: Whole numbers only'
       else
-        formatted = formatRecipe @recipe
+        formatted = db.convert @recipe, 'Vue'
         if @editindex > -1
           @recipes[@editindex] = formatted
           mess.show "Updated recipe: #{@recipe.name}"
+          @step1visible = no
         else
           @recipes.push formatted
           mess.show "Added new recipe: #{@recipe.name}"
@@ -115,7 +104,7 @@ appConfig =
           db.update app.recipes
 
     clearRecipe: ->
-      @recipe = clone templates.recipe
+      @recipe = clone defaults.recipe
       do @clearIngredient
       @editindex = -1
 
@@ -135,26 +124,6 @@ appConfig =
       # allow time for Vue to update DOM
       setTimeout(cb, 100)
 
-    # Takes an array of recipes and returns unique ingredients with amount sums
-    uniqueIngredients: (recipes = @recipes)->
-      ings = {}
-      recipes.forEach (recipe)->
-        recipe.ingredients.forEach (ing)->
-          ings[ing.department] = {} if not ings[ing.department]
-          if not ings[ing.department][ing.name]
-            ings[ing.department][ing.name] =
-              unit:       ing.unit
-              amount:     ing.amount
-              department: ing.department
-          else
-            ings[ing.department][ing.name].amount += ing.amount
-      # alphabetise everything
-      ordered = {}
-      for d in azsort Object.keys ings
-        ordered[d] = {}
-        ordered[d][i] = ings[d][i] for i in azsort Object.keys ings[d]
-      ordered
-
     onCopy: (e) -> eModal.alert
         title:    'Copied'
         subtitle: '(<kbd>Ctrl</kbd> + <kbd>v</kbd> to paste)'
@@ -162,6 +131,7 @@ appConfig =
     onError: (e) -> mess.show 'Error copying to the clipboard.'
 
     selectNone: -> recipe.selected = no for recipe in @recipes
+    
     clearQuery: ->
       @filters.query = ''
       do this.$refs.query.focus
@@ -200,13 +170,13 @@ appConfig =
         .toUpperCase()
     selectedRecipesServings: -> sum @selectedRecipes, 'servings'
 
-    ingredientList: -> (department: dep, ings: (details for name, details of ings) for dep, ings of uniqueIngredients @recipes)
-    ingredientListFlat: -> uniqueIngredients @recipes, no
-    departmentList: -> Object.keys uniqueIngredients @recipes
+    ingredientList: -> (department: dep, ings: (details for name, details of ings) for dep, ings of Ingredients.unique @recipes)
+    ingredientListFlat: -> Ingredients.unique @recipes, no
+    departmentList: -> Object.keys Ingredients.unique @recipes
 
     clipboardShoppingList: ->
       a = "Shopping list for #{@today}:\n\n"
-      departments = uniqueIngredients @selectedRecipes
+      departments = Ingredients.unique @selectedRecipes
       for department, ingredients of departments
         a += "#{ department }:\n"
         a += "#{ fraction ing.amount }#{ ing.unit } #{ ing.name }\n" for ing in ingredients
