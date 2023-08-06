@@ -32,7 +32,7 @@ recipeItem =
           show = @ingSearch.length > 0
       show
 
-    isVeg: -> not @recipe.ingredients.map( (ing)-> ing.department ).includes 'Meats'
+    isVeg: -> (ing for ing in @recipe.ingredients when ing.department is 'Meats').length is 0
 
     showItem: ->
       conditions =

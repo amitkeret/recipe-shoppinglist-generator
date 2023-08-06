@@ -166,16 +166,11 @@ appConfig =
 
   computed:
 
-    selectedRecipes: -> @recipes.filter (recipe)-> recipe.selected is yes
+    selectedRecipes: -> (recipe for recipe in @recipes when recipe.selected is yes)
 
-    selectedRecipesTitle: ->
-      s = @selectedRecipes.map (recipe)-> recipe.name
-      s.join ', '
-        .toUpperCase()
+    selectedRecipesTitle: -> (recipe.name for recipe in @selectedRecipes).join(', ').toUpperCase()
 
-    selectedRecipesServings: ->
-      servings = @selectedRecipes.map (recipe)-> recipe.servings * recipe.servingsModifier
-      sum servings
+    selectedRecipesServings: -> sum (recipe.servings * recipe.servingsModifier for recipe in @selectedRecipes)
 
     ingredientList: -> (department: dep, ings: (details for name, details of ings) for dep, ings of Ingredients.unique @recipes)
     ingredientListFlat: -> Ingredients.unique @recipes, no
