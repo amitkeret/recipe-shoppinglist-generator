@@ -174,7 +174,7 @@ appConfig =
         .toUpperCase()
 
     selectedRecipesServings: ->
-      servings = @selectedRecipes.map (recipe)-> recipe.servings * recipe.servingsModifier
+      servings = (recipe.servings * recipe.servingsModifier for recipe in @selectedRecipes)
       sum servings
 
     ingredientList: -> (department: dep, ings: (details for name, details of ings) for dep, ings of Ingredients.unique @recipes)
