@@ -40,11 +40,7 @@ appConfig =
       veg: no
     step1visible: no
 
-  created: ->
-    @recipes = do db.getAll
-    mess = new Mess
-    do mess.init
-    do $('[data-toggle="tooltip"]').tooltip
+  created: -> @recipes = do db.getAll
 
   methods:
 
@@ -194,4 +190,8 @@ appConfig =
         a += '\n'
       a
 
-document.addEventListener 'DOMContentLoaded', -> app = new Vue appConfig
+document.addEventListener 'DOMContentLoaded', ->
+  app = new Vue appConfig
+  mess = new Mess
+  do mess.init
+  do $('[data-toggle="tooltip"]').tooltip
