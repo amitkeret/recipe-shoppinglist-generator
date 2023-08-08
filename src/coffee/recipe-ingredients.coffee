@@ -1,14 +1,18 @@
-import { log, azsort, keysort } from './funcs.coffee'
+import { log, clone, azsort, keysort, validate } from './funcs.coffee'
+import { defaults } from './xStore.coffee'
 
-units = [
-  ''
-  'mL'
-  'g'
-  ' cup(s)'
-  ' tbsp(s)'
-  ' tsp(s)'
-  ' pack(s)'
-]
+data =
+  ingredient: clone defaults.ingredient
+  units: [
+    ''
+    'mL'
+    'g'
+    ' cup(s)'
+    ' tbsp(s)'
+    ' tsp(s)'
+    ' pack(s)'
+  ]
+  ingForm: 'exist'
 
 # Takes an array of recipes and returns unique ingredients with amount sums
 unique = (recipes, groupDeps = yes)->
@@ -29,4 +33,42 @@ unique = (recipes, groupDeps = yes)->
   if groupDeps is yes then keysort ings
   else azsort (Object.values(ings).flat()), 'name'
 
-export { units, unique }
+methods = ->
+
+  vue = @
+
+  unique: unique
+
+  clear: (type = 'exist')->
+    vue.Ingredient.ingredient = clone defaults.ingredient
+    vue.Ingredient.ingForm = type
+
+  add: ->
+    # vue-multiselect is bound to ingredient.name
+    # however, it stores (and sends) ingredient objects, not just names
+    vue.Ingredient.ingredient.name = vue.Ingredient.ingredient.name.name if vue.Ingredient.ingredient.name.name?
+
+    conditions = [
+      [ 'name',       '',                             'Ingredient name: Cannot be empty']
+      [ 'department', '',                             'Department name: Cannot be empty']
+      [ 'amount',     (prop)-> (prop * 8) % 1 isnt 0, 'Amount: Decimal numbers in steps of 1/8']
+      [ 'unit',       null,                           'Unit: Selection required']
+    ]
+
+    if validate vue.Ingredient.ingredient, conditions
+      vue.Recipe.recipe.ingredients.push vue.Ingredient.ingredient
+      do vue.Ingredients.clear
+
+  updateExisting: (selected)->
+    vue.Ingredient.ingredient.department = selected.department
+    vue.Ingredient.ingredient.unit = selected.unit
+
+  optional: (index)-> vue.Recipe.recipe.ingredients[index].optional = not vue.Recipe.recipe.ingredients[index].optional
+
+  delete: (index)-> vue.Recipe.recipe.ingredients.splice index, 1
+
+  list: -> (department: dep, ings: (details for name, details of ings) for dep, ings of unique vue.recipes)
+  listFlat: -> unique vue.recipes, no
+  departments: -> Object.keys unique vue.recipes
+
+export { data, methods }
