@@ -54,7 +54,7 @@ html
                   placeholder="Search ingredients"
                   label="name"
                   track-by="name"
-                  :options="ingredientListFlat"
+                  :options="Ingredients.listFlat()"
                   :multiple="true"
                 )
                 .input-group-append
@@ -84,16 +84,16 @@ html
               tr(is="recipe-item" v-for="(recipe, index) in recipes"
                 :recipe="recipe"
                 :filters="filters"
-                @updaterecipe="updateRecipe(index)"
-                @deleterecipe="deleteRecipe(index)"
-                @emodalrecipe="eModalRecipe(index)"
+                @updaterecipe="Recipes.update(index)"
+                @deleterecipe="Recipes.delete(index)"
+                @emodalrecipe="Recipes.eModal(index)"
               )
 
         #step3.card.shadow
           .card-header: .row.justify-content-between
             .col-md-3: section-title(text="3" title="Create shopping list")
-            .col.text-right(v-if="selectedRecipes.length > 0")
-              span.mr-md-2 {{ selectedRecipes.length }} recipes, {{ selectedRecipesServings }} servings
+            .col.text-right(v-if="Recipes.selected().length > 0")
+              span.mr-md-2 {{ Recipes.selected().length }} recipes, {{ Recipes.selected('servings') }} servings
               button-icon(
                 icon="shopping-basket" text="Generate shopping list" color="primary"
                 v-clipboard:copy="clipboardShoppingList"
