@@ -20,8 +20,8 @@ buttonIcon =
   props: base.concat ['tag', 'text']
   methods:
     buttonClick: ->
-      this.$emit 'buttonclick'
-      do this.$el.blur
+      @$emit 'click'
+      do @$el.blur
   computed:
     compColor:  -> if @color then "btn-#{@color}" else 'btn-secondary'
     compTag:    -> @tag ? 'button'
