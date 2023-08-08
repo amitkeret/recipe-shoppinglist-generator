@@ -12,9 +12,9 @@
 }
 
 /* Mess */
-/* coz the original uses "absolute" for some odd reason */
 #mess-messElement {
-  position: fixed !important;
+  position: fixed !important; /* coz the original uses "absolute" for some odd reason */
+  white-space: pre;           /* https://stackoverflow.com/a/33052216 */
 }
 
 /* eModal */
