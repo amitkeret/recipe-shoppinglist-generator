@@ -44,7 +44,6 @@ html
 
               //- Recipe filter
               .input-group
-                .input-group-prepend: .input-group-text: icon(icon="filter")
                 input.form-control(v-model="filters.query" ref="query" placeholder="Search recipe details")
                 .input-group-append: button-icon(icon="times" color="danger" title="Clear search" @buttonclick="clearQuery")
 
