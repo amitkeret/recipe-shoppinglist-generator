@@ -13,7 +13,7 @@ input(type="hidden" v-model="editindex")
           icon="trash"
           color="danger"
           title="Remove image"
-          @buttonclick="Recipe.recipe.image = ''"
+          @click="Recipe.recipe.image = ''"
         )
         input#recipeImageFile.w-100.h-100.border-0.text-center(
           type="text"
@@ -37,7 +37,7 @@ input(type="hidden" v-model="editindex")
       p(v-show="Recipe.recipe.ingredients.length == 0") No ingredients yet...
       ul#new-ingredients.fa-ul(v-show="Recipe.recipe.ingredients.length > 0")
         li.d-flex.justify-content-between.align-items-center(v-for="(ing, index) in Recipe.recipe.ingredients")
-          span.fa-li: icon.clickable(icon="trash" color="danger" @click.native="Ingredients.delete(index)")
+          span.fa-li: icon.clickable(icon="trash" color="danger" @click="Ingredients.delete(index)")
           span
             span(v-html="Funcs.fraction(ing.amount)")
             | {{ ing.unit }} {{ ing.name }}
@@ -109,7 +109,7 @@ input(type="hidden" v-model="editindex")
         .col-md-4
           icon.fa-lg.mr-2(
             v-model="Ingredient.ingredient.optional"
-            @click.native="Ingredient.ingredient.optional = !Ingredient.ingredient.optional"
+            @click="Ingredient.ingredient.optional = !Ingredient.ingredient.optional"
             :icon=  "Ingredient.ingredient.optional ? 'check-square' : 'square'"
             :family="Ingredient.ingredient.optional ? 'fas' : 'far'"
             :color= "Ingredient.ingredient.optional ? 'primary' : ''"
@@ -117,7 +117,7 @@ input(type="hidden" v-model="editindex")
           | Optional?
 
         //- New ingedient action button
-        .col.text-right: button-icon(icon="plus" text="Add" color="primary" @buttonclick="Ingredients.add()")
+        .col.text-right: button-icon(icon="plus" text="Add" color="primary" @click="Ingredients.add()")
 
 //- Recipe action buttons
 .col-md-2.text-right
@@ -125,6 +125,6 @@ input(type="hidden" v-model="editindex")
     :icon="editindex > -1 ? 'pen' : 'plus'"
     :text="editindex > -1 ? 'Update' : 'Add'"
     :color="editindex > -1 ? 'warning' : 'primary'"
-    @buttonclick="Recipes.save()"
+    @click="Recipes.save()"
   )
-  button-icon(icon="times" text="Cancel" color="danger" @buttonclick="Recipes.clear()")
+  button-icon(icon="times" text="Cancel" color="danger" @click="Recipes.clear()")
