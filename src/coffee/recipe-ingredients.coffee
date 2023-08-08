@@ -1,5 +1,5 @@
 import { log, clone, azsort, keysort, validate } from './funcs.coffee'
-import { defaults } from './xStore.coffee'
+import { defaults } from './store.coffee'
 
 data =
   ingredient: clone defaults.ingredient
