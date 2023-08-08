@@ -122,9 +122,9 @@ input(type="hidden" v-model="editindex")
 //- Recipe action buttons
 .col-md-2.text-right
   button-icon.btn-lg.mb-2(
-    :icon="editindex !== '' ? 'pen' : 'plus'"
-    :text="editindex !== '' ? 'Update' : 'Add'"
-    :color="editindex !== '' ? 'warning' : 'primary'"
+    :icon="editindex > -1 ? 'pen' : 'plus'"
+    :text="editindex > -1 ? 'Update' : 'Add'"
+    :color="editindex > -1 ? 'warning' : 'primary'"
     @buttonclick="Recipes.save()"
   )
   button-icon(icon="times" text="Cancel" color="danger" @buttonclick="Recipes.clear()")
