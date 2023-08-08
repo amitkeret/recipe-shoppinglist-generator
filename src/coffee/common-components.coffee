@@ -1,5 +1,8 @@
+import { log } from './funcs.coffee'
+
 iconHTML = require '../pug/icon.pug'
 buttonIconHTML = require '../pug/button-icon.pug'
+checkboxHTML = require '../pug/checkbox.pug'
 
 base = [
   'icon', 'color'
@@ -28,4 +31,12 @@ buttonIcon =
     children:   -> (a for a in [@icon, @text] when a?).length
   template: buttonIconHTML
 
-export { icon, buttonIcon }
+checkbox =
+  props: ['boolean']
+  computed:
+    icon: ->    if @boolean then 'check-square' else 'square'
+    family: ->  if @boolean then 'fas' else 'far'
+    color: ->   if @boolean then 'primary' else ''
+  template: checkboxHTML
+
+export { icon, buttonIcon, checkbox }
