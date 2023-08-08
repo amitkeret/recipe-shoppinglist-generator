@@ -4,26 +4,29 @@ input(type="hidden" v-model="editindex")
   .form-row.form-group
     .col-md-4
       #recipeImage.input-group-text.justify-content-center.h-100.p-md-0
-        .recipe-image-thumbnail(v-if="recipe.image" :style="{ 'background-image': getImage(recipe).css }")
+        .recipe-image-thumbnail(
+          v-if="Recipe.recipe.image"
+          :style="{ 'background-image': Funcs.getImage(Recipe.recipe).css }"
+        )
         button-icon(
-          v-if="recipe.image"
+          v-if="Recipe.recipe.image"
           icon="trash"
           color="danger"
           title="Remove image"
-          @buttonclick="recipe.image = ''"
+          @buttonclick="Recipe.recipe.image = ''"
         )
         input#recipeImageFile.w-100.h-100.border-0.text-center(
           type="text"
-          v-if="!recipe.image"
-          v-model="recipe.image"
+          v-if="!Recipe.recipe.image"
+          v-model="Recipe.recipe.image"
           placeholder="Image URL (optional)"
         )
     .col
-      input.form-control.form-control-lg(type="text" v-model="recipe.name" placeholder="Recipe name")
-      textarea.form-control(type="text" v-model="recipe.comment" placeholder="Comment (optional)")
+      input.form-control.form-control-lg(type="text" v-model="Recipe.recipe.name" placeholder="Recipe name")
+      textarea.form-control(type="text" v-model="Recipe.recipe.comment" placeholder="Comment (optional)")
       .form-row
-        .col: input.form-control(type="text" v-model="recipe.link" placeholder="Link (optional)")
-        .col-md-2: input.form-control(type="number" v-model="recipe.servings" min="1" max="10" step="0.5" placeholder="Servings (optional)")
+        .col: input.form-control(type="text" v-model="Recipe.recipe.link" placeholder="Link (optional)")
+        .col-md-2: input.form-control(type="number" v-model="Recipe.recipe.servings" min="1" max="10" step="1" placeholder="Servings (optional)")
 
   //- Recipe ingredients
   h5 Ingredients
@@ -31,19 +34,19 @@ input(type="hidden" v-model="editindex")
 
     //- Ingredient list
     .col-md-5
-      p(v-show="recipe.ingredients.length == 0") No ingredients yet...
-      ul#new-ingredients.fa-ul(v-show="recipe.ingredients.length > 0")
-        li.d-flex.justify-content-between.align-items-center(v-for="(ing, index) in recipe.ingredients")
-          span.fa-li: icon.clickable(icon="trash" color="danger" @click.native="deleteIngredient(index)")
+      p(v-show="Recipe.recipe.ingredients.length == 0") No ingredients yet...
+      ul#new-ingredients.fa-ul(v-show="Recipe.recipe.ingredients.length > 0")
+        li.d-flex.justify-content-between.align-items-center(v-for="(ing, index) in Recipe.recipe.ingredients")
+          span.fa-li: icon.clickable(icon="trash" color="danger" @click.native="Ingredients.delete(index)")
           span
-            span(v-html="fraction(ing.amount)")
+            span(v-html="Funcs.fraction(ing.amount)")
             | {{ ing.unit }} {{ ing.name }}
           .d-flex
             small.ing-optional.mr-1 Optional?
             input(
               type="checkbox"
               :checked="ing.optional ? true : false"
-              @change="optionalIngredient(index)"
+              @change="Ingredients.optional(index)"
             )
 
     //- New ingredient form
@@ -53,34 +56,34 @@ input(type="hidden" v-model="editindex")
         //- Ingredient selection
         .col
           vue-multiselect(
-            v-if="ingForm == 'exist'"
-            v-model="ingredient.name"
+            v-if="Ingredient.ingForm == 'exist'"
+            v-model="Ingredient.ingredient.name"
             placeholder="Choose existing ingredient..."
             :allow-empty="false"
             label="name"
-            :options="ingredientList"
+            :options="Ingredients.list()"
             group-label="department"
             group-values="ings"
             :group-select="false"
-            @input="updateExistingIngredient"
+            @input="Ingredients.updateExisting"
           )
-          div(v-if="ingForm == 'new'")
-            input.form-control(type="text" v-model="ingredient.name" @keydown.enter="addIngredient" placeholder="Ingredient name")
+          div(v-if="Ingredient.ingForm == 'new'")
+            input.form-control(type="text" v-model="Ingredient.ingredient.name" @keydown.enter="Ingredients.add()" placeholder="Ingredient name")
             .row
               .col
-                select.form-control(v-model="ingredient.department")
+                select.form-control(v-model="Ingredient.ingredient.department")
                   option(value="") Select department...
-                  option(v-for="department in departmentList" :value="department") {{ department }}
+                  option(v-for="department in Ingredients.departments()" :value="department") {{ department }}
               .col
-                input.form-control(type="text" v-model="ingredient.department" @keydown.enter="addIngredient" placeholder="... or add new")
+                input.form-control(type="text" v-model="Ingredient.ingredient.department" @keydown.enter="Ingredients.add()" placeholder="... or add new")
 
         //- Existing / new
         .col-md-3.text-right
           .dropdown
-            button-icon.dropdown-toggle(data-toggle="dropdown" :text="ingForm == 'exist' ? 'Existing' : 'New'")
+            button-icon.dropdown-toggle(data-toggle="dropdown" :text="Ingredient.ingForm == 'exist' ? 'Existing' : 'New'")
             .dropdown-menu
-              .dropdown-item(@click="clearIngredient()") Existing
-              .dropdown-item(@click="clearIngredient('new')") New
+              .dropdown-item(@click="Ingredients.clear()") Existing
+              .dropdown-item(@click="Ingredients.clear('new')") New
 
       .row.align-items-center
 
@@ -88,33 +91,33 @@ input(type="hidden" v-model="editindex")
         .col-md-5
           .input-group
             input.form-control(
-              type="number" v-model="ingredient.amount"
+              type="number" v-model="Ingredient.ingredient.amount"
               data-toggle="tooltip" data-placement="bottom" data-html="true"
               title="1 tbsp = 2 tsps<br />1 cup = 250 mLs"
             )
             .input-group-append.dropdown
               button.btn.dropdown-toggle(
-                v-model="ingredient.unit"
-                :disabled="ingForm == 'exist'"
+                v-model="Ingredient.ingredient.unit"
+                :disabled="Ingredient.ingForm == 'exist'"
                 data-toggle="dropdown"
-              ) {{ ingredient.unit !== null ? ingredient.unit : 'Unit' }}
+              ) {{ Ingredient.ingredient.unit !== null ? Ingredient.ingredient.unit : 'Unit' }}
               .dropdown-menu: .dropdown-item(
-                v-for="option in units"
-                @click="ingredient.unit = option"
+                v-for="option in Ingredient.units"
+                @click="Ingredient.ingredient.unit = option"
               ) {{ option != '' ? option : '(no unit)' }}
 
         .col-md-4
           icon.fa-lg.mr-2(
-            v-model="ingredient.optional"
-            @click.native="ingredient.optional = !ingredient.optional"
-            :icon=  "ingredient.optional ? 'check-square' : 'square'"
-            :family="ingredient.optional ? 'fas' : 'far'"
-            :color= "ingredient.optional ? 'primary' : ''"
+            v-model="Ingredient.ingredient.optional"
+            @click.native="Ingredient.ingredient.optional = !Ingredient.ingredient.optional"
+            :icon=  "Ingredient.ingredient.optional ? 'check-square' : 'square'"
+            :family="Ingredient.ingredient.optional ? 'fas' : 'far'"
+            :color= "Ingredient.ingredient.optional ? 'primary' : ''"
           )
           | Optional?
 
         //- New ingedient action button
-        .col.text-right: button-icon(icon="plus" text="Add" color="primary" @buttonclick="addIngredient")
+        .col.text-right: button-icon(icon="plus" text="Add" color="primary" @buttonclick="Ingredients.add()")
 
 //- Recipe action buttons
 .col-md-2.text-right
@@ -122,6 +125,6 @@ input(type="hidden" v-model="editindex")
     :icon="editindex !== '' ? 'pen' : 'plus'"
     :text="editindex !== '' ? 'Update' : 'Add'"
     :color="editindex !== '' ? 'warning' : 'primary'"
-    @buttonclick="saveRecipe"
+    @buttonclick="Recipes.save()"
   )
-  button-icon(icon="times" text="Cancel" color="danger" @buttonclick="clearRecipe")
+  button-icon(icon="times" text="Cancel" color="danger" @buttonclick="Recipes.clear()")
