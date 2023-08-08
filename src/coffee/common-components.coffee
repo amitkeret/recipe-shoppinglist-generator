@@ -32,11 +32,11 @@ buttonIcon =
   template: buttonIconHTML
 
 checkbox =
-  props: ['boolean']
+  props: ['checked']
   computed:
-    icon: ->    if @boolean then 'check-square' else 'square'
-    family: ->  if @boolean then 'fas' else 'far'
-    color: ->   if @boolean then 'primary' else ''
+    icon: ->    if @checked then 'check-square' else 'square'
+    family: ->  if @checked then 'fas' else 'far'
+    color: ->   if @checked then 'primary' else ''
   template: checkboxHTML
 
 export { icon, buttonIcon, checkbox }
