@@ -49,10 +49,14 @@ methods = ->
     vue.Ingredient.ingredient.name = vue.Ingredient.ingredient.name.name if vue.Ingredient.ingredient.name.name?
 
     conditions = [
-      [ 'name',       '',                             'Ingredient name: Cannot be empty']
-      [ 'department', '',                             'Department name: Cannot be empty']
-      [ 'amount',     (prop)-> (prop * 8) % 1 isnt 0, 'Amount: Decimal numbers in steps of 0.25']
-      [ 'unit',       null,                           'Unit: Selection required']
+      [ 'name',       '',   'Ingredient name: Cannot be empty']
+      [ 'department', '',   'Department name: Cannot be empty']
+      [
+        'amount'
+        (prop)-> (prop is '') or (isNaN(prop) is yes) or (prop < 0.25) or ((prop * 8) % 1 isnt 0)
+        'Amount: Decimal numbers in steps of 0.25'
+      ]
+      [ 'unit',       null, 'Unit: Selection required']
     ]
 
     if validate vue.Ingredient.ingredient, conditions
