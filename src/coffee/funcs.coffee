@@ -26,16 +26,6 @@ sum = (arr, prop = null)->
   if prop then chain arr.map (a)-> a[prop]
   else chain arr
 
-# return array of unique values
-uniqueArr = (arr) -> arr.filter (e, index, self)-> self.indexOf(e) is index
-
-# return array of objects with unique value in a certain property
-uniqueObj = (objs, prop = 'name')->
-  ret = []
-  for obj in objs
-    ret.push obj if not ret.map( (o)-> o[prop] ).includes obj[prop]
-  ret
-
 nlbr = (str)->
   if str.includes '\n' then str.replaceAll '\n', '<br />'
   else str.replaceAll '<br />', '\n'
@@ -78,8 +68,6 @@ export {
   azsort
   keysort
   sum
-  uniqueArr
-  uniqueObj
   nlbr
   parseURL
   fraction
