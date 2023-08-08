@@ -57,8 +57,8 @@ appConfig =
       do this.$refs.query.focus
 
     step1toggle: ->
-      do @Recipes.clear
       @step1visible = not @step1visible
+      do @Recipes.clear
 
     handleFileSelect: (evt)->
       onloadend = (e)->
