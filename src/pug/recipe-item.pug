@@ -12,10 +12,10 @@ tr.recipe-item(
         .dropdown-item(@click="$emit('deleterecipe')")
           icon.ml-n2.mr-2(icon="trash" color="danger" title="Delete recipe")
           | Delete
-    icon.clickable(icon="eye" color="secondary" @click.native="$emit('emodalrecipe')" title="View recipe")
+    icon.clickable(icon="eye" color="secondary" @click="$emit('emodalrecipe')" title="View recipe")
   td.recipe-title
     icon.fa-lg.mr-2(
-      @click.native="toggleSelected"
+      @click="toggleSelected"
       :icon=  "recipe.selected ? 'check-square' : 'square'"
       :family="recipe.selected ? 'fas' : 'far'"
       :color= "recipe.selected ? 'primary' : ''"
