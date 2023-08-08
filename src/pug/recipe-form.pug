@@ -43,7 +43,7 @@ input(type="hidden" v-model="editindex")
             | {{ ing.unit }} {{ ing.name }}
           .d-flex.align-items-center
             small.ing-optional.mr-1 Optional?
-            checkbox(:boolean="ing.optional" @click="Ingredients.optional(index)")
+            checkbox(:checked="ing.optional" @click="Ingredients.optional(index)")
 
     //- New ingredient form
     .col
@@ -105,7 +105,7 @@ input(type="hidden" v-model="editindex")
         .col-md-4
           checkbox.fa-lg.mr-2(
             v-model="Ingredient.ingredient.optional"
-            :boolean="Ingredient.ingredient.optional"
+            :checked="Ingredient.ingredient.optional"
             @click="Ingredient.ingredient.optional = !Ingredient.ingredient.optional"
           )
           | Optional?
