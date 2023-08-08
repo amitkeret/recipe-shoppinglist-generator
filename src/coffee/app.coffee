@@ -7,9 +7,12 @@ import { sectionTitle } from './section-title.coffee'
 import * as Recipe from './recipe-item.coffee'
 import * as Ingredients from './recipe-ingredients.coffee'
 
-import { icon, buttonIcon } from './icon.coffee'  # these components are used by multiple other components
-Vue.component 'icon', icon                        # importing globally -> available to any component, negates repetative inclusion
-Vue.component 'button-icon', buttonIcon           # @see https://vuejs.org/guide/components/registration.html
+# importing globally -> available to entire app, negates repetative inclusion by multiple other components
+# @see https://vuejs.org/guide/components/registration.html
+import { icon, buttonIcon, checkbox } from './common-components.coffee'
+Vue.component 'icon', icon
+Vue.component 'button-icon', buttonIcon
+Vue.component 'checkbox', checkbox
 
 appConfig = 
 
