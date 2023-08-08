@@ -14,12 +14,7 @@ tr.recipe-item(
           | Delete
     icon.clickable(icon="eye" color="secondary" @click="$emit('emodalrecipe')" title="View recipe")
   td.recipe-title
-    icon.fa-lg.mr-2(
-      @click="toggleSelected"
-      :icon=  "recipe.selected ? 'check-square' : 'square'"
-      :family="recipe.selected ? 'fas' : 'far'"
-      :color= "recipe.selected ? 'primary' : ''"
-    )
+    checkbox.fa-lg.mr-2(:checked="recipe.selected" @click="recipe.selected = !recipe.selected")
     .recipe-link(
       :is=    "recipe.link.length > 0 ? 'a' : 'span'"
       :href=  "recipe.link.length > 0 ? recipe.link : false"

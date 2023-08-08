@@ -41,13 +41,9 @@ input(type="hidden" v-model="editindex")
           span
             span(v-html="Funcs.fraction(ing.amount)")
             | {{ ing.unit }} {{ ing.name }}
-          .d-flex
+          .d-flex.align-items-center
             small.ing-optional.mr-1 Optional?
-            input(
-              type="checkbox"
-              :checked="ing.optional ? true : false"
-              @change="Ingredients.optional(index)"
-            )
+            checkbox(:checked="ing.optional" @click="Ingredients.optional(index)")
 
     //- New ingredient form
     .col
@@ -107,12 +103,10 @@ input(type="hidden" v-model="editindex")
               ) {{ option != '' ? option : '(no unit)' }}
 
         .col-md-4
-          icon.fa-lg.mr-2(
+          checkbox.fa-lg.mr-2(
             v-model="Ingredient.ingredient.optional"
+            :checked="Ingredient.ingredient.optional"
             @click="Ingredient.ingredient.optional = !Ingredient.ingredient.optional"
-            :icon=  "Ingredient.ingredient.optional ? 'check-square' : 'square'"
-            :family="Ingredient.ingredient.optional ? 'fas' : 'far'"
-            :color= "Ingredient.ingredient.optional ? 'primary' : ''"
           )
           | Optional?
 

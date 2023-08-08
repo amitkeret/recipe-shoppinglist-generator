@@ -82,7 +82,6 @@ component =
 
   methods:
     getLink: -> if @recipe.link.length is 0 then no else parseURL @recipe.link
-    toggleSelected: -> @recipe.selected = !@recipe.selected
 
   computed:
 
