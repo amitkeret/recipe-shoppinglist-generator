@@ -1,9 +1,76 @@
-import { log, parseURL } from './funcs.coffee'
+import { log, clone, sum, parseURL, validate } from './funcs.coffee'
+import { store as db, defaults } from './store.coffee'
 import { recipeServings } from './recipe-servings.coffee'
+
+data =
+  recipe: clone defaults.recipe
+  activeRecipe: null
+
+methods = ->
+
+  vue = @
+
+  # Set one of the list recipes to be the active recipe (for the placeholder)
+  # Any updates to the underlying recipe object should be reflected immediately in the active recipe
+  setActive: (index)-> vue.Recipe.activeRecipe = vue.recipes[index]
+
+  clear: ->
+    vue.Recipe.recipe = clone defaults.recipe
+    do vue.Ingredients.clear
+    vue.step1visible = no if vue.editindex > -1
+    vue.editindex = -1
+
+  save: ->
+
+    conditions = [
+      [ 'name',         '',                         'Recipe name: Cannot be empty']
+      [ 'ingredients',  (prop)-> prop.length is 0,  'Ingredients: Add at least one ingredient']
+      [ 'servings',     (prop)-> prop % 1 isnt 0,   'Servings: Whole numbers only (1-10)']
+      [ 'rating',       (prop)-> prop % 1 isnt 0,     'Rating: Whole numbers only (1-5)']
+    ]
+
+    if validate vue.Recipe.recipe, conditions
+      formatted = db.convert vue.Recipe.recipe, 'Vue'
+      if vue.editindex > -1
+        vue.recipes[vue.editindex] = formatted
+        vue.step1visible = no
+      else
+        vue.recipes.push formatted
+      mess.show "#{if vue.editindex > -1 then 'Updated' else 'Added new'} recipe: #{vue.Recipe.recipe.name}"
+      do vue.Recipes.clear
+      db.update vue.recipes
+
+  delete: (index)->
+    eModal.confirm 'This cannot be undone.', 'Are you sure?'
+      .then ->
+        vue.recipes.splice index, 1
+        db.update vue.recipes
+
+  update: (index)->
+    vue.Recipe.recipe = clone vue.recipes[index]
+    vue.editindex = index
+    vue.step1visible = yes
+
+  eModal: (index)->
+    vue.Recipes.setActive(index)
+    vue.step1visible = no
+    cb = -> eModal.alert
+      title:    vue.Recipe.activeRecipe.name
+      subtitle: vue.$refs.recipePlaceholderLink.outerHTML
+      message:  vue.$refs.recipePlaceholder.outerHTML
+    # allow time for Vue to update DOM
+    setTimeout(cb, 100)
+
+  selected: (partial = null)->
+    selected = (recipe for recipe in vue.recipes when recipe.selected is yes)
+    switch partial
+      when 'title' then (recipe.name for recipe in selected).join(', ').toUpperCase()
+      when 'servings' then sum (recipe.servings * recipe.servingsModifier for recipe in selected)
+      else selected
 
 import css from '../css/recipe-item.css'
 html = require '../pug/recipe-item.pug'
-recipeItem =
+component =
 
   components:
     'recipe-servings': recipeServings
@@ -15,7 +82,7 @@ recipeItem =
 
   methods:
     getLink: -> if @recipe.link.length is 0 then no else parseURL @recipe.link
-    toggleSelectedRecipe: -> @recipe.selected = !@recipe.selected
+    toggleSelected: -> @recipe.selected = !@recipe.selected
 
   computed:
 
@@ -51,4 +118,4 @@ recipeItem =
 
   template: html
 
-export { recipeItem }
+export { component, data, methods }

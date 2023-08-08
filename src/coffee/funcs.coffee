@@ -1,5 +1,4 @@
 log = (args...)->
-  do console.trace
   console.log if args.length is 1 then args[0] else args
 
 tlog = (args...)->
@@ -49,6 +48,19 @@ fraction = (decimal, html = no)->
   if html is no or f.d is 1 then frac   # d=denominator. d=1 means its a whole number
   else frac.replace(///(\d+)\/(\d+)///, '&frac$1$2;').replace(' ', '')
 
+# basic form validator, displays error messages
+# @object the object to validate
+# @conditions array of arrays ( 0= prop name, 1= condition check, 2= error message )
+validate = (object, conditions)->
+  errors = []
+  for cond in conditions
+    if typeof cond[1] is 'function'
+      errors.push cond[2] if cond[1](object[cond[0]]) is yes
+    else
+      errors.push cond[2] if object[cond[0]] is cond[1]
+  mess.show errors.join "\n" if errors.length isnt 0
+  errors.length is 0
+
 export {
   log
   tlog
@@ -59,4 +71,5 @@ export {
   nlbr
   parseURL
   fraction
+  validate
 }

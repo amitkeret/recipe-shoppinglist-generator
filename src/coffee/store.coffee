@@ -1,6 +1,6 @@
 # https://github.com/florian/xStore/blob/master/docs/api-documentation.md
 
-import { log, clone, azsort, uniqueArr, uniqueObj } from './funcs.coffee'
+import { log, clone, azsort } from './funcs.coffee'
 
 defaults =
   recipe:
@@ -9,7 +9,6 @@ defaults =
     comment:     ''
     image:       ''
     servings:    null
-    rating:      null
     ingredients: []
   ingredient:
     name:       ''

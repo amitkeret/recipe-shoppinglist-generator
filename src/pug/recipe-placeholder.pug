@@ -1,17 +1,20 @@
-#recipe-placeholder.d-none(v-if="activeRecipe !== null") 
+#recipe-placeholder.d-none(v-if="Recipe.activeRecipe !== null") 
   .recipe-placeholder.container(ref="recipePlaceholder")
-    .recipe-image-thumbnail.mb-md-3.rounded(v-if="activeRecipe.image" :style="{ 'background-image': getImage(activeRecipe).css }")
-    .mb-md-3: i(v-html="nlbr(activeRecipe.comment)")
-    ul.fa-ul: li(v-for="(ing, index) in activeRecipe.ingredients" :data-optional="ing.optional ? true : false")
+    .recipe-image-thumbnail.mb-md-3.rounded(
+      v-if="Recipe.activeRecipe.image"
+      :style="{ 'background-image': Funcs.getImage(Recipe.activeRecipe).css }"
+    )
+    .mb-md-3: i(v-html="Funcs.nlbr(Recipe.activeRecipe.comment)")
+    ul.fa-ul: li(v-for="(ing, index) in Recipe.activeRecipe.ingredients" :data-optional="ing.optional ? true : false")
       span.fa-li: small: icon(
         :icon="ing.optional ? 'question' : 'check'"
         :color="ing.optional ? 'primary' : 'success'"
       )
-      span(v-html="fraction(ing.amount * activeRecipe.servingsModifier)")
+      span(v-html="Funcs.fraction(ing.amount * Recipe.activeRecipe.servingsModifier)")
       | {{ ing.unit }} {{ ing.name }}
   a(
     ref="recipePlaceholderLink"
-    v-show="activeRecipe.link.length > 0"
-    :href="activeRecipe.link"
+    v-show="Recipe.activeRecipe.link.length > 0"
+    :href="Recipe.activeRecipe.link"
     target="_blank"
   ): icon(icon="external-link-alt" color="primary")

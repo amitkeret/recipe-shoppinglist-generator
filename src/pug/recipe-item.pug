@@ -15,7 +15,7 @@ tr.recipe-item(
     icon.clickable(icon="eye" color="secondary" @click.native="$emit('emodalrecipe')" title="View recipe")
   td.recipe-title
     icon.fa-lg.mr-2(
-      @click.native="toggleSelectedRecipe"
+      @click.native="toggleSelected"
       :icon=  "recipe.selected ? 'check-square' : 'square'"
       :family="recipe.selected ? 'fas' : 'far'"
       :color= "recipe.selected ? 'primary' : ''"
