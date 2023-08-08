@@ -51,7 +51,7 @@ methods = ->
     conditions = [
       [ 'name',       '',                             'Ingredient name: Cannot be empty']
       [ 'department', '',                             'Department name: Cannot be empty']
-      [ 'amount',     (prop)-> (prop * 8) % 1 isnt 0, 'Amount: Decimal numbers in steps of 1/8']
+      [ 'amount',     (prop)-> (prop * 8) % 1 isnt 0, 'Amount: Decimal numbers in steps of 0.25']
       [ 'unit',       null,                           'Unit: Selection required']
     ]
 
