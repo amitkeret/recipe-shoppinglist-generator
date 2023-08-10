@@ -1,7 +1,7 @@
 import cssApp from '../css/app.css'
 import cssOverwrites from '../css/overwrites.css'
 
-import { log, clone, nlbr, parseURL, fraction } from './funcs.coffee'
+import { log, clone, nlbr, parseURL, fraction, randomInteger, timeout } from './funcs.coffee'
 import { store as db } from './store.coffee'
 import { sectionTitle } from './section-title.coffee'
 import * as Recipe from './recipe-item.coffee'
