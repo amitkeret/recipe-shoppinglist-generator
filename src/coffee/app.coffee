@@ -52,6 +52,22 @@ appConfig =
 
     selectNone: -> recipe.selected = no for recipe in @recipes
 
+    randomRecipe: ->
+      dice = @$refs.randomRecipe.$el.firstChild
+      classRegEx = /dice(\-[a-z]+)?/
+      numbers = ['one','two','three','four','five','six']
+      running = yes
+      animation = ->
+        if running
+          dice.className = dice.className.replace classRegEx, "dice-#{ numbers[randomInteger 0, 5] }"
+          timeout animation, @, randomInteger 50, 300
+      do animation
+      timeout (vue)->
+        running = no
+        dice.className = dice.className.replace classRegEx, 'dice'
+        vue.Recipes.eModal randomInteger 0, vue.recipes.length - 1        
+      , @, 2000
+  
     clearQuery: ->
       @filters.query = ''
       do this.$refs.query.focus
