@@ -1,0 +1,84 @@
+//- Recipe ingredients
+h5 Ingredients
+.row
+
+  //- Ingredient list
+  .col-md-5
+    p(v-show="Recipe.recipe.ingredients.length == 0") No ingredients yet...
+    ul#new-ingredients.fa-ul(v-show="Recipe.recipe.ingredients.length > 0")
+      li.d-flex.justify-content-between.align-items-center(v-for="(ing, index) in Recipe.recipe.ingredients")
+        span.fa-li: icon.clickable(icon="trash" color="danger" @click="Ingredients.delete(index)")
+        span
+          span(v-html="Funcs.fraction(ing.amount)")
+          | {{ ing.unit }} {{ ing.name }}
+        .d-flex.align-items-center
+          small.ing-optional.mr-1 Optional?
+          checkbox(:checked="ing.optional" @click="Ingredients.optional(index)")
+
+  //- New ingredient form
+  .col
+    .row.form-group
+
+      //- Ingredient selection
+      .col
+        vue-multiselect(
+          v-if="Ingredient.ingForm == 'exist'"
+          v-model="Ingredient.ingredient.name"
+          placeholder="Choose existing ingredient..."
+          :allow-empty="false"
+          label="name"
+          :options="Ingredients.list()"
+          group-label="department"
+          group-values="ings"
+          :group-select="false"
+          @input="Ingredients.updateExisting"
+        )
+        div(v-if="Ingredient.ingForm == 'new'")
+          input.form-control(type="text" v-model="Ingredient.ingredient.name" @keydown.enter="Ingredients.add()" placeholder="Ingredient name")
+          .row
+            .col
+              select.form-control(v-model="Ingredient.ingredient.department")
+                option(value="") Select department...
+                option(v-for="department in Ingredients.departments()" :value="department") {{ department }}
+            .col
+              input.form-control(type="text" v-model="Ingredient.ingredient.department" @keydown.enter="Ingredients.add()" placeholder="... or add new")
+
+      //- Existing / new
+      .col-md-3.text-right
+        .dropdown
+          button-icon.dropdown-toggle(data-toggle="dropdown" :text="Ingredient.ingForm == 'exist' ? 'Existing' : 'New'")
+          .dropdown-menu
+            .dropdown-item(@click="Ingredients.clear()") Existing
+            .dropdown-item(@click="Ingredients.clear('new')") New
+
+    .row.align-items-center
+
+      //- Amount & unit
+      .col-md-5
+        .input-group
+          input.form-control(
+            type="number" v-model="Ingredient.ingredient.amount"
+            data-toggle="tooltip" data-placement="bottom" data-html="true"
+            title="1 tbsp = 2 tsps<br />1 cup = 250 mLs"
+          )
+          .input-group-append.dropdown
+            button.btn.dropdown-toggle(
+              v-model="Ingredient.ingredient.unit"
+              :disabled="Ingredient.ingForm == 'exist'"
+              data-toggle="dropdown"
+            ) {{ Ingredient.ingredient.unit !== null ? Ingredient.ingredient.unit : 'Unit' }}
+            .dropdown-menu: .dropdown-item(
+              v-for="option in Ingredient.units"
+              @click="Ingredient.ingredient.unit = option"
+            ) {{ option != '' ? option : '(no unit)' }}
+
+      .col-md-4
+        checkbox.fa-lg.mr-2(
+          v-model="Ingredient.ingredient.optional"
+          :checked="Ingredient.ingredient.optional"
+          @click="Ingredient.ingredient.optional = !Ingredient.ingredient.optional"
+        )
+        | Optional?
+
+      //- New ingedient action button
+      .col.text-right: button-icon(icon="plus" text="Add" color="primary" @click="Ingredients.add()")
