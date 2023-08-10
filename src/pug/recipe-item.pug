@@ -30,6 +30,9 @@ tr.recipe-item(
       span.badge.badge-pill(:class="ingSearch.length == filters.ings.length ? 'badge-primary' : 'badge-secondary'") {{ ingSearch.length }}
       span: .ml-1.badge.badge-pill.badge-primary(v-for="ing in ingSearch") {{ ing.name }}
     .recipe-meta-servings: recipe-servings(:recipe="recipe")
+    .recipe-meta-rating: .recipe-rating(v-if="recipe.rating")
+      icon.fa-sm(icon="star" color="warning")
+      small {{ recipe.rating }}
     icon(
       :icon=  "isVeg ? 'leaf' : 'drumstick-bite'"
       :color= "isVeg ? 'success' : 'danger'"
