@@ -52,7 +52,7 @@ methods = ->
     vue.step1visible = yes
 
   eModal: (index)->
-    vue.Recipes.setActive(index)
+    vue.Recipes.setActive index
     vue.step1visible = no
     cb = -> eModal.alert
       title:    vue.Recipe.activeRecipe.name
