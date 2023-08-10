@@ -46,6 +46,12 @@ html
 
             .col: div.card-header-actions.d-flex
 
+              //- Random recipe
+              button-icon.fa-lg(
+                ref="randomRecipe" @click="randomRecipe" v-if="recipes.length > 0"
+                icon="dice" color="primary" title="Random recipe"
+              )
+
               //- Recipe filter
               .input-group
                 input.form-control(v-model="filters.query" ref="query" placeholder="Search recipe details")
