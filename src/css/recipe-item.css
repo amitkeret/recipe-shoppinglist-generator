@@ -73,3 +73,13 @@ tr.recipe-item .recipe-comment {
 tr.recipe-item .recipe-meta-servings {
   min-width: 2rem;
 }
+tr.recipe-item .recipe-meta-rating {
+  min-width: 1.5rem;
+}
+tr.recipe-item .recipe-rating {
+  display: flex;
+  align-items: center;
+}
+tr.recipe-item .recipe-rating > small {
+  font-size: 0.7rem;
+}

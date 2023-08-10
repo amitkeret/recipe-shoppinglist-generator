@@ -9,6 +9,7 @@ defaults =
     comment:     ''
     image:       ''
     servings:    null
+    rating:      null
     ingredients: []
   ingredient:
     name:       ''
