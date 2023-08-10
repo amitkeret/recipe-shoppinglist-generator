@@ -36,11 +36,15 @@ html
         #step2.card.shadow.mb-4
 
           .card-header.pb-1: .row
-            .col-md-3: section-title(text="2" title="Select recipes")
+            .col-md-3
+              section-title(text="2" title="Select recipes")
+              icon.ml-1.clickable(
+                v-show="Recipes.selected().length > 0"
+                icon="clone" family="far" color="outline-dark"
+                title="Select none" @click="selectNone"
+              )
 
             .col: div.card-header-actions.d-flex
-              //- Select none
-              button-icon(icon="clone" family="far" color="outline-dark" title="Select none" @click="selectNone")
 
               //- Recipe filter
               .input-group
