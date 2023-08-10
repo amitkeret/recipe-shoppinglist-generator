@@ -19,14 +19,15 @@ input(type="hidden" v-model="editindex")
           type="text"
           v-if="!Recipe.recipe.image"
           v-model="Recipe.recipe.image"
-          placeholder="Image URL (optional)"
+          placeholder="Image URL"
         )
     .col
       input.form-control.form-control-lg(type="text" v-model="Recipe.recipe.name" placeholder="Recipe name")
-      textarea.form-control(type="text" v-model="Recipe.recipe.comment" placeholder="Comment (optional)")
+      textarea.form-control(type="text" v-model="Recipe.recipe.comment" placeholder="Comment")
       .form-row
-        .col: input.form-control(type="text" v-model="Recipe.recipe.link" placeholder="Link (optional)")
-        .col-md-2: input.form-control(type="number" v-model="Recipe.recipe.servings" min="1" max="10" step="1" placeholder="Servings (optional)")
+        .col: input.form-control(type="text" v-model="Recipe.recipe.link" placeholder="Link")
+        .col-md-2: input.form-control(type="number" v-model="Recipe.recipe.servings" min="1" max="10" step="1" placeholder="Servings")
+        .col-md-2: input.form-control(type="number" v-model="Recipe.recipe.rating" min="0" max="5" step="1" placeholder="Rating")
 
   include ./recipe-form-ingredients.pug
 
