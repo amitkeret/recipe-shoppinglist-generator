@@ -20,6 +20,16 @@ keysort = (object)->
     ret[key] = object[key] for key in ordered
     ret
 
+keysortRecursive = (mix)->
+  if Array.isArray mix
+    mix[index] = keysortRecursive element for element, index in mix
+    mix
+  else if mix is null then mix # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof#typeof_null
+  else if typeof mix is 'object'
+    mix[prop] = keysortRecursive element for prop, element of mix
+    keysort mix
+  else mix
+
 sum = (arr, prop = null)->
   func = (s, d)-> s + d
   chain = (arr)-> arr.filter( (a)-> a? ).reduce func, 0
@@ -75,6 +85,7 @@ export {
   clone
   azsort
   keysort
+  keysortRecursive
   sum
   nlbr
   parseURL

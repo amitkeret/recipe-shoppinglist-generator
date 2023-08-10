@@ -1,6 +1,6 @@
 # https://github.com/florian/xStore/blob/master/docs/api-documentation.md
 
-import { log, clone, azsort } from './funcs.coffee'
+import { log, clone, azsort, keysortRecursive } from './funcs.coffee'
 
 defaults =
   recipe:
@@ -64,7 +64,7 @@ convert = (recipes = [], toFormat = 'JSON')->
   recipe[field.name] = field.formatFunc recipe[field.name] for field in objectFields[toFormat] when field.formatFunc? for recipe in recipes
 
   # final alphabetical sorting
-  recipes = azsort recipes, 'name'
+  recipes = azsort keysortRecursive(recipes), 'name'
 
   if recipes.length is 1 then recipes[0] else recipes
 
