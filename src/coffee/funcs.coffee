@@ -61,6 +61,14 @@ validate = (object, conditions)->
   mess.show errors.join "\n" if errors.length isnt 0
   errors.length is 0
 
+randomInteger = (min, max)->
+  rand = min + do Math.random * (max + 1 - min)
+  Math.floor rand
+
+# shorthand to be ablet to pass the Vue object (@) to a callback without having to re-assign it each time
+# callback function accepts a single argument: (vue)->
+timeout = (cb, vue, delay)-> setTimeout (-> cb(vue)), delay
+
 export {
   log
   tlog
@@ -72,4 +80,6 @@ export {
   parseURL
   fraction
   validate
+  randomInteger
+  timeout
 }
