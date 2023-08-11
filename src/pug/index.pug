@@ -35,7 +35,7 @@ html
 
         #step2.card.shadow.mb-4
 
-          .card-header.pb-1: .row
+          .card-header.pb-2: .row
             .col-md-3
               section-title(text="2" title="Select recipes")
               icon.ml-1.clickable(
@@ -44,10 +44,10 @@ html
                 title="Select none" @click="selectNone"
               )
 
-            .col: .card-header-actions.d-flex
+            .col: .card-header-actions.d-flex.align-items-center.justify-content-end
 
               //- Random recipe
-              button-icon.fa-lg(
+              button-icon#randomRecipe.fa-lg.px-1(
                 ref="randomRecipe" @click="randomRecipe" v-if="recipes.length > 0"
                 icon="dice" color="primary" title="Random recipe"
               )
