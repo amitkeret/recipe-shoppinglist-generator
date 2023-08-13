@@ -14,12 +14,12 @@ html
 
         #step1.card.shadow.mb-4
           .card-header: .row
-            .col-md-3
+            .col-9.col-sm
               section-title(text="1" :title="editindex > -1 ? 'Edit recipe' : 'Add recipes'" @click="step1toggle")
               icon.ml-1.fa-lg(:icon="step1visible ? 'caret-up' : 'caret-down'")
             .col.text-right
               .dropdown#recipes-backup
-                button-icon.dropdown-toggle(icon="save" text="Recipes backup" data-toggle="dropdown")
+                button-icon.dropdown-toggle(icon="save" text="Recipes backup" text-breakpoint="sm" data-toggle="dropdown")
                 .dropdown-menu
                   //- https://codepen.io/pieceofcode/pen/zldng
                   label.dropdown-item.file-upload__label(for="recipesFile" text="Load")
@@ -36,7 +36,7 @@ html
         #step2.card.shadow.mb-4
 
           .card-header.pb-2: .row
-            .col-md-3
+            .col-9.col-lg-3.mb-2.mb-lg-0
               section-title(text="2" title="Select recipes")
               icon.ml-1.clickable(
                 v-show="Recipes.selected().length > 0"
@@ -44,21 +44,21 @@ html
                 title="Select none" @click="selectNone"
               )
 
-            .col: .card-header-actions.d-flex.align-items-center.justify-content-end
+            .col.card-header-actions.d-flex.flex-wrap.flex-md-nowrap.align-items-center.justify-content-end
 
               //- Random recipe
-              button-icon#randomRecipe.fa-lg.px-1(
+              button-icon#randomRecipe.order-1.fa-lg.px-1(
                 ref="randomRecipe" @click="randomRecipe" v-if="recipes.length > 0"
                 icon="dice" color="primary" title="Random recipe"
               )
 
               //- Recipe filter
-              .input-group
+              .input-group.order-3.order-md-2
                 input.form-control(v-model="filters.query" ref="query" placeholder="Search recipe details")
                 .input-group-append: button-icon(icon="times" color="danger" title="Clear search" @click="clearQuery")
 
               //- Ingredients filter
-              .input-group
+              .input-group.order-4.order-md-3
                 vue-multiselect(
                   v-model="filters.ings"
                   placeholder="Search ingredients"
@@ -79,7 +79,7 @@ html
                   )
 
               //- Veg filter
-              button-icon(
+              button-icon.order-2.order-md-4(
                 icon="leaf"
                 :color="filters.veg ? 'success' : 'outline-dark'"
                 title="Toggle vegetarian"
@@ -101,17 +101,21 @@ html
 
         #step3.card.shadow
           .card-header: .row.justify-content-between
-            .col-md-3: section-title(text="3" title="Create shopping list")
+            .col-lg-4.mb-2.mb-lg-0: section-title(text="3" title="Create shopping list")
             .col.text-right(v-if="Recipes.selected().length > 0")
               span.mr-md-2 {{ Recipes.selected().length }} recipes, {{ Recipes.selected('servings') }} servings
               button-icon(
-                icon="shopping-basket" text="Generate shopping list" color="primary"
+                title="Generate shopping list"
+                icon="shopping-basket" color="primary"
+                text="Generate shopping list" text-breakpoint="md"
                 v-clipboard:copy="clipboardShoppingList"
                 v-clipboard:success="onCopy"
                 v-clipboard:error="onError"
               )
               button-icon(
-                icon="clipboard-list" text="Preview selected recipes" color="primary"
+                title="Preview selected recipes"
+                icon="clipboard-list" color="primary"
+                text="Preview selected recipes" text-breakpoint="md"
                 v-clipboard:copy="clipboardMenues"
                 v-clipboard:success="onCopy"
                 v-clipboard:error="onError"
