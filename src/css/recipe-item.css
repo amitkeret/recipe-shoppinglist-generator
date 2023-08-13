@@ -15,6 +15,10 @@ tr.recipe-item .recipe-link .badge {
   opacity: 0;
   transition: var(--transition);
 }
+tr.recipe-item .recipe-title,
+tr.recipe-item .recipe-comment {
+  white-space: nowrap;
+}
 tr.recipe-item .recipe-title {
   width: calc( var(--column) * 4 );
 }
@@ -37,7 +41,6 @@ tr.recipe-item .recipe-meta > div {
 }
 tr.recipe-item .recipe-comment {
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
 }
 tr.recipe-item .recipe-meta {
