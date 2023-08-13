@@ -20,7 +20,7 @@ icon =
   template: iconHTML
 
 buttonIcon =
-  props: base.concat ['tag', 'text']
+  props: base.concat ['tag', 'text', 'textBreakpoint']
   methods:
     buttonClick: ->
       @$emit 'click'
@@ -29,6 +29,12 @@ buttonIcon =
     compColor:  -> if @color then "btn-#{@color}" else 'btn-secondary'
     compTag:    -> @tag ? 'button'
     children:   -> (a for a in [@icon, @text] when a?).length
+    compTextClass: ->
+      cl = [
+        if @textBreakpoint? then "d-none d-#{@textBreakpoint}-inline" else ''
+        if @children > 1 then 'ml-2' else ''
+      ]
+      cl.join ' '
   template: buttonIconHTML
 
 checkbox =
