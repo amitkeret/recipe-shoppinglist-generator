@@ -44,9 +44,6 @@ methods = ->
     vue.Ingredient.ingForm = type
 
   add: ->
-    # vue-multiselect is bound to ingredient.name
-    # however, it stores (and sends) ingredient objects, not just names
-    vue.Ingredient.ingredient.name = vue.Ingredient.ingredient.name.name if vue.Ingredient.ingredient.name.name?
 
     conditions = [
       [ 'name',       '',   'Ingredient name: Cannot be empty']
@@ -60,6 +57,10 @@ methods = ->
     ]
 
     if validate vue.Ingredient.ingredient, conditions
+      # vue-multiselect is bound to ingredient.name
+      # however, it stores (and sends) ingredient objects, not just names
+      vue.Ingredient.ingredient.name = vue.Ingredient.ingredient.name.name if vue.Ingredient.ingredient.name.name?
+
       vue.Recipe.recipe.ingredients.push vue.Ingredient.ingredient
       do vue.Ingredients.clear
 
