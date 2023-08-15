@@ -13,7 +13,7 @@ tr.recipe-item(
           icon.ml-n2.mr-2(icon="trash" color="danger" title="Delete recipe")
           | Delete
     icon.clickable(icon="eye" color="secondary" @click="$emit('emodalrecipe')" title="View recipe")
-  td.recipe-title
+  td.recipe-title.text-nowrap
     checkbox.fa-lg.mr-2(:checked="recipe.selected" @click="recipe.selected = !recipe.selected")
     .recipe-link(
       :is=    "recipe.link.length > 0 ? 'a' : 'span'"
@@ -24,11 +24,14 @@ tr.recipe-item(
       span(v-if="recipe.link.length > 0")
         icon.ml-2(icon="external-link-alt")
         .badge.badge-primary {{ getLink().host }}
-  td.recipe-comment: i(v-if="recipe.comment.length > 0") {{ recipe.comment }}
+  td.recipe-comment.text-nowrap: i(v-if="recipe.comment.length > 0") {{ recipe.comment }}
   td.recipe-meta: div
     .recipe-meta-ings(v-if="ingSearch.length > 0")
-      span.badge.badge-pill(:class="ingSearch.length == filters.ings.length ? 'badge-primary' : 'badge-secondary'") {{ ingSearch.length }}
-      span: .ml-1.badge.badge-pill.badge-primary(v-for="ing in ingSearch") {{ ing.name }}
+      span.badge.badge-pill(
+        :class="ingSearch.length == filters.ings.length ? 'badge-primary' : 'badge-secondary'"
+      ) {{ ingSearch.length }}
+      span.text-nowrap
+        .ml-1.badge.badge-pill.badge-primary(v-for="ing in ingSearch") {{ ing.name }}
     .recipe-meta-servings: recipe-servings(:recipe="recipe")
     .recipe-meta-rating: .recipe-rating(v-if="recipe.rating")
       icon.fa-sm(icon="star" color="warning")
