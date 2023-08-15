@@ -108,8 +108,8 @@ html
           .card-header: .row.justify-content-between
             .col-lg-4.mb-2.mb-lg-0: section-title(text="3" title="Create shopping list")
             .col.text-right(v-if="Recipes.selected().length > 0")
-              span.mr-md-2 {{ Recipes.selected().length }} recipes, {{ Recipes.selected('servings') }} servings
-              button-icon(
+              span.mr-2 {{ Recipes.selected().length }} recipes, {{ Recipes.selected('servings') }} servings
+              button-icon.mr-1(
                 title="Generate shopping list"
                 icon="shopping-basket" color="primary"
                 text="Generate shopping list" text-breakpoint="md"
