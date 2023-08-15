@@ -67,7 +67,7 @@ appConfig =
         dice.className = dice.className.replace classRegEx, 'dice'
         vue.Recipes.eModal randomInteger 0, vue.recipes.length - 1        
       , @, 2000
-  
+
     clearQuery: ->
       @filters.query = ''
       do this.$refs.query.focus
@@ -76,7 +76,7 @@ appConfig =
       @step1visible = not @step1visible
       do @Recipes.clear
 
-    handleFileSelect: (evt)->
+    importRecipes: (evt)->
       onloadend = (e)->
         jsonStr = new TextDecoder().decode e.target.result # @see https://stackoverflow.com/a/65272548
         @recipes = db.importJSON jsonStr
@@ -97,6 +97,13 @@ appConfig =
       downloadLink.style.display = 'none'
       document.body.appendChild downloadLink
       do downloadLink.click
+
+    clearRecipes: ->
+      vue = @
+      eModal.confirm 'This will clear the entire recipes detabase. This cannot be undone.', 'Are you ABSOLUTELY sure?'
+      .then ->
+        vue.recipes = db.update []
+        mess.show "Recipes database cleared."
 
   computed:
 
