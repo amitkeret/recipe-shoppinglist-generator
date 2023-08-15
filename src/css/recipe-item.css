@@ -15,10 +15,6 @@ tr.recipe-item .recipe-link .badge {
   opacity: 0;
   transition: var(--transition);
 }
-tr.recipe-item .recipe-title,
-tr.recipe-item .recipe-comment {
-  white-space: nowrap;
-}
 tr.recipe-item .recipe-title {
   width: calc( var(--column) * 4 );
 }
@@ -33,11 +29,8 @@ tr.recipe-item .recipe-actions > div,
 tr.recipe-item .recipe-meta > div {
   display: flex;
   align-items: center;
-  gap: var(--spacer);
-}
-tr.recipe-item .recipe-actions > div,
-tr.recipe-item .recipe-meta > div {
   justify-content: flex-end;
+  gap: var(--spacer);
 }
 tr.recipe-item .recipe-comment {
   overflow: hidden;
@@ -55,9 +48,6 @@ tr.recipe-item .recipe-meta .recipe-meta-ings > span {
   position: absolute;
   right: 0;
   transition: var(--transition);
-}
-tr.recipe-item .recipe-meta .recipe-meta-ings > span:nth-child(2) {
-  white-space: nowrap;
 }
 tr.recipe-item .recipe-meta .recipe-meta-ings > span:nth-child(2),
 tr.recipe-item:hover .recipe-meta .recipe-meta-ings > span:nth-child(1) {
