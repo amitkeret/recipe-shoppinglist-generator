@@ -1,11 +1,11 @@
 #recipe-placeholder.d-none(v-if="Recipe.activeRecipe !== null") 
   .recipe-placeholder.container(ref="recipePlaceholder")
-    .recipe-image-thumbnail.mb-md-3.rounded(
+    .recipe-image-thumbnail.rounded.mb-2(
       v-if="Recipe.activeRecipe.image"
       :style="{ 'background-image': Funcs.getImage(Recipe.activeRecipe).css }"
     )
-    .mb-md-3.recipe-rating(v-if="Recipe.activeRecipe.rating"): icon(v-for="i in Recipe.activeRecipe.rating" icon="star" color="warning")
-    .mb-md-3: i(v-html="Funcs.nlbr(Recipe.activeRecipe.comment)")
+    .mb-2(v-if="Recipe.activeRecipe.rating"): icon(v-for="i in Recipe.activeRecipe.rating" icon="star" color="warning")
+    .mb-3(v-if="Recipe.activeRecipe.comment"): i(v-html="Funcs.nlbr(Recipe.activeRecipe.comment)")
     ul.fa-ul
       li(
         v-for="(ing, index) in Recipe.activeRecipe.ingredients"
