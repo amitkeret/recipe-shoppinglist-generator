@@ -103,6 +103,7 @@ component =
     showItem: ->
       conditions =
         AND:
+          rating:   @filters.rating is no or @filters.rating <= @recipe.rating
           veg:      @filters.veg is no or @isVeg is yes
           ings:     @showIngs
         OR:
