@@ -29,10 +29,11 @@ html
                   .dropdown-item(@click="exportRecipes")
                     icon.ml-n2.mr-2(icon="file-download")
                     | Save
-                  .dropdown-divider
-                  .dropdown-item(@click="clearRecipes")
-                    icon.ml-n2.mr-2(icon="broom" color="danger")
-                    | Clear
+                  div(v-if="recipes.length > 0")
+                    .dropdown-divider
+                    .dropdown-item(@click="clearRecipes")
+                      icon.ml-n2.mr-2(icon="broom" color="danger")
+                      | Clear
 
           .card-body(v-show="step1visible == true"): .row
             include ./recipe-form.pug
