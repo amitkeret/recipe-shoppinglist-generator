@@ -101,27 +101,18 @@ input[type=number] {
     column-gap: calc(2 * var(--spacer));
   }
 }
-/* workaround until nth-child() with arguments is supported. @see https://stackoverflow.com/a/8539107 */
-.recipe-placeholder ul li[data-optional] {
+.recipe-placeholder ul li[data-first-optional] {
   margin-top: calc(0.5 * var(--spacer));
   padding-top: calc(1.5 * var(--spacer));
   border-top: 2px solid black;
   border-image: linear-gradient(to left, transparent 2em, var(--secondary) 2em);
   border-image-slice: 1;
 }
-.recipe-placeholder ul li[data-optional] ~ li[data-optional] {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: none;
-}
-.recipe-placeholder ul li[data-optional]::before {
+.recipe-placeholder ul li[data-first-optional]::before {
   content: "Optional:";
   font-size: 80%;
   position: absolute;
   top: 0;
-}
-.recipe-placeholder ul li[data-optional] ~ li[data-optional]::before {
-  content: "";
 }
 .modal .modal-title kbd {
   vertical-align: text-bottom;
