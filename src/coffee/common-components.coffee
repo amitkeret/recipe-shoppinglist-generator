@@ -32,7 +32,7 @@ buttonIcon =
     compTextClass: ->
       cl = [
         if @textBreakpoint? then "d-none d-#{@textBreakpoint}-inline" else ''
-        if @children > 1 then 'ml-2' else ''
+        if @children > 1 then "ml-#{ if @textBreakpoint? then "#{ @textBreakpoint }-" else '' }2" else ''
       ]
       cl.join ' '
   template: buttonIconHTML
