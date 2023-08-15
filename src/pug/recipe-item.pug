@@ -23,7 +23,7 @@ tr.recipe-item(
       | {{ recipe.name }}
       span(v-if="recipe.link.length > 0")
         icon.ml-2(icon="external-link-alt")
-        .badge.badge-primary {{ getLink().host }}
+        .badge.badge-primary.d-none.d-md-inline {{ getLink().host }}
   td.recipe-comment.text-nowrap: i(v-if="recipe.comment.length > 0") {{ recipe.comment }}
   td.recipe-meta: div
     .recipe-meta-ings(v-if="ingSearch.length > 0")
