@@ -37,6 +37,7 @@ appConfig =
       query: ''
       ings: []
       ingModeAnd: no
+      rating: no
       veg: no
     step1visible: no
 
