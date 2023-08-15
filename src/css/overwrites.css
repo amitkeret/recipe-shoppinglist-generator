@@ -34,6 +34,8 @@
   margin-bottom: 0;
   padding-top: 0;
   color: var(--form-placeholder-color);
+  white-space: nowrap;
+  overflow: hidden;
 }
 .multiselect__tags, .multiselect__content-wrapper {
   border-color: #ced4da;
