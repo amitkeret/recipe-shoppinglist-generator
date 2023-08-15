@@ -58,12 +58,12 @@ html
               )
 
               //- Recipe filter
-              .input-group.order-3.order-md-2
+              .input-group.order-4.order-md-2
                 input.form-control(v-model="filters.query" ref="query" placeholder="Search recipe details")
                 .input-group-append: button-icon(icon="times" color="danger" title="Clear search" @click="clearQuery")
 
               //- Ingredients filter
-              .input-group.order-4.order-md-3
+              .input-group.order-5.order-md-3
                 vue-multiselect(
                   v-model="filters.ings"
                   placeholder="Search ingredients"
@@ -83,8 +83,17 @@ html
                     data-height="auto"
                   )
 
+              //- Rating filiter
+              button-icon#filter-rating.order-2.order-md-4(
+                icon="star"
+                :text="filters.rating ? filters.rating : false"
+                :color="filters.rating ? 'warning' : 'outline-dark'"
+                title="Filter starred recipes"
+                @click="filters.rating = filters.rating == 5 ? false : filters.rating + 1"
+              )
+
               //- Veg filter
-              button-icon.order-2.order-md-4(
+              button-icon.order-3.order-md-5(
                 icon="leaf"
                 :color="filters.veg ? 'success' : 'outline-dark'"
                 title="Toggle vegetarian"
