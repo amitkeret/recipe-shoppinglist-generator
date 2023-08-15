@@ -84,6 +84,19 @@ input[type=number] {
   min-width: 2em;
   overflow: hidden;
 }
+#step2 .card-header button#filter-rating {
+  position: relative;
+}
+#step2 .card-header button#filter-rating.btn-warning > i {
+  color: white;
+}
+#step2 .card-header button#filter-rating > span {
+  position: absolute;
+  font-size: 65%;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% - .5rem), calc(-50% + 1px)); /* -.5rem to offset Bootstrap's "ml-2" */
+}
 #step2 .card-body {
   max-height: 60vh;
   overflow-y: scroll;
