@@ -50,8 +50,8 @@ methods = ->
       [ 'department', '',   'Department name: Cannot be empty']
       [
         'amount'
-        (prop)-> (prop is '') or (isNaN(prop) is yes) or (prop < 0.25) or ((prop * 8) % 1 isnt 0)
-        'Amount: Decimal numbers in steps of 0.25'
+        (prop)-> (prop is '') or (isNaN(prop) is yes) or (prop < 0.125) or ((prop * 8) % 1 isnt 0)
+        'Amount: Decimal numbers in steps of 0.125'
       ]
       [ 'unit',       null, 'Unit: Selection required']
     ]
