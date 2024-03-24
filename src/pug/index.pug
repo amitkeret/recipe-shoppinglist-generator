@@ -102,16 +102,14 @@ html
 
           //- Recipes list
           .card-body.py-2
-            .table-responsive: table.table.table-hover.mb-0: tbody
-              //- For custom components rendered as <tr>, syntax is different
-              //- @see https://vuejs.org/guide/essentials/component-basics.html#dom-template-parsing-caveats
-              tr(is="recipe-item" v-for="(recipe, index) in recipes"
-                :recipe="recipe"
-                :filters="filters"
-                @updaterecipe="Recipes.update(index)"
-                @deleterecipe="Recipes.delete(index)"
-                @emodalrecipe="Recipes.eModal(index)"
-              )
+            recipe-item(v-for="(recipe, index) in recipes"
+              :recipe="recipe"
+              :image="Funcs.getImage(recipe)"
+              :filters="filters"
+              @updaterecipe="Recipes.update(index)"
+              @deleterecipe="Recipes.delete(index)"
+              @emodalrecipe="Recipes.eModal(index)"
+            )
 
         #step3.card.shadow
           .card-header: .row.justify-content-between
