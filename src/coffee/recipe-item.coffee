@@ -77,6 +77,7 @@ component =
 
   props: [
     'recipe'
+    'image'
     'filters'
   ]
 
