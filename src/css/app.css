@@ -97,12 +97,9 @@ input[type=number] {
   left: 50%;
   transform: translate(calc(-50% - .5rem), calc(-50% + 1px)); /* -.5rem to offset Bootstrap's "ml-2" */
 }
-#step2 .card-body {
+#step2 > .card-body {
   max-height: 60vh;
   overflow-y: scroll;
-}
-#step2 .card-body table tr:first-child > td {
-  border-top: none;
 }
 .recipe-placeholder .recipe-image-thumbnail {
   position: relative;
