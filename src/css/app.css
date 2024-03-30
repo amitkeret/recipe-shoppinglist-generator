@@ -54,10 +54,10 @@ input[type=number] {
 #step1 #recipeImageFile {
   background: none;
 }
-#step1 .recipe-form-ingredients {
+#step1 .form-ingredients {
   position: relative;
 }
-#step1 .recipe-form-ingredients h5 {
+#step1 .form-ingredients h5 {
   position: absolute;
   top: calc(-1 * var(--spacer));
   left: calc(0.5 * var(--spacer));
