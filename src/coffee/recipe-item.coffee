@@ -1,6 +1,7 @@
 import { log, clone, sum, parseURL, validate } from './funcs.coffee'
 import { store as db, defaults } from './store.coffee'
 import { recipeServings } from './recipe-servings.coffee'
+import * as Ingredients from './recipe-ingredients.coffee'
 
 data =
   recipe: clone defaults.recipe
@@ -76,11 +77,12 @@ component =
 
   components:
     'recipe-servings': recipeServings
+    'recipe-ingredients': Ingredients.component
 
   props: [
     'recipe'
-    'image'
     'filters'
+    'settings'
   ]
 
   methods:
@@ -89,17 +91,13 @@ component =
 
   computed:
 
-    ingSearch: ->
-      fings = (ing.name for ing in @filters.ings)
-      found = (ing for ing in @recipe.ingredients when fings.includes ing.name)
-
     showIngs: ->
       show = yes
       if @filters.ings.length isnt 0
-        if @filters.ingModeAnd is yes
-          show = @ingSearch.length is @filters.ings.length
+        if @settings.ingModeAnd is yes
+          show = Ingredients.methods().ingSearch(@recipe, @filters).length is @filters.ings.length
         else
-          show = @ingSearch.length > 0
+          show = Ingredients.methods().ingSearch(@recipe, @filters).length > 0
       show
 
     isVeg: -> (ing for ing in @recipe.ingredients when ing.department is 'Meats').length is 0
