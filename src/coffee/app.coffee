@@ -14,7 +14,7 @@ Vue.component 'icon', icon
 Vue.component 'button-icon', buttonIcon
 Vue.component 'checkbox', checkbox
 
-appConfig = 
+appConfig =
 
   el: '#app'
 
@@ -36,10 +36,12 @@ appConfig =
     filters:
       query: ''
       ings: []
-      ingModeAnd: no
       rating: no
       veg: no
-    step1visible: no
+    settings:
+      step1visible: no
+      ingModeAnd: no
+      listCompact: no
 
   created: -> @recipes = do db.getAll
 
@@ -66,7 +68,7 @@ appConfig =
       timeout (vue)->
         running = no
         dice.className = dice.className.replace classRegEx, 'dice'
-        vue.Recipes.eModal randomInteger 0, vue.recipes.length - 1        
+        vue.Recipes.eModal randomInteger 0, vue.recipes.length - 1
       , @, 2000
 
     clearQuery: ->
@@ -74,7 +76,7 @@ appConfig =
       do this.$refs.query.focus
 
     step1toggle: ->
-      @step1visible = not @step1visible
+      @settings.step1visible = not @settings.step1visible
       do @Recipes.clear
 
     importRecipes: (evt)->
