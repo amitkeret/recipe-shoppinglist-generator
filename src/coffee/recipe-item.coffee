@@ -51,6 +51,8 @@ methods = ->
     vue.editindex = index
     vue.step1visible = yes
 
+  getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
+
   eModal: (index)->
     vue.Recipes.setActive index
     vue.step1visible = no
@@ -83,6 +85,7 @@ component =
 
   methods:
     getLink: -> if @recipe.link.length is 0 then no else parseURL @recipe.link
+    getImage: -> methods().getImage @recipe
 
   computed:
 
