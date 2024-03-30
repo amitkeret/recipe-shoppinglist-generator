@@ -94,4 +94,4 @@ component =
 
   template: html
 
-export { data, methods }
+export { component, data, methods }
