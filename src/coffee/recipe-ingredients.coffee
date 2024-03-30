@@ -77,8 +77,8 @@ methods = ->
   departments: -> Object.keys unique vue.recipes
 
   ingSearch: (recipe, filters)->
-    fings = (ing.uuid for ing in filters.ings)
-    found = (ing for ing in recipe.ingredients when fings.includes ing.ref_ingredients)
+    fings = (ing.name for ing in filters.ings)
+    found = (ing for ing in recipe.ingredients when fings.includes ing.name)
 
 import css from '../css/recipe-ingredients.css'
 html = require '../pug/recipe-ingredients.pug'
