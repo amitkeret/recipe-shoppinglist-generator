@@ -114,7 +114,7 @@ appConfig =
     Funcs: ->
       nlbr: (str)-> nlbr str
       fraction: (num)-> fraction num, yes
-      getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
+      getImage: (recipe)-> Recipe.methods().getImage recipe
 
     Recipes: Recipe.methods
     Ingredients: Ingredients.methods

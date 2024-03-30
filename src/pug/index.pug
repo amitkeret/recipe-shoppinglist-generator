@@ -104,7 +104,6 @@ html
           .card-body.py-2
             recipe-item(v-for="(recipe, index) in recipes"
               :recipe="recipe"
-              :image="Funcs.getImage(recipe)"
               :filters="filters"
               @updaterecipe="Recipes.update(index)"
               @deleterecipe="Recipes.delete(index)"

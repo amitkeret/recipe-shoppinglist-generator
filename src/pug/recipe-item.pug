@@ -65,5 +65,6 @@
     //- Image thumbnail
     .mh-100.my-n3.mr-n3.rounded-right.recipe-image-thumbnail(
       v-if="recipe.image"
-      :style="{ 'background-image': image.css }"
+      :style="{ 'background-image': getImage().css }"
+      @click="$emit('emodalrecipe')" title="View recipe"
     )
