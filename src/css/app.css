@@ -25,6 +25,13 @@ input[type=number] {
 .file-upload__label > i {
   margin-left: -0.75rem;
 }
+.flexbox-break {
+  flex-basis: 100%;
+  height: 0;
+}
+.dropdown-menu.dropdown-menu-right .dropdown-item > small.text-right {
+  min-width: 40px;
+}
 .recipe-image-thumbnail {
   background-position: center;
   background-size: cover;
@@ -83,19 +90,6 @@ input[type=number] {
 #step2 .card-header button#randomRecipe {
   min-width: 2em;
   overflow: hidden;
-}
-#step2 .card-header button#filter-rating {
-  position: relative;
-}
-#step2 .card-header button#filter-rating.btn-warning > i {
-  color: white;
-}
-#step2 .card-header button#filter-rating > span {
-  position: absolute;
-  font-size: 65%;
-  top: 50%;
-  left: 50%;
-  transform: translate(calc(-50% - .5rem), calc(-50% + 1px)); /* -.5rem to offset Bootstrap's "ml-2" */
 }
 #step2 > .card-body {
   max-height: 60vh;

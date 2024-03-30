@@ -1,6 +1,6 @@
 {
   "name": "recipe-shoppinglist-generator",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "recipe-shoppinglist-generator",
   "main": "index.html",
   "devDependencies": {

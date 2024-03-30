@@ -76,4 +76,22 @@ methods = ->
   listFlat: -> unique vue.recipes, no
   departments: -> Object.keys unique vue.recipes
 
-export { data, methods }
+  ingSearch: (recipe, filters)->
+    fings = (ing.name for ing in filters.ings)
+    found = (ing for ing in recipe.ingredients when fings.includes ing.name)
+
+import css from '../css/recipe-ingredients.css'
+html = require '../pug/recipe-ingredients.pug'
+component =
+
+  props: [
+    'recipe'
+    'filters'
+  ]
+
+  computed:
+    ingSearch: -> methods().ingSearch @recipe, @filters
+
+  template: html
+
+export { component, data, methods }
