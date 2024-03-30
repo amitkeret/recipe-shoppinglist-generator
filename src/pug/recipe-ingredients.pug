@@ -1,0 +1,6 @@
+.recipe-meta-ings(v-if="ingSearch.length > 0")
+  span.badge.badge-pill(
+    :class="ingSearch.length == filters.ings.length ? 'badge-primary' : 'badge-secondary'"
+  ) {{ ingSearch.length }}
+  span.text-nowrap
+    .ml-1.badge.badge-pill.badge-primary(v-for="ing in ingSearch" :ing="ing") {{ ing.name }}
