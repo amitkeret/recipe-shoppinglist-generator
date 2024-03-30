@@ -16,11 +16,11 @@ html
           .card-header: .row
             .col-9.col-sm
               section-title(text="1" :title="editindex > -1 ? 'Edit recipe' : 'Add recipes'" @click="step1toggle")
-              icon.ml-1.fa-lg(:icon="step1visible ? 'caret-up' : 'caret-down'")
+              icon.ml-1.fa-lg(:icon="settings.step1visible ? 'caret-up' : 'caret-down'")
             .col.text-right
               .dropdown#recipes-backup
                 button-icon.dropdown-toggle(icon="database" text="Recipes DB" text-breakpoint="sm" data-toggle="dropdown")
-                .dropdown-menu
+                .dropdown-menu.dropdown-menu-right
                   //- https://codepen.io/pieceofcode/pen/zldng
                   label.dropdown-item.file-upload__label(for="recipesFile" text="Load")
                     icon.mr-2(icon="file-import")
@@ -35,7 +35,7 @@ html
                       icon.ml-n2.mr-2(icon="broom" color="danger")
                       | Clear
 
-          .card-body(v-show="step1visible == true"): .row
+          .card-body(v-show="settings.step1visible == true"): .row
             include ./form.pug
 
         #step2.card.shadow.mb-4
@@ -58,12 +58,12 @@ html
               )
 
               //- Recipe filter
-              .input-group.order-4.order-md-2
+              .input-group.order-3.order-md-2
                 input.form-control(v-model="filters.query" ref="query" placeholder="Search recipe details")
                 .input-group-append: button-icon(icon="times" color="danger" title="Clear search" @click="clearQuery")
 
               //- Ingredients filter
-              .input-group.order-5.order-md-3
+              .input-group.order-4.order-md-3
                 vue-multiselect(
                   v-model="filters.ings"
                   placeholder="Search ingredients"
@@ -72,39 +72,39 @@ html
                   :options="Ingredients.listFlat()"
                   :multiple="true"
                 )
-                .input-group-append
-                  button-icon(icon="times" color="danger" title="Clear" @click="filters.ings = []")
-                  input(type="checkbox" v-model="filters.ingModeAnd"
-                    data-toggle="switchbutton" id="switchbutton-filters-ingModeAnd"
-                    data-onlabel="AND"
-                    data-offlabel="OR"
-                    data-onstyle="danger"
-                    data-offstyle="warning"
-                    data-height="auto"
-                  )
+                .input-group-append: button-icon(icon="times" color="danger" title="Clear" @click="filters.ings = []")
 
-              //- Rating filiter
-              button-icon#filter-rating.order-2.order-md-4(
-                icon="star"
-                :text="filters.rating ? filters.rating : false"
-                :color="filters.rating ? 'warning' : 'outline-dark'"
-                title="Filter starred recipes"
-                @click="filters.rating = filters.rating == 5 ? false : filters.rating + 1"
-              )
-
-              //- Veg filter
-              button-icon.order-3.order-md-5(
-                icon="leaf"
-                :color="filters.veg ? 'success' : 'outline-dark'"
-                title="Toggle vegetarian"
-                @click="filters.veg = !filters.veg"
-              )
+              //- Settings
+              .dropdown.order-2.order-md-4
+                button-icon.dropdown-toggle(icon="cog" color="secondary" text-breakpoint="sm" data-toggle="dropdown")
+                .dropdown-menu.dropdown-menu-right
+                  .dropdown-header.ml-n2 Settings (click to chage)
+                  .dropdown-item.d-flex.align-items-center(@click.stop="filters.rating = filters.rating == 5 ? false : filters.rating + 1")
+                    icon.ml-n2.mr-2(icon="star" :color="filters.rating ? 'warning' : 'dark'")
+                    span.flex-grow-1 Minimum rating
+                    small.text-secondary.text-right {{ filters.rating ? filters.rating : 'any' }}
+                  .dropdown-item.d-flex.align-items-center(@click.stop="filters.veg = !filters.veg")
+                    icon.ml-n2.mr-2(icon="leaf" :color="filters.veg ? 'success' : 'dark'")
+                    span.flex-grow-1 Vegetarian only
+                    small.text-secondary.text-right {{ filters.veg ? 'yes' : 'no' }}
+                  .dropdown-item.d-flex.align-items-center(@click.stop="settings.ingModeAnd = !settings.ingModeAnd")
+                    icon.ml-n2.mr-2(
+                      :icon="settings.ingModeAnd ? 'check-double' : 'check'"
+                      :color="settings.ingModeAnd ? 'danger' : 'dark'"
+                    )
+                    span.flex-grow-1 Ingredient match
+                    small.text-secondary.text-right {{ settings.ingModeAnd ? 'all' : 'any' }}
+                  .dropdown-item.d-flex.align-items-center(@click.stop="settings.listCompact = !settings.listCompact")
+                    icon.ml-n2.mr-2(:icon="settings.listCompact ? 'list' : 'th-list'" color="dark")
+                    span.flex-grow-1 List style
+                    small.text-secondary.text-right {{ settings.listCompact ? 'compact' : 'detailed' }}
 
           //- Recipes list
-          .card-body.py-2
+          .card-body.py-2.px-lg-5
             recipe-item(v-for="(recipe, index) in recipes"
               :recipe="recipe"
               :filters="filters"
+              :settings="settings"
               @updaterecipe="Recipes.update(index)"
               @deleterecipe="Recipes.delete(index)"
               @emodalrecipe="Recipes.eModal(index)"
