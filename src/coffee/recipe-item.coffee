@@ -18,7 +18,7 @@ methods = ->
   clear: ->
     vue.Recipe.recipe = clone defaults.recipe
     do vue.Ingredients.clear
-    vue.step1visible = no if vue.editindex > -1
+    vue.settings.step1visible = no if vue.editindex > -1
     vue.editindex = -1
 
   save: ->
@@ -34,7 +34,7 @@ methods = ->
       formatted = db.convert vue.Recipe.recipe, 'Vue'
       if vue.editindex > -1
         vue.recipes[vue.editindex] = formatted
-        vue.step1visible = no
+        vue.settings.step1visible = no
       else
         vue.recipes.push formatted
       mess.show "#{if vue.editindex > -1 then 'Updated' else 'Added new'} recipe: #{vue.Recipe.recipe.name}"
@@ -50,13 +50,13 @@ methods = ->
   update: (index)->
     vue.Recipe.recipe = clone vue.recipes[index]
     vue.editindex = index
-    vue.step1visible = yes
+    vue.settings.step1visible = yes
 
   getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
 
   eModal: (index)->
     vue.Recipes.setActive index
-    vue.step1visible = no
+    vue.settings.step1visible = no
     cb = -> eModal.alert
       title:    vue.Recipe.activeRecipe.name
       subtitle: vue.$refs.recipePlaceholderLink.outerHTML
