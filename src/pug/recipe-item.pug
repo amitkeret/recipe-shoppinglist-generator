@@ -1,27 +1,38 @@
-.recipe-item.card.mb-3.mx-lg-5(
+.recipe-item.card.p-3.mb-3.mx-lg-5(
   v-show="showItem"
   :class="{ 'bg-light': recipe.selected, 'shadow-sm': !recipe.selected, 'shadow': recipe.selected }"
 )
-  .d-flex.justify-content-between.p-3
+
+
+  //- Compact list
+  .recipe-meta: .d-flex.align-items-center.justify-content-between(v-if="settings.listCompact")
+
+    checkbox.mt-1.fa.fa-lg(:checked="recipe.selected" @click="recipe.selected = !recipe.selected")
+
+    h6.mb-0.flex-grow-1 {{ recipe.name }}
+
+    recipe-servings(:recipe="recipe")
+
+    icon.clickable.d-none.d-md-block(icon="eye" color="secondary" @click="$emit('emodalrecipe')" title="View recipe")
+
+
+  //- Detailed list
+  .d-flex.justify-content-between(v-if="!settings.listCompact")
 
     .recipe-meta.flex-grow-1
 
       .d-flex.align-items-start.justify-content-start.mb-2
 
-        //- Selection checkbox
         checkbox.mt-1.fa.fa-lg(:checked="recipe.selected" @click="recipe.selected = !recipe.selected")
 
-        //- Recipe title
         h5.mb-0 {{ recipe.name }}
 
-        //- External link
         a.mr-2.recipe-link(
           v-if="recipe.link.length > 0"
           href="recipe.link" target="_blank"
         )
           icon( icon="external-link-alt")
           small: .badge.badge-pill.badge-primary.d-none.d-md-inline {{ getLink().host }}
-
 
       .d-flex.align-items-center.justify-content-start
 
@@ -36,34 +47,22 @@
               icon.ml-n2.mr-2(icon="trash" color="danger" title="Delete recipe")
               | Delete
 
-        //- Preview
         icon.clickable(icon="eye" color="secondary" @click="$emit('emodalrecipe')" title="View recipe")
 
-        //- Vegeterian
         div: icon(
           :icon=  "isVeg ? 'leaf' : 'drumstick-bite'"
           :color= "isVeg ? 'success' : 'danger'"
         )
 
-        //- Rating
-        .recipe-rating(v-if="recipe.rating")
+        .recipe-rating.text-nowrap(v-if="recipe.rating")
           icon.fa-sm(icon="star" color="warning")
           small {{ recipe.rating }}
 
-        //- Servings
-        //- This custom component has the "if" condition within it
         recipe-servings(:recipe="recipe")
 
-        //- Ingredients
-        .recipe-meta-ings(v-if="ingSearch.length > 0")
-          span.badge.badge-pill(
-            :class="ingSearch.length == filters.ings.length ? 'badge-primary' : 'badge-secondary'"
-          ) {{ ingSearch.length }}
-          span.text-nowrap
-            .ml-1.badge.badge-pill.badge-primary(v-for="ing in ingSearch") {{ ing.name }}
+        recipe-ingredients(:recipe="recipe" :filters="filters")
 
-    //- Image thumbnail
-    .mh-100.my-n3.mr-n3.rounded-right.recipe-image-thumbnail(
+    .mh-100.my-n3.mr-n3.rounded-right.recipe-image-thumbnail.clickable(
       v-if="recipe.image"
       :style="{ 'background-image': getImage().css }"
       @click="$emit('emodalrecipe')" title="View recipe"
