@@ -59,10 +59,11 @@ h5 Ingredients
               :disabled="Ingredient.ingForm == 'exist'"
               data-toggle="dropdown"
             ) {{ Ingredient.ingredient.unit !== null ? Ingredient.ingredient.unit : 'Unit' }}
-            .dropdown-menu: .dropdown-item(
+            .dropdown-menu: dropdown-item(
               v-for="option in Ingredient.units"
+              :text="option != '' ? option : '(no unit)'"
               @click="Ingredient.ingredient.unit = option"
-            ) {{ option != '' ? option : '(no unit)' }}
+            )
 
       .col-lg
         checkbox.fa-lg.mr-2(
@@ -85,8 +86,8 @@ h5 Ingredients
             text-breakpoint="sm"
           )
           .dropdown-menu
-            .dropdown-item(@click="Ingredients.clear()") Existing
-            .dropdown-item(@click="Ingredients.clear('new')") New
+            dropdown-item(text="Existing" @click="Ingredients.clear()")
+            dropdown-item(text="New" @click="Ingredients.clear('new')")
 
 
       //- New ingedient action button

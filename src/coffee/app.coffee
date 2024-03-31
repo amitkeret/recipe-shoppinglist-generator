@@ -3,23 +3,20 @@ import cssOverwrites from '../css/overwrites.css'
 
 import { log, clone, nlbr, parseURL, fraction, randomInteger, timeout } from './funcs.coffee'
 import { store as db } from './store.coffee'
-import { sectionTitle } from './section-title.coffee'
 import * as Recipe from './recipe-item.coffee'
 import * as Ingredients from './recipe-ingredients.coffee'
 
 # importing globally -> available to entire app, negates repetative inclusion by multiple other components
 # @see https://vuejs.org/guide/components/registration.html
-import { icon, buttonIcon, checkbox } from './common-components.coffee'
-Vue.component 'icon', icon
-Vue.component 'button-icon', buttonIcon
-Vue.component 'checkbox', checkbox
+# camelCase component names can be used as kebab-case in templates
+import * as commonComponents from './common-components.coffee'
+Vue.component name, component for name, component of commonComponents
 
 appConfig =
 
   el: '#app'
 
   components:
-    'section-title': sectionTitle
     'vue-multiselect': VueMultiselect.default
     'recipe-item': Recipe.component
 

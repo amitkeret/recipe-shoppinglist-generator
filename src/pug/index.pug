@@ -15,8 +15,12 @@ html
         #step1.card.shadow.mb-4
           .card-header: .row
             .col-9.col-sm
-              section-title(text="1" :title="editindex > -1 ? 'Edit recipe' : 'Add recipes'" @click="step1toggle")
-              icon.ml-1.fa-lg(:icon="settings.step1visible ? 'caret-up' : 'caret-down'")
+              section-title.clickable(
+                text="1"
+                :title="editindex > -1 ? 'Edit recipe' : 'Add recipes'"
+                @click="step1toggle"
+                :suffix-icon="settings.step1visible ? 'caret-up' : 'caret-down'"
+              )
             .col.text-right
               .dropdown#recipes-backup
                 button-icon.dropdown-toggle(icon="database" text="Recipes DB" text-breakpoint="sm" data-toggle="dropdown")
@@ -26,14 +30,10 @@ html
                     icon.mr-2(icon="file-import")
                     | Load
                   input#recipesFile.file-upload__input(type="file" name="files" @change="importRecipes")
-                  .dropdown-item(@click="exportRecipes")
-                    icon.ml-n2.mr-2(icon="file-download")
-                    | Save
+                  dropdown-item(text="Save" icon="file-download" @click="exportRecipes")
                   div(v-if="recipes.length > 0")
                     .dropdown-divider
-                    .dropdown-item(@click="clearRecipes")
-                      icon.ml-n2.mr-2(icon="broom" color="danger")
-                      | Clear
+                    dropdown-item(text="Clear" icon="broom" color="danger" @click="clearRecipes")
 
           .card-body(v-show="settings.step1visible == true"): .row
             include ./form.pug
@@ -78,26 +78,37 @@ html
               .dropdown.order-2.order-md-4
                 button-icon.dropdown-toggle(icon="cog" color="secondary" text-breakpoint="sm" data-toggle="dropdown")
                 .dropdown-menu.dropdown-menu-right
-                  .dropdown-header.ml-n2 Settings (click to chage)
-                  .dropdown-item.d-flex.align-items-center(@click.stop="filters.rating = filters.rating == 5 ? false : filters.rating + 1")
-                    icon.ml-n2.mr-2(icon="star" :color="filters.rating ? 'warning' : 'dark'")
-                    span.flex-grow-1 Minimum rating
-                    small.text-secondary.text-right {{ filters.rating ? filters.rating : 'any' }}
-                  .dropdown-item.d-flex.align-items-center(@click.stop="filters.veg = !filters.veg")
-                    icon.ml-n2.mr-2(icon="leaf" :color="filters.veg ? 'success' : 'dark'")
-                    span.flex-grow-1 Vegetarian only
-                    small.text-secondary.text-right {{ filters.veg ? 'yes' : 'no' }}
-                  .dropdown-item.d-flex.align-items-center(@click.stop="settings.ingModeAnd = !settings.ingModeAnd")
-                    icon.ml-n2.mr-2(
-                      :icon="settings.ingModeAnd ? 'check-double' : 'check'"
-                      :color="settings.ingModeAnd ? 'danger' : 'dark'"
-                    )
-                    span.flex-grow-1 Ingredient match
-                    small.text-secondary.text-right {{ settings.ingModeAnd ? 'all' : 'any' }}
-                  .dropdown-item.d-flex.align-items-center(@click.stop="settings.listCompact = !settings.listCompact")
-                    icon.ml-n2.mr-2(:icon="settings.listCompact ? 'list' : 'th-list'" color="dark")
-                    span.flex-grow-1 List style
-                    small.text-secondary.text-right {{ settings.listCompact ? 'compact' : 'detailed' }}
+                  dropdown-item(
+                    text="Minimum rating"
+                    icon="star"
+                    :color="filters.rating ? 'warning' : 'dark'"
+                    :suffix="filters.rating ? filters.rating : 'any'"
+                    @click="filters.rating = filters.rating == 5 ? false : filters.rating + 1"
+                    :keep-menu="true"
+                  )
+                  dropdown-item(
+                    text="Vegetarian only"
+                    icon="leaf"
+                    :color="filters.veg ? 'success' : 'dark'"
+                    :suffix="filters.veg ? 'yes' : 'no'"
+                    @click="filters.veg = !filters.veg"
+                    :keep-menu="true"
+                  )
+                  dropdown-item(
+                    text="Ingredient match"
+                    :icon="settings.ingModeAnd ? 'check-double' : 'check'"
+                    :color="settings.ingModeAnd ? 'danger' : 'dark'"
+                    :suffix="settings.ingModeAnd ? 'all' : 'any'"
+                    @click="settings.ingModeAnd = !settings.ingModeAnd"
+                    :keep-menu="true"
+                  )
+                  dropdown-item(
+                    text="List style"
+                    :icon="settings.listCompact ? 'list' : 'th-list'"
+                    :suffix="settings.listCompact ? 'compact' : 'detailed'"
+                    @click="settings.listCompact = !settings.listCompact"
+                    :keep-menu="true"
+                  )
 
           //- Recipes list
           .card-body.py-2.px-lg-5

@@ -1,0 +1,4 @@
+.dropdown-item.d-flex.align-items-center(@click="dropdownClick")
+  icon.ml-n2.mr-2(:icon="icon" :color="color" v-if="icon")
+  span.flex-grow-1 {{ text }}
+  small.text-secondary.text-right(v-if="suffix") {{ suffix }}
