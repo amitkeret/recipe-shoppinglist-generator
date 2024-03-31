@@ -1,5 +1,6 @@
-h4.section-title(@click.stop="$emit('click')")
+h4.section-title.d-inline(@click.stop="$emit('click')")
   span.badge.badge-dark.rounded-circle.mr-2
     span(v-if="text") {{ text }}
     icon(v-if="icon" :icon="icon" :family="family")
   | {{ title }}
+  icon.ml-1.fa(v-if="suffixIcon" :icon="suffixIcon")
