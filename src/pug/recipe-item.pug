@@ -40,12 +40,8 @@
         .dropdown
           icon.clickable(icon="ellipsis-h" data-toggle="dropdown")
           .dropdown-menu
-            .dropdown-item(@click="$emit('updaterecipe')")
-              icon.ml-n2.mr-2(icon="pen" color="warning" title="Update recipe")
-              | Edit
-            .dropdown-item(@click="$emit('deleterecipe')")
-              icon.ml-n2.mr-2(icon="trash" color="danger" title="Delete recipe")
-              | Delete
+            dropdown-item(text="Edit" icon="pen" color="warning" @click="$emit('updaterecipe')")
+            dropdown-item(text="Delete" icon="trash" color="danger" @click="$emit('deleterecipe')")
 
         icon.clickable(icon="eye" color="secondary" @click="$emit('emodalrecipe')" title="View recipe")
 
