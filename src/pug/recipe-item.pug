@@ -9,7 +9,7 @@
 
     checkbox.mt-1.fa.fa-lg(:checked="recipe.selected" @click="recipe.selected = !recipe.selected")
 
-    h6.mb-0.flex-grow-1 {{ recipe.name }}
+    h6.clickable.mb-0.flex-grow-1(@click="$emit('emodalrecipe')") {{ recipe.name }}
 
     recipe-servings(:recipe="recipe")
 
@@ -25,7 +25,7 @@
 
         checkbox.mt-1.fa.fa-lg(:checked="recipe.selected" @click="recipe.selected = !recipe.selected")
 
-        h5.mb-0 {{ recipe.name }}
+        h5.clickable.mb-0(@click="$emit('emodalrecipe')") {{ recipe.name }}
 
         a.mr-2.recipe-link(
           v-if="recipe.link.length > 0"
