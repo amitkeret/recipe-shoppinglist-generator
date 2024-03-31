@@ -44,6 +44,7 @@ checkbox =
     color: ->   if @checked then 'primary' else ''
   template: clone html
 
+import dropdownItemCss from '../css/dropdown-item.css'
 html = require '../pug/dropdown-item.pug'
 dropdownItem =
   props: [
@@ -59,6 +60,7 @@ dropdownItem =
       do e.stopPropagation if @keepMenu is yes
   template: clone html
 
+import sectionTitleCss from '../css/section-title.css'
 html = require '../pug/section-title.pug'
 sectionTitle =
   props: [
