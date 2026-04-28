@@ -1,6 +1,6 @@
 {
   "name": "recipe-shoppinglist-generator",
-  "version": "0.4.0",
+  "version": "0.7.3",
   "description": "recipe-shoppinglist-generator",
   "main": "index.html",
   "devDependencies": {
@@ -22,7 +22,7 @@
   },
   "scripts": {
     "watch:js": "webpack",
-    "watch:html": "pug -o dist/ -Pw src/pug/index.pug",
+    "watch:html": "pug -o dist/ -w src/pug/index.pug",
     "dev": "npm-run-all -p watch:*",
     "build:js": "webpack --env prod",
     "build:html": "pug -o dist/ src/pug/index.pug",

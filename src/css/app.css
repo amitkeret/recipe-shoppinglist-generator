@@ -25,6 +25,11 @@ input[type=number] {
 .file-upload__label > i {
   margin-left: -0.75rem;
 }
+.flexbox-break {
+  flex-basis: 100%;
+  height: 0;
+}
+
 .recipe-image-thumbnail {
   background-position: center;
   background-size: cover;
@@ -34,6 +39,7 @@ input[type=number] {
 }
 #step1 #recipeImage {
   position: relative;
+  min-height: 7rem;
 }
 #step1 #recipeImage .recipe-image-thumbnail {
   position: absolute;
@@ -53,6 +59,21 @@ input[type=number] {
 #step1 #recipeImageFile {
   background: none;
 }
+#step1 .form-ingredients {
+  position: relative;
+}
+#step1 .form-ingredients h5 {
+  position: absolute;
+  top: calc(-1 * var(--spacer));
+  left: calc(0.5 * var(--spacer));
+  padding: calc(0.25 * var(--spacer));
+  background: white;
+}
+#step1 #new-ingredients li .new-ing-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 #step1 #new-ingredients li .ing-optional {
   cursor: default;
   opacity: 0;
@@ -64,46 +85,36 @@ input[type=number] {
 #step2 .card-header .card-header-actions {
   gap: calc(0.25 * var(--spacer));
 }
-#step2 .card-header .card-header-actions button#randomRecipe {
-  width: 6rem;
+#step2 .card-header button#randomRecipe {
+  min-width: 2em;
   overflow: hidden;
 }
-#step2 .card-body {
+#step2 > .card-body {
   max-height: 60vh;
   overflow-y: scroll;
-}
-#step2 .card-body table tr:first-child > td {
-  border-top: none;
 }
 .recipe-placeholder .recipe-image-thumbnail {
   position: relative;
   height: calc(10 * var(--spacer));
 }
-.recipe-placeholder ul {
-  column-count: 2;
-  column-gap: calc(2 * var(--spacer));
+@media (min-width: 768px) {
+  .recipe-placeholder ul {
+    column-count: 2;
+    column-gap: calc(2 * var(--spacer));
+  }
 }
-/* workaround until nth-child() with arguments is supported. @see https://stackoverflow.com/a/8539107 */
-.recipe-placeholder ul li[data-optional] {
+.recipe-placeholder ul li[data-first-optional] {
   margin-top: calc(0.5 * var(--spacer));
   padding-top: calc(1.5 * var(--spacer));
   border-top: 2px solid black;
   border-image: linear-gradient(to left, transparent 2em, var(--secondary) 2em);
   border-image-slice: 1;
 }
-.recipe-placeholder ul li[data-optional] ~ li[data-optional] {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: none;
-}
-.recipe-placeholder ul li[data-optional]::before {
+.recipe-placeholder ul li[data-first-optional]::before {
   content: "Optional:";
   font-size: 80%;
   position: absolute;
   top: 0;
-}
-.recipe-placeholder ul li[data-optional] ~ li[data-optional]::before {
-  content: "";
 }
 .modal .modal-title kbd {
   vertical-align: text-bottom;

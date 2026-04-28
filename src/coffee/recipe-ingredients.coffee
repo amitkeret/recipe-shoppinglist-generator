@@ -44,22 +44,23 @@ methods = ->
     vue.Ingredient.ingForm = type
 
   add: ->
-    # vue-multiselect is bound to ingredient.name
-    # however, it stores (and sends) ingredient objects, not just names
-    vue.Ingredient.ingredient.name = vue.Ingredient.ingredient.name.name if vue.Ingredient.ingredient.name.name?
 
     conditions = [
       [ 'name',       '',   'Ingredient name: Cannot be empty']
       [ 'department', '',   'Department name: Cannot be empty']
       [
         'amount'
-        (prop)-> (prop is '') or (isNaN(prop) is yes) or (prop < 0.25) or ((prop * 8) % 1 isnt 0)
-        'Amount: Decimal numbers in steps of 0.25'
+        (prop)-> (prop is '') or (isNaN(prop) is yes) or (prop < 0.125) or ((prop * 8) % 1 isnt 0)
+        'Amount: Decimal numbers in steps of 0.125'
       ]
       [ 'unit',       null, 'Unit: Selection required']
     ]
 
     if validate vue.Ingredient.ingredient, conditions
+      # vue-multiselect is bound to ingredient.name
+      # however, it stores (and sends) ingredient objects, not just names
+      vue.Ingredient.ingredient.name = vue.Ingredient.ingredient.name.name if vue.Ingredient.ingredient.name.name?
+
       vue.Recipe.recipe.ingredients.push vue.Ingredient.ingredient
       do vue.Ingredients.clear
 
@@ -75,4 +76,22 @@ methods = ->
   listFlat: -> unique vue.recipes, no
   departments: -> Object.keys unique vue.recipes
 
-export { data, methods }
+  ingSearch: (recipe, filters)->
+    fings = (ing.name for ing in filters.ings)
+    found = (ing for ing in recipe.ingredients when fings.includes ing.name)
+
+import css from '../css/recipe-ingredients.css'
+html = require '../pug/recipe-ingredients.pug'
+component =
+
+  props: [
+    'recipe'
+    'filters'
+  ]
+
+  computed:
+    ingSearch: -> methods().ingSearch @recipe, @filters
+
+  template: html
+
+export { component, data, methods }

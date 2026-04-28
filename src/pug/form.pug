@@ -1,0 +1,46 @@
+input(type="hidden" v-model="editindex")
+.col
+
+  .form-row.form-group
+    .col-md-4.order-2.order-md-1
+      #recipeImage.input-group-text.justify-content-center.h-100.p-md-0
+        .recipe-image-thumbnail(
+          v-if="Recipe.recipe.image"
+          :style="{ 'background-image': Funcs.getImage(Recipe.recipe).css }"
+        )
+        button-icon(
+          v-if="Recipe.recipe.image"
+          icon="trash"
+          color="danger"
+          title="Remove image"
+          @click="Recipe.recipe.image = ''"
+        )
+        input#recipeImageFile.w-100.h-100.border-0.text-center(
+          type="text"
+          v-if="!Recipe.recipe.image"
+          v-model="Recipe.recipe.image"
+          placeholder="Image URL"
+        )
+    .col.order-1.order-md-2
+      input.form-control.form-control-lg.mb-2(type="text" v-model="Recipe.recipe.name" placeholder="Recipe name")
+      textarea.form-control.mb-2(type="text" v-model="Recipe.recipe.comment" placeholder="Comment")
+      .form-row.mb-2.mb-md-0
+        .col-12.col-sm.mb-2.mb-sm-0
+          input.form-control(type="text" v-model="Recipe.recipe.link" placeholder="Link")
+        .col-6.col-sm-3.col-lg-2
+          input.form-control(type="number" v-model="Recipe.recipe.servings" min="1" max="10" step="1" placeholder="Servings")
+        .col-6.col-sm-3.col-lg-2
+          input.form-control(type="number" v-model="Recipe.recipe.rating" min="0" max="5" step="1" placeholder="Rating")
+
+  .form-ingredients.border.rounded.p-3
+    include ./form-ingredients.pug
+
+//- Recipe action buttons
+.col-lg-2.mt-4.mt-lg-0
+  button-icon.btn-block.btn-lg.mb-2(
+    :icon="editindex > -1 ? 'pen' : 'plus'"
+    :text="editindex > -1 ? 'Update' : 'Add'"
+    :color="editindex > -1 ? 'warning' : 'primary'"
+    @click="Recipes.save()"
+  )
+  button-icon.btn-block(icon="times" text="Cancel" color="danger" @click="Recipes.clear()")

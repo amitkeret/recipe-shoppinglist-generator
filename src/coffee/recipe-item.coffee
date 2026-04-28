@@ -1,6 +1,7 @@
 import { log, clone, sum, parseURL, validate } from './funcs.coffee'
 import { store as db, defaults } from './store.coffee'
 import { recipeServings } from './recipe-servings.coffee'
+import * as Ingredients from './recipe-ingredients.coffee'
 
 data =
   recipe: clone defaults.recipe
@@ -17,7 +18,7 @@ methods = ->
   clear: ->
     vue.Recipe.recipe = clone defaults.recipe
     do vue.Ingredients.clear
-    vue.step1visible = no if vue.editindex > -1
+    vue.settings.step1visible = no if vue.editindex > -1
     vue.editindex = -1
 
   save: ->
@@ -33,7 +34,7 @@ methods = ->
       formatted = db.convert vue.Recipe.recipe, 'Vue'
       if vue.editindex > -1
         vue.recipes[vue.editindex] = formatted
-        vue.step1visible = no
+        vue.settings.step1visible = no
       else
         vue.recipes.push formatted
       mess.show "#{if vue.editindex > -1 then 'Updated' else 'Added new'} recipe: #{vue.Recipe.recipe.name}"
@@ -49,11 +50,13 @@ methods = ->
   update: (index)->
     vue.Recipe.recipe = clone vue.recipes[index]
     vue.editindex = index
-    vue.step1visible = yes
+    vue.settings.step1visible = yes
+
+  getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
 
   eModal: (index)->
     vue.Recipes.setActive index
-    vue.step1visible = no
+    vue.settings.step1visible = no
     cb = -> eModal.alert
       title:    vue.Recipe.activeRecipe.name
       subtitle: vue.$refs.recipePlaceholderLink.outerHTML
@@ -74,28 +77,27 @@ component =
 
   components:
     'recipe-servings': recipeServings
+    'recipe-ingredients': Ingredients.component
 
   props: [
     'recipe'
     'filters'
+    'settings'
   ]
 
   methods:
     getLink: -> if @recipe.link.length is 0 then no else parseURL @recipe.link
+    getImage: -> methods().getImage @recipe
 
   computed:
-
-    ingSearch: ->
-      fings = (ing.name for ing in @filters.ings)
-      found = (ing for ing in @recipe.ingredients when fings.includes ing.name)
 
     showIngs: ->
       show = yes
       if @filters.ings.length isnt 0
-        if @filters.ingModeAnd is yes
-          show = @ingSearch.length is @filters.ings.length
+        if @settings.ingModeAnd is yes
+          show = Ingredients.methods().ingSearch(@recipe, @filters).length is @filters.ings.length
         else
-          show = @ingSearch.length > 0
+          show = Ingredients.methods().ingSearch(@recipe, @filters).length > 0
       show
 
     isVeg: -> (ing for ing in @recipe.ingredients when ing.department is 'Meats').length is 0
@@ -103,6 +105,7 @@ component =
     showItem: ->
       conditions =
         AND:
+          rating:   @filters.rating is no or @filters.rating <= @recipe.rating
           veg:      @filters.veg is no or @isVeg is yes
           ings:     @showIngs
         OR:

@@ -1,14 +1,11 @@
-import { log } from './funcs.coffee'
-
-iconHTML = require '../pug/icon.pug'
-buttonIconHTML = require '../pug/button-icon.pug'
-checkboxHTML = require '../pug/checkbox.pug'
+import { log, clone } from './funcs.coffee'
 
 base = [
   'icon', 'color'
   'family'  # meaning the icon-family [fas|far|...]
 ]
 
+html = require '../pug/icon.pug'
 icon =
   props: base
   methods:
@@ -17,10 +14,11 @@ icon =
     compIcon:   -> "#{do @getStyle} fa-#{@icon}"
     compColor:  -> if @color then "text-#{@color}" else ''
     compClass:  -> "#{@compIcon} #{@compColor}"
-  template: iconHTML
+  template: clone html
 
+html = require '../pug/button-icon.pug'
 buttonIcon =
-  props: base.concat ['tag', 'text']
+  props: base.concat ['tag', 'text', 'textBreakpoint']
   methods:
     buttonClick: ->
       @$emit 'click'
@@ -29,14 +27,48 @@ buttonIcon =
     compColor:  -> if @color then "btn-#{@color}" else 'btn-secondary'
     compTag:    -> @tag ? 'button'
     children:   -> (a for a in [@icon, @text] when a?).length
-  template: buttonIconHTML
+    compTextClass: ->
+      cl = [
+        if @textBreakpoint? then "d-none d-#{@textBreakpoint}-inline" else ''
+        if @children > 1 then "ml-#{ if @textBreakpoint? then "#{ @textBreakpoint }-" else '' }2" else ''
+      ]
+      cl.join ' '
+  template: clone html
 
+html = require '../pug/checkbox.pug'
 checkbox =
   props: ['checked']
   computed:
     icon: ->    if @checked then 'check-square' else 'square'
     family: ->  if @checked then 'fas' else 'far'
     color: ->   if @checked then 'primary' else ''
-  template: checkboxHTML
+  template: clone html
 
-export { icon, buttonIcon, checkbox }
+import dropdownItemCss from '../css/dropdown-item.css'
+html = require '../pug/dropdown-item.pug'
+dropdownItem =
+  props: [
+    'icon'
+    'color'
+    'text'
+    'suffix'
+    'keepMenu'
+  ]
+  methods:
+    dropdownClick: (e)->
+      @$emit 'click'
+      do e.stopPropagation if @keepMenu is yes
+  template: clone html
+
+import sectionTitleCss from '../css/section-title.css'
+html = require '../pug/section-title.pug'
+sectionTitle =
+  props: [
+    'title'           # the title
+    'text'            # option 1: prepend text
+    'icon', 'family'  # option 2: prepend icon
+    'suffixIcon'
+  ]
+  template: clone html
+
+export { icon, buttonIcon, checkbox, dropdownItem, sectionTitle }

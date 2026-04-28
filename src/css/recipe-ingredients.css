@@ -1,0 +1,17 @@
+.recipe-meta-ings {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.recipe-meta-ings > span {
+  position: absolute;
+  transition: var(--transition);
+}
+.recipe-meta-ings > span:nth-child(2),
+.recipe-meta-ings:hover > span:nth-child(1) {
+  opacity: 0;
+}
+.recipe-meta-ings > span:nth-child(1),
+.recipe-meta-ings:hover > span:nth-child(2) {
+  opacity: 1;
+}

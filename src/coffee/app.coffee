@@ -3,23 +3,20 @@ import cssOverwrites from '../css/overwrites.css'
 
 import { log, clone, nlbr, parseURL, fraction, randomInteger, timeout } from './funcs.coffee'
 import { store as db } from './store.coffee'
-import { sectionTitle } from './section-title.coffee'
 import * as Recipe from './recipe-item.coffee'
 import * as Ingredients from './recipe-ingredients.coffee'
 
 # importing globally -> available to entire app, negates repetative inclusion by multiple other components
 # @see https://vuejs.org/guide/components/registration.html
-import { icon, buttonIcon, checkbox } from './common-components.coffee'
-Vue.component 'icon', icon
-Vue.component 'button-icon', buttonIcon
-Vue.component 'checkbox', checkbox
+# camelCase component names can be used as kebab-case in templates
+import * as commonComponents from './common-components.coffee'
+Vue.component name, component for name, component of commonComponents
 
-appConfig = 
+appConfig =
 
   el: '#app'
 
   components:
-    'section-title': sectionTitle
     'vue-multiselect': VueMultiselect.default
     'recipe-item': Recipe.component
 
@@ -36,9 +33,12 @@ appConfig =
     filters:
       query: ''
       ings: []
-      ingModeAnd: no
+      rating: no
       veg: no
-    step1visible: no
+    settings:
+      step1visible: no
+      ingModeAnd: no
+      listCompact: no
 
   created: -> @recipes = do db.getAll
 
@@ -65,18 +65,18 @@ appConfig =
       timeout (vue)->
         running = no
         dice.className = dice.className.replace classRegEx, 'dice'
-        vue.Recipes.eModal randomInteger 0, vue.recipes.length - 1        
+        vue.Recipes.eModal randomInteger 0, vue.recipes.length - 1
       , @, 2000
-  
+
     clearQuery: ->
       @filters.query = ''
       do this.$refs.query.focus
 
     step1toggle: ->
-      @step1visible = not @step1visible
+      @settings.step1visible = not @settings.step1visible
       do @Recipes.clear
 
-    handleFileSelect: (evt)->
+    importRecipes: (evt)->
       onloadend = (e)->
         jsonStr = new TextDecoder().decode e.target.result # @see https://stackoverflow.com/a/65272548
         @recipes = db.importJSON jsonStr
@@ -98,6 +98,13 @@ appConfig =
       document.body.appendChild downloadLink
       do downloadLink.click
 
+    clearRecipes: ->
+      vue = @
+      eModal.confirm 'This will clear the entire recipes detabase. This cannot be undone.', 'Are you ABSOLUTELY sure?'
+      .then ->
+        vue.recipes = db.update []
+        mess.show "Recipes database cleared."
+
   computed:
 
     # temporary hack for nested methods/properties
@@ -106,7 +113,7 @@ appConfig =
     Funcs: ->
       nlbr: (str)-> nlbr str
       fraction: (num)-> fraction num, yes
-      getImage: (recipe)-> if recipe.image is '' then no else parseURL recipe.image
+      getImage: (recipe)-> Recipe.methods().getImage recipe
 
     Recipes: Recipe.methods
     Ingredients: Ingredients.methods
